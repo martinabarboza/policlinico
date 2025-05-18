@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rectangulo azul -->
+  <rect x="10" y="20" width="40" height="100" fill="#003366"/>
+  
+  <!-- Rectangulos verdes y rojos (coloridos) -->
+  <rect x="50" y="20" width="20" height="100" fill="#76923c"/>
+  <rect x="70" y="20" width="20" height="100" fill="#c00000"/>
+  
+  <!-- Texto CENUR -->
+  <text x="65" y="135" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#003366" text-anchor="middle">CENUR</text>
+  
+  <!-- Texto Litoral Norte -->
+  <text x="100" y="65" font-family="Arial, sans-serif" font-size="12" fill="#003366">Litoral Norte</text>
+  
+  <!-- Texto Salto -->
+  <text x="100" y="85" font-family="Arial, sans-serif" font-size="10" fill="#003366">Salto</text>
+</svg>

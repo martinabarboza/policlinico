@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="80" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icono veterinario -->
+  <g transform="translate(10, 10)">
+    <!-- Estetoscopio -->
+    <circle cx="30" cy="30" r="28" fill="#0083c1" />
+    <circle cx="30" cy="30" r="24" fill="#ffffff" />
+    
+    <!-- Silueta de animal (perro) -->
+    <path d="M20,18 C18,18 16,20 16,22 C16,24 18,26 20,26 C22,26 24,24 24,22 C24,20 22,18 20,18 Z" fill="#0083c1" />
+    <path d="M40,18 C38,18 36,20 36,22 C36,24 38,26 40,26 C42,26 44,24 44,22 C44,20 42,18 40,18 Z" fill="#0083c1" />
+    <path d="M15,32 C15,32 18,30 30,30 C42,30 45,32 45,32 L45,45 C45,45 40,50 30,50 C20,50 15,45 15,45 Z" fill="#0083c1" />
+    <path d="M26,36 C26,36 30,38 34,36 C34,40 32,44 30,44 C28,44 26,40 26,36 Z" fill="#ffffff" />
+    
+    <!-- Estetoscopio -->
+    <path d="M10,15 C6,11 6,6 10,2 C14,-2 19,1 19,1 L15,15 Z" fill="#0083c1" />
+    <path d="M50,15 C54,11 54,6 50,2 C46,-2 41,1 41,1 L45,15 Z" fill="#0083c1" />
+  </g>
+  
+  <!-- Texto "Policlínico Veterinario" -->
+  <g transform="translate(80, 35)">
+    <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#0083c1">Policlínico</text>
+    <text font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#76923c" x="0" y="25">Veterinario</text>
+  </g>
+</svg>

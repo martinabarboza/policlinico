@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+  <!-- Círculo verde -->
+  <circle cx="60" cy="60" r="40" fill="#00a651"/>
+  
+  <!-- Texto FVET en blanco -->
+  <text x="60" y="68" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="white" text-anchor="middle">FVET</text>
+  
+  <!-- Texto Facultad de Veterinaria -->
+  <text x="120" y="50" font-family="Arial, sans-serif" font-size="10" fill="#00a651" text-anchor="middle">Facultad de Veterinaria</text>
+  
+  <!-- Texto Universidad de la República -->
+  <text x="120" y="65" font-family="Arial, sans-serif" font-size="8" fill="#00a651" text-anchor="middle">Universidad de la República</text>
+  
+  <!-- Texto Uruguay -->
+  <text x="120" y="80" font-family="Arial, sans-serif" font-size="8" fill="#00a651" text-anchor="middle">Uruguay</text>
+</svg>
