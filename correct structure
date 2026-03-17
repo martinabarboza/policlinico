@@ -1,0 +1,65 @@
+polivet/
+
+# 🌐 FRONTEND PÚBLICO
+public/
+│
+├── index.php
+├── contacto.php
+├── equipo.php
+├── dejar_testimonio.php
+├── login.php
+├── logout.php
+│
+├── assets/
+│   ├── logos/
+│   ├── images/
+│
+├── css/
+│   ├── normalize.css
+│   ├── styles.css
+│
+├── js/
+│   └── main.js
+
+# 🔐 PANEL ADMIN
+admin/
+│
+├── index.php (dashboard)
+├── registros_medicos.php
+├── registros_pacientes.php
+├── citas.php
+├── horas_disponibles.php
+│
+├── components/
+│   └── sidebar.php
+│
+├── css/
+│   └── admin.css
+│
+├── js/
+│   └── admin.js
+
+# ⚙️ LÓGICA DEL SISTEMA
+includes/
+│
+├── config.php
+├── functions.php
+├── auth.php   ← (esto te falta 🔥)
+├── header.php
+├── footer.php
+
+# 📡 API (muy importante para escalar)
+api/
+│
+├── get_services.php
+├── get_staff.php
+├── get_testimonials.php
+
+# 🧠 BASE DE DATOS
+database/
+│
+└── policlinico_veterinario.sql
+
+# 📄 OTROS
+README.md
+logs/
