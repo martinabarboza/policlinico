@@ -1,0 +1,27 @@
+services:
+  app:
+    image: php:8.2-apache
+    container_name: policlinico-app
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./public/docker/apache.conf:/etc/apache2/sites-available/000-default.conf
+    depends_on:
+      - db
+    command: >
+      sh -c "docker-php-ext-install mysqli pdo pdo_mysql && apache2-foreground"
+
+  db:
+    image: mariadb:10.11
+    container_name: policlinico-db
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: policlinico_db 
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - policlinico_db_data:/var/lib/mysql 
+
+volumes:
+  policlinico_db_data:

@@ -1,0 +1,53 @@
+===========================================================
+      GUÍA RÁPIDA: DOCKER PARA DESARROLLO WEB
+===========================================================
+
+1. REQUISITOS PREVIOS (INSTALAR)
+-----------------------------------------------------------
+* Docker (Motor de contenedores)
+* Docker Compose (Orquestador de servicios)
+* Git (Control de versiones)
+
+Nota en Linux: Asegurar que el servicio esté corriendo:
+   sudo systemctl enable --now docker
+
+-----------------------------------------------------------
+2. COMANDOS PRINCIPALES (Ejecutar en la raíz del proyecto)
+-----------------------------------------------------------
+
+LIMPIAR RESIDUOS (Borra contenedores temporales):
+--> docker-compose down
+
+LEVANTAR PROYECTO (Enciende la web y DB):
+--> docker-compose up -d
+
+VER ESTADO (Ver si están corriendo y en qué puertos):
+--> docker ps
+
+APAGAR Y LIBERAR RAM (Solo apaga, no borra nada):
+--> docker-compose stop
+
+VER LOGS/ERRORES (Si la página no carga o da error 500):
+--> docker logs -f policlinico-app
+
+-----------------------------------------------------------
+3. ACCESO Y BASE DE DATOS
+-----------------------------------------------------------
+
+URL DE LA PÁGINA (Usar siempre HTTP, no HTTPS):
+--> http://localhost:8080
+
+ENTRAR A CONSOLA MARIA DB (Manual):
+--> docker exec -it policlinico-db mariadb -u nombre-usuario -p
+
+IMPORTAR ARCHIVO SQL (Directo):
+--> docker exec -i policlinico-db mariadb -u nombre-usuario -pcontraseña policlinico_db < carpeta/tu_archivo.sql
+
+-----------------------------------------------------------
+4. TIPS DE SEGURIDAD Y ERRORES
+-----------------------------------------------------------
+* Error SSL_ERROR_RX_RECORD_TOO_LONG: Estás intentando entrar por 
+  https://. Cambia la URL manualmente a http://.
+* Si el puerto 8080 está ocupado, cámbialo en el docker-compose.yml 
+  en la sección "ports".
+===========================================================
