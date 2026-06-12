@@ -1,2 +1,2 @@
 # policlinico
-boceto de veterinaria universitaria
+sistema de gestión de consultas veterinaria
