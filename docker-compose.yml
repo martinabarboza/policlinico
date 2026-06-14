@@ -17,11 +17,22 @@ services:
     container_name: policlinico-db
     environment:
       MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: policlinico_db 
+      MYSQL_DATABASE: policlinico_db
       MYSQL_USER: user
       MYSQL_PASSWORD: 123456
     volumes:
-      - policlinico_db_data:/var/lib/mysql 
+      - policlinico_db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: policlinico-pma
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: policlinico-db
+      MYSQL_ROOT_PASSWORD: 123456
 
 volumes:
   policlinico_db_data:
