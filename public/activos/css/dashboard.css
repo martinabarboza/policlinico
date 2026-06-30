@@ -1,6 +1,7 @@
 :root {
-    --primary: #009CFF;
-    --light: #F3F6F9;
+    --light: #f8f9fa;
+    --primary: #04714c;
+    --secondary: #004a82
     --dark: #191C24;
 }
 
@@ -65,7 +66,7 @@
     width: 250px;
     height: 100vh;
     overflow-y: auto;
-    background: var(--light);
+    background: var(--primary);
     transition: 0.5s;
     z-index: 999;
 }
@@ -115,18 +116,19 @@
 /*** Navbar ***/
 .sidebar .navbar .navbar-nav .nav-link {
     padding: 7px 20px;
-    color: var(--dark);
+    color: var(--light);
     font-weight: 500;
-    border-left: 3px solid var(--light);
+    border-left: 3px solid var(--primary);
+    background-color: var(--primary);
     border-radius: 0 30px 30px 0;
     outline: none;
 }
 
 .sidebar .navbar .navbar-nav .nav-link:hover,
 .sidebar .navbar .navbar-nav .nav-link.active {
-    color: var(--primary);
-    background: #FFFFFF;
-    border-color: var(--primary);
+    color: var(--light);
+    background: #048359;
+    border-color: var(--light);
 }
 
 .sidebar .navbar .navbar-nav .nav-link i {
@@ -135,13 +137,13 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #FFFFFF;
+   /* background: var(--primary);*/
     border-radius: 40px;
 }
 
 .sidebar .navbar .navbar-nav .nav-link:hover i,
 .sidebar .navbar .navbar-nav .nav-link.active i {
-    background: var(--light);
+background: var(--primary);
 }
 
 .sidebar .navbar .dropdown-toggle::after {
@@ -150,7 +152,7 @@
     right: 15px;
     border: none;
     content: "\f107";
-    font-family: "Font Awesome 5 Free";
+    font-family: "Inter";
     font-weight: 900;
     transition: .5s;
 }
@@ -164,12 +166,12 @@
     border-radius: 0 30px 30px 0;
 }
 
-.content .navbar .navbar-nav .nav-link {
+/*.content .navbar .navbar-nav .nav-link {
     margin-left: 25px;
     padding: 12px 0;
-    color: var(--dark);
+    color: var(--primary);
     outline: none;
-}
+} */
 
 .content .navbar .navbar-nav .nav-link:hover,
 .content .navbar .navbar-nav .nav-link.active {
@@ -183,7 +185,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #FFFFFF;
+    background: var(--light);
     border-radius: 40px;
 }
 
@@ -192,7 +194,7 @@
     vertical-align: middle;
     border: none;
     content: "\f107";
-    font-family: "Font Awesome 5 Free";
+    font-family: "Inter";
     font-weight: 900;
     transition: .5s;
 }

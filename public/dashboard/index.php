@@ -17,7 +17,7 @@
     <link href="../activos/libs/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- CSS -->
-    <link href="../activos/css/style.css" rel="stylesheet">
+    <link href="../activos/css/dashboard.css" rel="stylesheet">
 </head>
 
 <body>
@@ -33,18 +33,19 @@
 
         <!-- Empieza Sidebar -->
         <div class="sidebar pe-4 pb-3">
-            <nav class="navbar bg-light navbar-light">
-                <a href="index.php" class="navbar-brand mx-4 mb-3">
-                    <h3 class="text-primary"><i class="fa fa-horse me-2"></i>PoliVet</h3>
+            <nav class="navbar">
+                <!-- bg-light navbar-light -->
+                <a href="index.php" class="navbar-brand mx-4 mt-4 mb-4">
+                    <h3 class="text-light"><i class="fa fa-paw me-2"></i>PetCraft</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
-                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center bg-light text-secondary" style="width: 40px; height: 40px;">
                             <i class="bi bi-person-fill"></i>
                         </div> 
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
-                    <div class="ms-3">
+                    <div class="ms-3 text-light">
                         <h6 class="mb-0">Martina Barboza</h6>
                         <span>Admin</span>
                     </div>
@@ -84,9 +85,9 @@
 
             <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
                 <a href="index.php" class="navbar-brand d-flex d-lg-none me-4">
-                    <h2 class="text-primary mb-0"><i class="fa fa-horse"></i></h2>
+                    <h2 class="text-light mb-0"><i class="fa fa-horse"></i></h2>
                 </a>
-                <a href="#" class="sidebar-toggler flex-shrink-0">
+                <a href="#" class="sidebar-toggler flex-shrink-0 bg-light text-secondary">
                     <i class="fa fa-ellipsis-v"></i>
                 </a>
 <form class="d-none d-md-flex ms-4">
@@ -107,7 +108,7 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                             <i class="fa fa-envelope me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Mensaje</span>
+                            <span class="d-none d-lg-inline-flex">Mensajes</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
@@ -196,39 +197,39 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
                     <div class="col-sm-6 col-xl-3">
-                        <a href="blank.php" class="btn btn-primary rounded d-flex align-items-center justify-content-between text-decoration-none p-5">
-                            <i class="fa fa-plus-circle fa-3x text-white"></i>
+                        <a href="blank.php" class="btn btn-light rounded d-flex align-items-center justify-content-between text-decoration-none p-5">
+                            <i class="fa fa-plus-circle fa-3x text-primary"></i>
                             <div class="ms-3">
-                                <h6 class="mb-0 text-white">NUEVA FICHA</h6>
+                                <h6 class="mb-0 text-dark">NUEVA FICHA</h6>
                             </div>
                         </a>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <a href="#" class="btn btn-success rounded d-flex align-items-center justify-content-between text-decoration-none p-5">
-                            <i class="fa fa-calendar-day fa-3x text-white"></i>
+                        <a href="#" class="btn btn-light rounded d-flex align-items-center justify-content-between text-decoration-none p-5">
+                            <i class="fa fa-calendar-day fa-3x text-success"></i>
                             <div class="ms-3">
-                            <h6 class="mb-0 text-white">CONSULTAS DIARIAS</h6>
-                          <p class="mb-2 text-white">nroConsultas</p>
+                            <h6 class="mb-0 text-dark">CONSULTAS DIARIAS</h6>
+                          <p class="mb-2 text-dark">nroConsultas</p>
 
                             </div>
                         </a>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <a href="" class="btn btn-danger rounded d-flex align-items-center justify-content-between text-decoration-none p-5">
-                            <i class="fa fa-exclamation-triangle fa-3x text-white"></i>
+                        <a href="" class="btn btn-light rounded d-flex align-items-center justify-content-between text-decoration-none p-5">
+                            <i class="fa fa-exclamation-triangle fa-3x text-danger"></i>
                             <div class="ms-3"> 
-                                <h6 class="mb-0 text-white">CONSULTAS INCOMPLETAS</h6>
-                                <p class="mb-2 text-white">nroConsultas</p>
+                                <h6 class="mb-0 text-dark">CONSULTAS INCOMPLETAS</h6>
+                                <p class="mb-2 text-dark">nroConsultas</p>
                                
                             </div>
                         </a>
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <a href="" class="btn btn-info rounded d-flex align-items-center justify-content-between text-decoration-none p-5">
-                            <i class="fa fa-clock fa-3x text-white"></i>
+                        <a href="" class="btn btn-light rounded d-flex align-items-center justify-content-between text-decoration-none p-5">
+                            <i class="fa fa-clock fa-3x text-warning"></i>
                             <div class="ms-3">
-                             <h6 class="mb-0 text-white">PRÓXIMAS CONSULTAS</h6>
-                                <p class="mb-2 text-white">Ver consultas</p>
+                             <h6 class="mb-0 text-dark">PRÓXIMAS CONSULTAS</h6>
+                                <p class="mb-2 text-dark">Ver consultas</p>
 
                             </div>
                         </a>
@@ -337,10 +338,10 @@
                 <div class="bg-light rounded-top p-4">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Policlínico Veterinario</a>, Todos los derechos reservados. 
+                            &copy; <a href="#">Policlínico Veterinario</a> 
                         </div>
                         <div class="col-12 col-sm-6 text-center text-sm-end">
-                            Hecho por <a href="#">Petcraft</a>
+                            Diseñado por <a href="#">Petcraft</a>
                         </div>
                     </div>
                 </div>
