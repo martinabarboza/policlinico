@@ -225,7 +225,7 @@
 <script src="../activos/libs/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
 
     <!--Javascript -->
-    <script src="../activos/js/main.js"></script>
+    <script src="../activos/js/dashboard.js"></script>
 </body>
 
 </html>
