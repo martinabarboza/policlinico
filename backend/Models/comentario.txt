@@ -1,0 +1,3 @@
+CLASES y METODOS
+Modelo: es la lógica de negocios. Es decir las clases y métodos que se comunican directamente con la
+base de datos.

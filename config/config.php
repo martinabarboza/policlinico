@@ -3,8 +3,8 @@
 define('ROOT_PATH', dirname(__DIR__));
 
 define('APP_PATH', ROOT_PATH . '/app');
-define('BASE_URL', '/policlinico');
-define('ASSETS_URL', BASE_URL . '/public/activos');
+define('BASE_URL', '');
+define('ASSETS_URL', BASE_URL . '/activos');
 define('CONTROLLERS_PATH', APP_PATH . '/Controllers');
 define('MODELS_PATH', APP_PATH . '/Models');
 define('VIEWS_PATH', APP_PATH . '/Views');

@@ -1,0 +1,4 @@
+Controlador: el intermediario entre la vista y el modelo, se encarga de controlar las interacciones del
+usuario en la vista, pide los datos al modelo y los devuelve de nuevo a la vista para que esta los muestre al
+usuario. Es decir las llamadas a clases y métodos, y los datos recibidos de formularios.
+PUBLIC (index/dashborad) -- CONTROLADOR(Interprete) - Vista/Modelo
