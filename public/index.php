@@ -1,3 +1,4 @@
+<?php require __DIR__ . '../../backend/Controllers/InicioController.php'; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -6,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poliniclinico</title>
 </head>
-    <h1>Hola Mundo</h1>
-<body>
 
+<body>
+    <?php $InicioController->index();  ?>
 </body>
 
 </html>
