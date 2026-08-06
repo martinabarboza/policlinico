@@ -1,20 +1,15 @@
-<?php require __DIR__ . '../../backend/Controllers/InicioController.php'; ?>
-<!DOCTYPE html>
-<html lang="es">
+<?php
 
-<head class="head-landing">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poliniclinico</title>
-    <!-- Librerias -->
-    <link rel="stylesheet" href="<?= '/activos/libs/bootstrap-5.3.8-dist/css/bootstrap.min.css' ?>">
-    <script src= "<?= '/activos/libs/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js'?>"></script>
-    <!-- CSS -->
-     <link rel="stylesheet" href="<?= '/activos/css/' ?>">
-</head>
 
-<body>
-    <?php $InicioController->index();  ?>
-</body>
+// ACA NUNCA VA HTML, EL HTML VA EN LAS VISTAS, ACA CARGAMOS EL CONFIG
+// LLAMAMOS CONTROLLERS, MANEJADORES DE ERRORES,ETC 
 
-</html> 
+require_once __DIR__ . '/../config/config.php';
+
+require_once APP_PATH . '/Core/Controller.php';
+require_once APP_PATH . '/Core/Model.php';
+
+require_once APP_PATH . '/Controllers/InicioController.php';
+
+$controller = new InicioController();
+$controller->index();

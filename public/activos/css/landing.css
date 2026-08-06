@@ -1,0 +1,12 @@
+header {
+    min-height: 120px;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+}
+
+.bg-success {
+    background: #04714c !important;
+}
+
+.bg-primary {
+    background: #004a82 !important;
+}
