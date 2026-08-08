@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 07, 2026 at 06:14 AM
+-- Generation Time: Aug 08, 2026 at 04:50 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,16 +44,11 @@ CREATE TABLE `anamnesis` (
 --
 -- Table structure for table `consulta`
 --
--- La estructura de esta tabla está basada en al pie de la letra del
--- Modelo Relacional y debe discutirse. La existencia de la columna 
--- "id_diagnostico" está en duda ya que representa una clave foranea
--- que no existe en otra tabla. Debe aclararse.
---
 
 CREATE TABLE `consulta` (
   `id_consulta` int(11) NOT NULL,
   `id_paciente` int(11) NOT NULL,
-  `id_diagnostico` int(11) NOT NULL,
+  `id_anamnesis` int(11) NOT NULL,
   `tipo_consulta` varchar(25) NOT NULL,
   `estado_consulta` varchar(9) NOT NULL,
   `fecha_hora_consulta` datetime NOT NULL,
@@ -65,12 +60,6 @@ CREATE TABLE `consulta` (
 --
 -- Table structure for table `paciente`
 --
--- Al no saber como funciona el Policlinico al momento de registrar
--- un animal que tenga una fecha de nacimiento desconocida opté por dejar
--- la posibilidad de que se pueda guardar como un valor nulo, esto está
--- sujeto a cambios y deberia aclararse antes de llegar a una versión
--- más completa de la BD.
---
 
 CREATE TABLE `paciente` (
   `id_paciente` int(11) NOT NULL,
@@ -78,7 +67,7 @@ CREATE TABLE `paciente` (
   `nombre_paciente` varchar(50) NOT NULL,
   `color_paciente` varchar(50) NOT NULL,
   `foto_paciente` varchar(2048) NOT NULL,
-  `fecha_nac_paciente` date DEFAULT NULL,
+  `fecha_nac_paciente` date NOT NULL,
   `sexo_paciente` varchar(6) NOT NULL,
   `peso_paciente` float(6,2) NOT NULL,
   `esterilizado_paciente` varchar(2) NOT NULL,
@@ -167,7 +156,8 @@ ALTER TABLE `anamnesis`
 --
 ALTER TABLE `consulta`
   ADD PRIMARY KEY (`id_consulta`),
-  ADD KEY `fk_consulta_paciente` (`id_paciente`);
+  ADD KEY `fk_consulta_paciente` (`id_paciente`),
+  ADD KEY `fk_consulta_anamnesis` (`id_anamnesis`);
 
 --
 -- Indexes for table `paciente`
@@ -256,6 +246,7 @@ ALTER TABLE `anamnesis`
 -- Constraints for table `consulta`
 --
 ALTER TABLE `consulta`
+  ADD CONSTRAINT `fk_consulta_anamnesis` FOREIGN KEY (`id_anamnesis`) REFERENCES `anamnesis` (`id_anamnesis`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_consulta_paciente` FOREIGN KEY (`id_paciente`) REFERENCES `paciente` (`id_paciente`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
