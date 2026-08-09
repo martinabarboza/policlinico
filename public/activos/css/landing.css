@@ -1,3 +1,36 @@
+/* INCLUDES DE FUENTES */
+@font-face {
+    font-family: 'INTER-NEGRITA' ;
+    src: url('../fonts/inter-v20-latin/inter-v20-latin-900.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap; /*Evita el texto invisible mientras espera que cargue la font*/
+}
+@font-face {
+    font-family: 'INTER-NORMAL' ;
+    src: url('../fonts/inter-v20-latin/inter-v20-latin-500.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'MONTSERRAT-NEGRITA' ;
+    src: url('../fonts/montserrat-v31-latin/montserrat-v31-latin-900.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'MONTSERRAT-SEMI' ;
+    src: url('../fonts/montserrat-v31-latin/montserrat-v31-latin-600.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+/*------------------- */
+body {
+    background-color: #f4f5fa;
+}
 header {
     min-height: 120px;
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
@@ -9,4 +42,28 @@ header {
 
 .bg-primary {
     background: #004a82 !important;
+}
+
+.navbar {
+    min-height: 80px;
+    background-color: #f8f8f8 !important;
+    border-bottom: 2px solid #292a2a;
+}
+.nav-link {
+    font-family: 'INTER-NEGRITA';
+    font-size: 18px;
+}
+.nav-item.activo .nav-link.active {
+    color: #04714c !important;
+    border-bottom: 5px solid #04714c;
+}
+
+/* Efecto seleccion en la navbar */
+.nav-item .nav-link {
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.nav-item .nav-link:not(.active):hover {
+    transform: scale(1.08);
+    color: #04714c !important;
 }
