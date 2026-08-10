@@ -1,39 +1,56 @@
 /* INCLUDES DE FUENTES */
 @font-face {
-    font-family: 'INTER-NEGRITA' ;
+    font-family: 'INTER-NEGRITA';
     src: url('../fonts/inter-v20-latin/inter-v20-latin-900.woff2') format('woff2');
     font-weight: 900;
     font-style: normal;
-    font-display: swap; /*Evita el texto invisible mientras espera que cargue la font*/
+    font-display: swap;
+    /*Evita el texto invisible mientras espera que cargue la font*/
 }
+
 @font-face {
-    font-family: 'INTER-NORMAL' ;
+    font-family: 'INTER-NORMAL';
     src: url('../fonts/inter-v20-latin/inter-v20-latin-500.woff2') format('woff2');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
 }
+
 @font-face {
-    font-family: 'MONTSERRAT-NEGRITA' ;
+    font-family: 'MONTSERRAT-NEGRITA';
     src: url('../fonts/montserrat-v31-latin/montserrat-v31-latin-900.woff2') format('woff2');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
 }
+
 @font-face {
-    font-family: 'MONTSERRAT-SEMI' ;
+    font-family: 'MONTSERRAT-SEMI';
     src: url('../fonts/montserrat-v31-latin/montserrat-v31-latin-600.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
 }
+
 /*------------------- */
+
+/* Reset Basico */
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* ------------ */
+
+
 body {
     background-color: #f4f5fa;
 }
+
 header {
     min-height: 120px;
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
 }
 
 .bg-success {
@@ -44,15 +61,18 @@ header {
     background: #004a82 !important;
 }
 
+/* ---- INICIO del NAVBAR ---- */
 .navbar {
     min-height: 80px;
     background-color: #f8f8f8 !important;
     border-bottom: 2px solid #292a2a;
 }
+
 .nav-link {
     font-family: 'INTER-NEGRITA';
     font-size: 18px;
 }
+
 .nav-item.activo .nav-link.active {
     color: #04714c !important;
     border-bottom: 5px solid #04714c;
@@ -61,9 +81,109 @@ header {
 /* Efecto seleccion en la navbar */
 .nav-item .nav-link {
     transition: transform 0.2s ease, color 0.2s ease;
+    transform-origin: left center;
+    /*Hace crecer de la izquierda hacia el centro de la pantalla*/
 }
 
 .nav-item .nav-link:not(.active):hover {
-    transform: scale(1.08);
+    transform: scale(1.1);
     color: #04714c !important;
 }
+
+.li-ingresar {
+    background-color: #04714c;
+    width: fit-content !important;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+
+}
+
+.li-ingresar:hover {
+    background-color: #feea00 !important;
+    transform: scale(1.05);
+    border: solid 1px black;
+}
+
+.btn-ingresar {
+    font-family: 'INTER-NEGRITA';
+    font-size: 18px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: white;
+}
+
+/* ---- FIN del NAVBAR ---- */
+
+
+/* ---- INICIO del FOOTER ---- */
+
+.footer-landing {
+    background-color: #04714c;
+
+
+}
+
+.footer-landing .pie-pagina {
+    background-color: #3b7bbb;
+    border-top: 2px solid #292a2a;
+}
+
+.text-uppercase {
+    font-family: 'INTER-NEGRITA';
+    font-size: 18px;
+}
+
+.text-justify {
+    text-align: justify;
+    hyphens: auto;
+    overflow-wrap: break-word;
+}
+
+.enlace-rapido {
+    font-family: 'INTER-NORMAl';
+    font-size: 16px;
+    text-decoration: underline;
+    color: white;
+}
+
+.footer-p {
+    font-family: 'INTER-NORMAl';
+    font-size: 16px;
+    color: white;
+}
+
+@media (min-width: 992px) {
+    .border-bottom-lg {
+        border-right: 1px solid var(--bs-secondary) !important;
+    }
+}
+
+@media (max-width: 992px) {
+
+    .footer-p {
+        font-size: 14px;
+    }
+
+    .enlace-rapido {
+        font-size: 14px;
+    }
+
+}
+
+.info-vet {
+    text-decoration: none;
+}
+
+.pie-pagina p {
+    font-family: 'INTER-NORMAl';
+    font-size: 13px;
+    color: white;
+}
+
+.paw-dog {
+    width: 30px;
+    height: 30px;
+}
+
+/* ---- FIN del FOOTER ---- */
