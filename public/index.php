@@ -1,15 +1,21 @@
 <?php
 
-
-// ACA NUNCA VA HTML, EL HTML VA EN LAS VISTAS, ACA CARGAMOS EL CONFIG
-// LLAMAMOS CONTROLLERS, MANEJADORES DE ERRORES,ETC 
-
 require_once __DIR__ . '/../config/config.php';
+
+require_once APP_PATH . '/../backend/Helpers/url.php';
+require_once APP_PATH . '/../backend/Core/Router.php';
 
 require_once APP_PATH . '/Core/Controller.php';
 require_once APP_PATH . '/Core/Model.php';
 
 require_once APP_PATH . '/Controllers/InicioController.php';
 
-$controller = new InicioController();
-$controller->index();
+
+$router = new Router();
+
+require_once APP_PATH . '/../routes/web.php';
+
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
+
+$router->dispatch($uri, $method);

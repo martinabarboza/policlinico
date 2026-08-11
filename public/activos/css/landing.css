@@ -119,12 +119,12 @@ header {
 /* ---- INICIO del FOOTER ---- */
 
 .footer-landing {
-    background-color: #04714c;
+    background-color: #04714c; 
 
 
 }
 
-.footer-landing .pie-pagina {
+.pie-pagina {
     background-color: #3b7bbb;
     border-top: 2px solid #292a2a;
 }
@@ -187,3 +187,37 @@ header {
 }
 
 /* ---- FIN del FOOTER ---- */
+
+
+/* login */
+
+  body {
+    background: #eef1f8;
+    min-height: 100vh;
+  }
+  .top-bar {
+    height: 6px;
+    background: linear-gradient(to right, #1f7a4d 0%, #1f7a4d 50%, #1a3fae 50%, #1a3fae 100%);
+  }
+  .login-card {
+    max-width: 480px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+  .logo-circle {
+    width: 72px;
+    height: 72px;
+  }
+  .brand-green {
+    color: #1f7a4d;
+  }
+  .btn-brand {
+    background-color: #1f7a4d;
+    border-color: #1f7a4d;
+  }
+  .btn-brand:hover {
+    background-color: #17603c;
+    border-color: #17603c;
+  }
+  
+

@@ -91,7 +91,6 @@
         <!--Grid row-->
     </div>
     <!-- Grid container -->
-
     <!-- Copyright -->
     <div class="text-center p-3 pie-pagina d-flex flex-column flex-lg-row justify-content-center align-items-center">
         <p class=" text-justify mb-0  mt-0 me-lg-auto"> ©2026 Copyright: Policlínica Veterinaria CENUR, Todos los derechos reservados</p>

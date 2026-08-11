@@ -22,7 +22,7 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item btn li-ingresar rounded rounded-2 d-flex  w-auto align-items-center gap-2">
                     <img src="<?= ASSETS_URL ?>/svgs/user-svgrepo-com.svg" alt="">
-                    <button class="btn-ingresar" aria-current="page" href="#">INGRESAR AL PORTAL</button>
+                    <a class="btn-ingresar" aria-current="page" href="<?= url('login') ?>">INGRESAR AL PORTAL</a>
                 </li>
             </ul>
         </div>
