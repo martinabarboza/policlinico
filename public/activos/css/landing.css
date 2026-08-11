@@ -94,11 +94,13 @@ header {
     background-color: #04714c;
     width: fit-content !important;
     transition: background-color 0.2s ease, transform 0.2s ease;
+    transform-origin: right center;
+
 
 }
 
 .li-ingresar:hover {
-    background-color: #feea00 !important;
+    background-color: #04714c !important;
     transform: scale(1.05);
     border: solid 1px black;
 }
@@ -107,6 +109,7 @@ header {
     font-family: 'INTER-NEGRITA';
     font-size: 18px;
     background: none;
+    text-decoration: none !important;
     border: none;
     padding: 0;
     margin: 0;
@@ -119,7 +122,7 @@ header {
 /* ---- INICIO del FOOTER ---- */
 
 .footer-landing {
-    background-color: #04714c; 
+    background-color: #04714c;
 
 
 }
@@ -169,6 +172,10 @@ header {
         font-size: 14px;
     }
 
+    .li-ingresar {
+        transform-origin: left center;
+    }
+
 }
 
 .info-vet {
@@ -191,33 +198,37 @@ header {
 
 /* login */
 
-  body {
+body {
     background: #eef1f8;
     min-height: 100vh;
-  }
-  .top-bar {
+}
+
+.top-bar {
     height: 6px;
     background: linear-gradient(to right, #1f7a4d 0%, #1f7a4d 50%, #1a3fae 50%, #1a3fae 100%);
-  }
-  .login-card {
+}
+
+.login-card {
     max-width: 480px;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  }
-  .logo-circle {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.logo-circle {
     width: 72px;
     height: 72px;
-  }
-  .brand-green {
+}
+
+.brand-green {
     color: #1f7a4d;
-  }
-  .btn-brand {
+}
+
+.btn-brand {
     background-color: #1f7a4d;
     border-color: #1f7a4d;
-  }
-  .btn-brand:hover {
+}
+
+.btn-brand:hover {
     background-color: #17603c;
     border-color: #17603c;
-  }
-  
-
+}

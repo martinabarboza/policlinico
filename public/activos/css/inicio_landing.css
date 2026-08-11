@@ -1,0 +1,61 @@
+.hero {
+    width: 100%;
+    background-size: cover;
+    background-position: center 1px;
+    background-repeat: no-repeat;
+    background-image:/* Capa 1 (arriba): Tinte azul semitransparente (rgba) */linear-gradient(rgba(0, 74, 130, 0.7), rgba(0, 74, 130, 0.7)),/* Capa 2 (abajo): Tu imagen */url('../imgs/Hero_Background.png');
+}
+
+.img-policlinico {
+    width: 700px;
+    height: 300px;
+    object-position: center center;
+}
+
+.hero-titulo {
+    font-family: 'MONTSERRAT-NEGRITA';
+    font-size: 36px;
+    color: white;
+}
+
+.hero-parrafo {
+    font-family: 'INTER-NORMAL';
+    font-size: 16px;
+    color: white;
+}
+
+.hero-btn {
+    font-family: 'MONTSERRAT-NEGRITA';
+    font-size: 16px;
+    color: white;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+
+}
+
+.hero-btn:hover {
+    transform: scale(1.05);
+    border: solid 1px black;
+}
+
+@media (max-width: 992px) {
+    .img-policlinico {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+@media (max-width: 500px) {
+    .img-policlinico {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        object-position: center;
+    }
+    .hero-parrafo {
+        font-size: 14px;
+    }
+    .hero-btn {
+        font-size: 14px;
+    }
+}

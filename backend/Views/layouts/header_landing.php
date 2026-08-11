@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <!-- librerias siempre en el header para que siempre carguen junto con la pagina -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,9 @@
     <script src="<?= ASSETS_URL ?>/libs/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/landing.css">
+    <!-- CSS-DINAMICOS -->
+    <link id="dinamico-css" rel="stylesheet" href="<?= ASSETS_URL ?>/css/inicio_landing.css">
+
 </head>
 <header class="container-fluid p-0">
     <div class="row g-0">
