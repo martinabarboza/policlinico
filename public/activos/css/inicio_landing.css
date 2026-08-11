@@ -37,6 +37,45 @@
     border: solid 1px black;
 }
 
+.section1-h2 {
+    font-family: 'MONTSERRAT-NEGRITA';
+    font-size: 24px;
+    color: #004a82;
+}
+
+.separador-con-huella {
+    display: flex;
+    align-items: center;
+    width: 100%;             /* Asegura que ocupe todo el ancho del contenedor */
+    color: #004a82;          /* Color del SVG */
+    margin: 2rem 0;
+}
+
+/* Forzar renderizado explícito de las líneas */
+.separador-con-huella::before,
+.separador-con-huella::after {
+    content: "";
+    display: block;          /* Obligatorio para garantizar visibilidad */
+    flex: 1;                 /* Se expande para llenar el espacio disponible */
+    height: 4px;             /* Grosor visible de la línea */
+    background-color: #04714c; /* Usar el color directo en lugar de currentColor */
+}
+
+/* Espaciados entre la línea y el SVG */
+.separador-con-huella::before {
+    margin-right: 1rem;
+}
+
+.separador-con-huella::after {
+    margin-left: 1rem;
+}
+
+.cards-carousel {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
 @media (max-width: 992px) {
     .img-policlinico {
         width: 100%;
@@ -45,6 +84,7 @@
         object-position: center;
     }
 }
+
 @media (max-width: 500px) {
     .img-policlinico {
         width: 100%;
@@ -57,5 +97,10 @@
     }
     .hero-btn {
         font-size: 14px;
+    }
+
+    .section1-h2 {
+        font-size: 18px;
+        text-align: center;
     }
 }
