@@ -1,4 +1,4 @@
-<body>
+<main>
  
 <div class="top-bar"></div>
  
@@ -45,3 +45,4 @@
         <p class=" text-justify mb-0  mt-0 me-lg-auto"> ©2026 Copyright: Policlínica Veterinaria CENUR, Todos los derechos reservados</p>
         <p class=" text-justify mb-0  mt-0 ms-lg-auto">Desarrollado por <img src="<?= ASSETS_URL ?>/imgs/petcraft-logo.png" alt="Huella" class=" mx-2 paw-dog"> PetCraft</p>
     </div>
+</main>
