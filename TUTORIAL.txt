@@ -51,3 +51,4 @@ IMPORTAR ARCHIVO SQL (Directo):
 * Si el puerto 8080 está ocupado, cámbialo en el docker-compose.yml 
   en la sección "ports".
 ===========================================================
+docker compose up -d --build

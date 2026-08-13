@@ -3,7 +3,11 @@
     background-size: cover;
     background-position: center 1px;
     background-repeat: no-repeat;
-    background-image:/* Capa 1 (arriba): Tinte azul semitransparente (rgba) */linear-gradient(rgba(0, 74, 130, 0.7), rgba(0, 74, 130, 0.7)),/* Capa 2 (abajo): Tu imagen */url('../imgs/Hero_Background.png');
+    background-image:
+        /* Capa 1 (arriba): Tinte azul semitransparente (rgba) */
+        linear-gradient(rgba(0, 74, 130, 0.7), rgba(0, 74, 130, 0.7)),
+        /* Capa 2 (abajo): Tu imagen */
+        url('../imgs/Hero_Background.png');
 }
 
 .img-policlinico {
@@ -43,11 +47,15 @@
     color: #004a82;
 }
 
+/* --- Nota, me lo dio GEMINI, parece funcional con varios dispositivos --- */
+
 .separador-con-huella {
     display: flex;
     align-items: center;
-    width: 100%;             /* Asegura que ocupe todo el ancho del contenedor */
-    color: #004a82;          /* Color del SVG */
+    width: 100%;
+    /* Asegura que ocupe todo el ancho del contenedor */
+    color: #004a82;
+    /* Color del SVG */
     margin: 2rem 0;
 }
 
@@ -55,10 +63,14 @@
 .separador-con-huella::before,
 .separador-con-huella::after {
     content: "";
-    display: block;          /* Obligatorio para garantizar visibilidad */
-    flex: 1;                 /* Se expande para llenar el espacio disponible */
-    height: 4px;             /* Grosor visible de la línea */
-    background-color: #04714c; /* Usar el color directo en lugar de currentColor */
+    display: block;
+    /* Obligatorio para garantizar visibilidad */
+    flex: 1;
+    /* Se expande para llenar el espacio disponible */
+    height: 4px;
+    /* Grosor visible de la línea */
+    background-color: #04714c;
+    /* Usar el color directo en lugar de currentColor */
 }
 
 /* Espaciados entre la línea y el SVG */
@@ -76,6 +88,66 @@
     gap: 1rem;
 }
 
+/* -- Fin -- */
+
+.card-title {
+    font-family: 'INTER-NEGRITA';
+    font-size: 16px;
+}
+
+.card-text {
+    font-family: 'INTER-NORMAL';
+    font-size: 14px;
+}
+
+.btn-primary {
+    background-color: #3b7bbb !important;
+    font-family: 'MONTSERRAT-NEGRITA';
+    font-size: 14px;
+    transition: transform 0.2s ease, color 0.2s ease;
+    transform-origin: left center;
+
+}
+
+.btn-primary:hover {
+    transform: scale(1.1);
+
+}
+
+/* --- GEMINI ataca de nuevo --- */
+
+/* Ajustes para solapar la etiqueta superior con el contenedor verde */
+.titulo-banner-verde {
+    margin-bottom: -10px;
+    margin-left: 0px !important;
+    /* Hace que la etiqueta azul quede por detrás/debajo */
+    position: relative;
+    z-index: 1;
+}
+
+/* El banner principal debe estar al frente para la sombra */
+.banner-horario {
+    z-index: 2;
+    border-radius: 0 10px 10px 10px;
+    /* Si los colores exactos difieren de Bootstrap por defecto: */
+    /* background-color: #007043 !important; */
+}
+
+/* Posicionamiento y tamaño del perro sobresalido */
+.img-golden {
+    height: 125%;
+    /* Hace que sea más alto que la caja verde */
+    bottom: 0;
+    /* Se alinea al fondo de la caja */
+    right: 15px !important;
+    /* Separación del borde derecho */
+    object-fit: contain;
+    pointer-events: none;
+    /* Evita interacciones accidentales */
+}
+
+/* --- FIN de GEMINI ---*/
+
 @media (max-width: 992px) {
     .img-policlinico {
         width: 100%;
@@ -92,9 +164,11 @@
         object-fit: cover;
         object-position: center;
     }
+
     .hero-parrafo {
         font-size: 14px;
     }
+
     .hero-btn {
         font-size: 14px;
     }

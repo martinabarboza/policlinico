@@ -7,7 +7,10 @@ class InicioController
     }
 
     public function obtenerServicios()
-    {
+    {   //NOTA
+        //Armar un model que obtenga los servicios de la base de datos.
+        // Y que se guarden en el array recorriendolos con for.
+        //
         return [
             [
                 'titulo' => 'Consultas y atención al publico',
@@ -30,4 +33,4 @@ class InicioController
         ];
     }
 }
-$InicioController = new InicioController();
+?>
