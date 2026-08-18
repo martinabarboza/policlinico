@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.1deb1+deb12u1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Aug 08, 2026 at 04:50 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Servidor: localhost:3306
+-- Tiempo de generación: 18-08-2026 a las 23:53:19
+-- Versión del servidor: 10.11.18-MariaDB-0+deb12u1
+-- Versión de PHP: 8.2.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `polivetdb`
+-- Base de datos: `polivetdb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `anamnesis`
+-- Estructura de tabla para la tabla `anamnesis`
 --
 
 CREATE TABLE `anamnesis` (
@@ -42,7 +42,7 @@ CREATE TABLE `anamnesis` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `consulta`
+-- Estructura de tabla para la tabla `consulta`
 --
 
 CREATE TABLE `consulta` (
@@ -58,7 +58,7 @@ CREATE TABLE `consulta` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `paciente`
+-- Estructura de tabla para la tabla `paciente`
 --
 
 CREATE TABLE `paciente` (
@@ -78,7 +78,7 @@ CREATE TABLE `paciente` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `servicio`
+-- Estructura de tabla para la tabla `servicio`
 --
 
 CREATE TABLE `servicio` (
@@ -96,7 +96,7 @@ CREATE TABLE `servicio` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tutor`
+-- Estructura de tabla para la tabla `tutor`
 --
 
 CREATE TABLE `tutor` (
@@ -115,7 +115,7 @@ CREATE TABLE `tutor` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuarios`
+-- Estructura de tabla para la tabla `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -123,6 +123,7 @@ CREATE TABLE `usuarios` (
   `cedula_usuario` int(8) NOT NULL,
   `nombre_usuario` varchar(50) NOT NULL,
   `apellido_usuario` varchar(50) NOT NULL,
+  `rol_usuario` varchar(11) NOT NULL,
   `email_usuario` varchar(320) NOT NULL,
   `passwd_usuario` varchar(256) NOT NULL,
   `lastlogin_usuario` datetime NOT NULL,
@@ -132,7 +133,7 @@ CREATE TABLE `usuarios` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuario_consulta`
+-- Estructura de tabla para la tabla `usuario_consulta`
 --
 
 CREATE TABLE `usuario_consulta` (
@@ -141,18 +142,18 @@ CREATE TABLE `usuario_consulta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `anamnesis`
+-- Indices de la tabla `anamnesis`
 --
 ALTER TABLE `anamnesis`
   ADD PRIMARY KEY (`id_anamnesis`),
   ADD KEY `fk_anamnesis_consulta` (`id_consulta`);
 
 --
--- Indexes for table `consulta`
+-- Indices de la tabla `consulta`
 --
 ALTER TABLE `consulta`
   ADD PRIMARY KEY (`id_consulta`),
@@ -160,103 +161,103 @@ ALTER TABLE `consulta`
   ADD KEY `fk_consulta_anamnesis` (`id_anamnesis`);
 
 --
--- Indexes for table `paciente`
+-- Indices de la tabla `paciente`
 --
 ALTER TABLE `paciente`
   ADD PRIMARY KEY (`id_paciente`),
   ADD KEY `fk_paciente_tutor` (`id_tutor`);
 
 --
--- Indexes for table `servicio`
+-- Indices de la tabla `servicio`
 --
 ALTER TABLE `servicio`
   ADD PRIMARY KEY (`id_servicio`);
 
 --
--- Indexes for table `tutor`
+-- Indices de la tabla `tutor`
 --
 ALTER TABLE `tutor`
   ADD PRIMARY KEY (`id_tutor`),
   ADD UNIQUE KEY `documento_tutor` (`documento_tutor`);
 
 --
--- Indexes for table `usuarios`
+-- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id_usuario`);
 
 --
--- Indexes for table `usuario_consulta`
+-- Indices de la tabla `usuario_consulta`
 --
 ALTER TABLE `usuario_consulta`
   ADD PRIMARY KEY (`id_usuario`,`id_consulta`),
   ADD KEY `fk_usuario_id_consulta` (`id_consulta`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `anamnesis`
+-- AUTO_INCREMENT de la tabla `anamnesis`
 --
 ALTER TABLE `anamnesis`
   MODIFY `id_anamnesis` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `consulta`
+-- AUTO_INCREMENT de la tabla `consulta`
 --
 ALTER TABLE `consulta`
   MODIFY `id_consulta` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `paciente`
+-- AUTO_INCREMENT de la tabla `paciente`
 --
 ALTER TABLE `paciente`
   MODIFY `id_paciente` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `servicio`
+-- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
   MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `tutor`
+-- AUTO_INCREMENT de la tabla `tutor`
 --
 ALTER TABLE `tutor`
   MODIFY `id_tutor` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `usuarios`
+-- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
   MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- Restricciones para tablas volcadas
 --
 
 --
--- Constraints for table `anamnesis`
+-- Filtros para la tabla `anamnesis`
 --
 ALTER TABLE `anamnesis`
   ADD CONSTRAINT `fk_anamnesis_consulta` FOREIGN KEY (`id_consulta`) REFERENCES `consulta` (`id_consulta`);
 
 --
--- Constraints for table `consulta`
+-- Filtros para la tabla `consulta`
 --
 ALTER TABLE `consulta`
   ADD CONSTRAINT `fk_consulta_anamnesis` FOREIGN KEY (`id_anamnesis`) REFERENCES `anamnesis` (`id_anamnesis`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_consulta_paciente` FOREIGN KEY (`id_paciente`) REFERENCES `paciente` (`id_paciente`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `paciente`
+-- Filtros para la tabla `paciente`
 --
 ALTER TABLE `paciente`
   ADD CONSTRAINT `fk_paciente_tutor` FOREIGN KEY (`id_tutor`) REFERENCES `tutor` (`id_tutor`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `usuario_consulta`
+-- Filtros para la tabla `usuario_consulta`
 --
 ALTER TABLE `usuario_consulta`
   ADD CONSTRAINT `fk_id_usuario_consulta` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
