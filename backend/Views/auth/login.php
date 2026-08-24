@@ -11,20 +11,42 @@
         <p class="text-secondary mb-0">Ingresa tus credenciales para continuar</p>
       </div>
  
-      <form action="<?=url('login')?>">
+      <?php if (!empty($error)): ?>
+        <div class="alert alert-danger" role="alert">
+          <?= htmlspecialchars($error) ?>
+        </div>
+      <?php endif; ?>
+
+      <form action="<?=url('login')?>" method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
+
         <div class="mb-3">
           <label for="email" class="form-label fw-semibold">Correo electrónico</label>
-          <input type="email" class="form-control form-control-lg" id="email" placeholder="ejemplo@fvet.edu.uy">
+          <input
+            type="email"
+            class="form-control form-control-lg"
+            id="email"
+            name="email"
+            value="<?= htmlspecialchars($oldEmail ?? '') ?>"
+            placeholder="ejemplo@fvet.edu.uy"
+            required
+            autofocus>
         </div>
  
         <div class="mb-3">
           <label for="password" class="form-label fw-semibold">Contraseña</label>
-          <input type="password" class="form-control form-control-lg" id="password" placeholder="**************">
+          <input
+            type="password"
+            class="form-control form-control-lg"
+            id="password"
+            name="password"
+            placeholder="**************"
+            required>
         </div>
  
         <div class="d-flex justify-content-between align-items-center mb-4">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="remember">
+            <input class="form-check-input" type="checkbox" id="remember" name="remember">
             <label class="form-check-label" for="remember">
               Recordarme
             </label>

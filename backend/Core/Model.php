@@ -2,5 +2,10 @@
 
 class Model
 {
-    // Más adelante agregamos la conexión a la base de datos.
+    protected mysqli $db;
+
+    public function __construct()
+    {
+        $this->db = Database::getConnection();
+    }
 }

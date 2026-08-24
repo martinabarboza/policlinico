@@ -82,10 +82,3 @@ class Controller
 
 }
 
-class AuthController extends Controller
-{
-    public function login(): void
-    {
-        $this->view('auth/login', [], 'landing');
-    }
-}
