@@ -66,7 +66,7 @@ class AuthController extends Controller
         exit;
     }
 
-    private function fallarLogin(string $mensaje, string $cedula): void
+    private function fallarLogin(string $mensaje, int $cedula): void
     {
         $_SESSION['auth_error'] = $mensaje;
         $_SESSION['old_cedula']  = $cedula;

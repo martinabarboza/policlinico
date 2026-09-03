@@ -23,7 +23,7 @@
         <div class="mb-3">
           <label for="cedula" class="form-label fw-semibold">Cedula de Identidad</label>
           <input
-            type="cedula"
+            type="number"
             class="form-control form-control-lg"
             id="cedula"
             name="cedula"
