@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 02-09-2026 a las 00:26:16
+-- Tiempo de generación: 02-09-2026 a las 22:37:08
 -- Versión del servidor: 10.11.18-MariaDB-0+deb12u1
 -- Versión de PHP: 8.2.32
 
@@ -219,7 +219,8 @@ ALTER TABLE `tutor`
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id_usuario`);
+  ADD PRIMARY KEY (`id_usuario`),
+  ADD UNIQUE KEY `cedula_usuario` (`cedula_usuario`);
 
 --
 -- Indices de la tabla `usuario_consulta`

@@ -6,7 +6,7 @@ $estado_auth;
 //Verifica si existe la sessión
 if (isset($_COOKIE['auten_token'])) {
 
-    //Obtiene de la cookie tomanto en cuenta el $ para separar la session de la firma
+    //Obtiene de la cookie tomando en cuenta el $ para separar la session de la firma
     list($sesionCodificada64, $firmaRecibida) = explode('$', $_COOKIE['auten_token']);
 
     //Recrea el hash de la misma manera

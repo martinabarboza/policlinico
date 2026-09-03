@@ -21,14 +21,14 @@
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
 
         <div class="mb-3">
-          <label for="email" class="form-label fw-semibold">Correo electrónico</label>
+          <label for="cedula" class="form-label fw-semibold">Cedula de Identidad</label>
           <input
-            type="email"
+            type="cedula"
             class="form-control form-control-lg"
-            id="email"
-            name="email"
-            value="<?= htmlspecialchars($oldEmail ?? '') ?>"
-            placeholder="ejemplo@fvet.edu.uy"
+            id="cedula"
+            name="cedula"
+            value="<?= htmlspecialchars($oldCedula ?? '') ?>"
+            placeholder="51234567"
             required
             autofocus>
         </div>
@@ -40,7 +40,7 @@
             class="form-control form-control-lg"
             id="password"
             name="password"
-            placeholder="**************"
+            placeholder="Contraseña"
             required>
         </div>
  

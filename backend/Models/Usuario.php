@@ -3,20 +3,20 @@
 class Usuario extends Model
 {
     
-      // Busca un usuario por su email. Devuelve el registro completo
+      // Busca un usuario por su cedula. Devuelve el registro completo
       //(incluye passwd_usuario hasheada) o null si no existe
      
-    public function buscarPorEmail(string $email): ?array
+    public function buscarPorCedula(int $cedula): ?array
     {
         $stmt = $this->db->prepare(
             'SELECT id_usuario, cedula_usuario, nombre_usuario, apellido_usuario,
                     rol_usuario, email_usuario, passwd_usuario
              FROM usuarios
-             WHERE email_usuario = ?
+             WHERE cedula_usuario = ?
              LIMIT 1'
         );
 
-        $stmt->bind_param('s', $email);
+        $stmt->bind_param('i', $cedula);
         $stmt->execute();
 
         $resultado = $stmt->get_result()->fetch_assoc();

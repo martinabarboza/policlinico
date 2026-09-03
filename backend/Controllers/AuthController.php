@@ -16,10 +16,10 @@ class AuthController extends Controller
         $this->view('auth/login', [
             'csrfToken' => Csrf::token(),
             'error'     => $_SESSION['auth_error'] ?? null,
-            'oldEmail'  => $_SESSION['old_email'] ?? '',
+            'oldCedula'  => $_SESSION['old_cedula'] ?? '',
         ], 'landing');
 
-        unset($_SESSION['auth_error'], $_SESSION['old_email']);
+        unset($_SESSION['auth_error'], $_SESSION['old_cedula']);
     }
 
     /**
@@ -27,25 +27,25 @@ class AuthController extends Controller
      */
     public function authenticate(): void
     {
-        $email    = trim($_POST['email'] ?? '');
+        $cedula    = trim($_POST['cedula'] ?? '');
         $password = $_POST['password'] ?? '';
         $token    = $_POST['csrf_token'] ?? '';
 
         if (!Csrf::validar($token)) {
-            $this->fallarLogin('Tu sesión expiró, por favor intentá de nuevo.', $email);
+            $this->fallarLogin('Tu sesión expiró, por favor intentá de nuevo.', $cedula);
             return;
         }
 
-        if ($email === '' || $password === '') {
-            $this->fallarLogin('Completá tu correo y tu contraseña.', $email);
+        if ($cedula === '' || $password === '') {
+            $this->fallarLogin('Completá tu documento y tu contraseña.', $cedula);
             return;
         }
 
         $usuarioModel = $this->model('Usuario');
-        $usuario = $usuarioModel->buscarPorEmail($email);
+        $usuario = $usuarioModel->buscarPorCedula($cedula);
 
         if (!$usuario || !password_verify($password, $usuario['passwd_usuario'])) {
-            $this->fallarLogin('Correo o contraseña incorrectos.', $email);
+            $this->fallarLogin('Documento o contraseña incorrectos.', $cedula);
             return;
         }
 
@@ -66,10 +66,10 @@ class AuthController extends Controller
         exit;
     }
 
-    private function fallarLogin(string $mensaje, string $email): void
+    private function fallarLogin(string $mensaje, string $cedula): void
     {
         $_SESSION['auth_error'] = $mensaje;
-        $_SESSION['old_email']  = $email;
+        $_SESSION['old_cedula']  = $cedula;
         header('Location: ' . url('login'));
         exit;
     }

@@ -12,6 +12,7 @@ class Auth{
                 'id'       => (int) $usuario['id_usuario'],
             'nombre'   => $usuario['nombre_usuario'],
             'apellido' => $usuario['apellido_usuario'],
+            'cedula' => $usuario['cedula_usuario'],
             'email'    => $usuario['email_usuario'],
             'rol'      => $usuario['rol_usuario'],
         ];
@@ -56,7 +57,7 @@ class Auth{
         $rol = self::rol();
 
         $permitido = match ($permiso) {
-            'admin.total' => $rol === 'admin',
+            'admin.total' => $rol === 'DIRECTOR',
             default       => false,
         };
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 01-09-2026 a las 23:14:44
+-- Tiempo de generación: 02-09-2026 a las 22:39:14
 -- Versión del servidor: 10.11.18-MariaDB-0+deb12u1
 -- Versión de PHP: 8.2.32
 
@@ -173,7 +173,8 @@ ALTER TABLE `paciente`
 -- Indices de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  ADD PRIMARY KEY (`id_servicio`);
+  ADD PRIMARY KEY (`id_servicio`),
+  ADD KEY `servicio_usuario` (`id_usuario`);
 
 --
 -- Indices de la tabla `tutor`
@@ -186,7 +187,8 @@ ALTER TABLE `tutor`
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id_usuario`);
+  ADD PRIMARY KEY (`id_usuario`),
+  ADD UNIQUE KEY `cedula_usuario` (`cedula_usuario`);
 
 --
 -- Indices de la tabla `usuario_consulta`
@@ -215,25 +217,25 @@ ALTER TABLE `consulta`
 -- AUTO_INCREMENT de la tabla `paciente`
 --
 ALTER TABLE `paciente`
-  MODIFY `id_paciente` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_paciente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tutor`
 --
 ALTER TABLE `tutor`
-  MODIFY `id_tutor` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tutor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
@@ -257,6 +259,12 @@ ALTER TABLE `consulta`
 --
 ALTER TABLE `paciente`
   ADD CONSTRAINT `fk_paciente_tutor` FOREIGN KEY (`id_tutor`) REFERENCES `tutor` (`id_tutor`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `servicio`
+--
+ALTER TABLE `servicio`
+  ADD CONSTRAINT `servicio_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`);
 
 --
 -- Filtros para la tabla `usuario_consulta`
