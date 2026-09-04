@@ -21,14 +21,14 @@
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
 
         <div class="mb-3">
-          <label for="cedula" class="form-label fw-semibold">Cedula de Identidad</label>
+          <label for="cedula" class="form-label fw-semibold">C.I.</label>
           <input
             type="number"
             class="form-control form-control-lg"
             id="cedula"
             name="cedula"
             value="<?= htmlspecialchars($oldCedula ?? '') ?>"
-            placeholder="51234567"
+            placeholder="Ingresa tu cédula de identidad"
             required
             autofocus>
         </div>
@@ -40,7 +40,7 @@
             class="form-control form-control-lg"
             id="password"
             name="password"
-            placeholder="Contraseña"
+            placeholder="● ● ● ● ● ●"
             required>
         </div>
  
