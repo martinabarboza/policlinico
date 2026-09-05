@@ -26,9 +26,10 @@ class Usuario extends Model
         return $resultado ?: null;
     }
 
-    
+     //
      // Actualiza la fecha de último login del usuario.
-     
+     //
+    
     public function actualizarUltimoLogin(int $idUsuario): void
     {
         $stmt = $this->db->prepare(
@@ -39,4 +40,24 @@ class Usuario extends Model
         $stmt->execute();
         $stmt->close();
     }
+
+     //
+     // Agrega un Nuevo Usuario a la Base de Datos
+     //
+    
+    public function crearUsuarioNuevo(int $cedula, string $nombre, string $apellido, string $rol, string $email, string $passwd){
+        password_hash($passwd, PASSWORD_DEFAULT);
+        $stmt = $this->db->prepare(
+            'INSERT INTO usuarios (cedula_usuario, nombre_usuario, apellido_usuario, rol_usuario, email_usuario, passwd_usuario, lastlogin_usuario, dateupdate_usuario)
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW()');
+        
+        $stmt->bind_param('isssss', $cedula, $nombre, $apellido, $rol, $email, $passwd);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function modificarUsuario(){
+        
+    }
+
 }
