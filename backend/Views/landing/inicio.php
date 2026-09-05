@@ -1,6 +1,10 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
 <?php include __DIR__ . '/../layouts/header_landing.php'; ?>
 <?php
-
 function mostrarServicios($cartas, $cantidad)
 {
     $grupos = array_chunk($cartas, $cantidad);
@@ -15,7 +19,7 @@ function mostrarServicios($cartas, $cantidad)
         foreach ($grupo as $carta) {
             echo '
                 <div class="servicio-card">
-                    <img src="' . $carta['imagen'] . '"
+                    <img src="' . htmlspecialchars($carta['imagen'], ENT_QUOTES, 'UTF-8') . '"
                         class="card-img-top"
                         alt="' . htmlspecialchars($carta['titulo']) . '">
 
@@ -32,7 +36,7 @@ function mostrarServicios($cartas, $cantidad)
                             ' . htmlspecialchars($carta['descripcion']) . '
                         </p>
 
-                        <a href="' . $carta['link'] . '"
+                        <a href="' . htmlspecialchars($carta['link'], ENT_QUOTES, 'UTF-8') . '"
                             class="btn btn-primary">
                             Acceder al portal
                             <i class="bi bi-arrow-right ms-2"></i>
