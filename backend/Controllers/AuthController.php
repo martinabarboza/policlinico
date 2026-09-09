@@ -42,7 +42,16 @@ class AuthController extends Controller
         }
 
         $usuarioModel = $this->model('Usuario');
-        $usuario = $usuarioModel->buscarPorCedula($cedula);
+
+         if (!empty($cedula) && ctype_digit((string)$cedula)) {
+            $usuario = $usuarioModel->buscarPorCedula ((int)$cedula);
+           } else {
+               $usuario = null;
+                $data['error'] = "La cédula debe contener solamente números.";
+
+             }
+
+        //  $usuario = $usuarioModel->buscarPorCedula($cedula);
 
         if (!$usuario || !password_verify($password, $usuario['passwd_usuario'])) {
             $this->fallarLogin('Documento o contraseña incorrectos.', $cedula);
@@ -59,6 +68,7 @@ class AuthController extends Controller
     /**
      * Cierra la sesion (GET /logout).
      */
+
     public function logout(): void
     {
         Auth::logout();
@@ -66,10 +76,18 @@ class AuthController extends Controller
         exit;
     }
 
-    private function fallarLogin(string $mensaje, int $cedula): void
-    {
+    private function fallarLogin(string $mensaje, $cedula): void
+    {   
+        $cedulaINT;
+        try {
+            $cedulaINT = (int) $cedula;
+        } catch (Exception $e) {
+            throw new Exception("Error Processing Request", $e);
+        }
+
+
         $_SESSION['auth_error'] = $mensaje;
-        $_SESSION['old_cedula']  = $cedula;
+        $_SESSION['old_cedula']  = $cedulaINT;
         header('Location: ' . url('login'));
         exit;
     }

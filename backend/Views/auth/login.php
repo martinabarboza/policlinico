@@ -23,7 +23,9 @@
         <div class="mb-3">
           <label for="cedula" class="form-label fw-semibold">C.I.</label>
           <input
-            type="number"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
             class="form-control form-control-lg"
             id="cedula"
             name="cedula"
