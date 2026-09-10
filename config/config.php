@@ -10,6 +10,8 @@ define('MODELS_PATH', APP_PATH . '/Models');
 define('VIEWS_PATH', APP_PATH . '/Views');
 define('INCLUDES_PATH', APP_PATH . '/Views/layouts');
 define('CORE_PATH', APP_PATH . '/Core');
+define('HELPERS_PATH', APP_PATH . '/Helpers');
+
 
 // Configuracion privada 
 

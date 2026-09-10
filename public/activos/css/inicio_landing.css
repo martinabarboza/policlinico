@@ -28,19 +28,6 @@
     color: white;
 }
 
-.hero-btn {
-    font-family: 'MONTSERRAT-NEGRITA';
-    font-size: 16px;
-    color: white;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-
-}
-
-.hero-btn:hover {
-    transform: scale(1.05);
-    border: solid 1px black;
-}
-
 .section1-h2 {
     font-family: 'MONTSERRAT-NEGRITA';
     font-size: 24px;

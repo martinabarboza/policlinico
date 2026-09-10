@@ -1,7 +1,8 @@
 <?php
 
 
-  // token CSRF version mvc
+  // CONVERSIÓN DEL TOKEN CSRF A CLASES, 
+  // FUNCIONANDO EN MVC
  
 class Csrf
 {

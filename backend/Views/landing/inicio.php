@@ -65,9 +65,6 @@ function mostrarServicios($cartas, $cantidad)
                 <div class="col-lg-6">
                     <h1 class="display-5 hero-titulo lh-1 mb-3">Gestión clínica e investigación veterinaria</h1>
                     <p class="lead hero-parrafo text-justify">Optimizando la administración de pacientes, profesionales veterinarios y datos clínicos de la Policlínica CENUR para mejorar la atención y potenciar la investigación epidemiológica.</p>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                        <button type="button" class="btn btn-primary btn-lg px-4 me-md-2 hero-btn">INGRESAR AL PANEL DE CONTROL</button>
-                    </div>
                 </div>
             </div>
         </div>

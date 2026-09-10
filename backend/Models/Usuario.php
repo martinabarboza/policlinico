@@ -3,9 +3,6 @@
 class Usuario extends Model
 {
 
-
-    public function __CONSTRUCT() {}
-
     //
     // Busca un usuario por su cedula. Devuelve el registro completo
     //(incluye passwd_usuario hasheada) o null si no existe.
