@@ -1,5 +1,7 @@
 <?php
 
+// ACA SE DEFIENEN LAS DIRECCIONES IMPORTANTES
+
 define('ROOT_PATH', dirname(__DIR__));
 
 define('APP_PATH', ROOT_PATH . '/backend');
