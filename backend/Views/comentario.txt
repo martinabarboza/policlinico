@@ -1,0 +1,2 @@
+VISTAS (Paginas HTML) y Cada vista va en su carpeta.
+Vista: es la encargada de mostrar la información al usuario, con de forma gráfica y legible.

@@ -1,0 +1,256 @@
+REPORTE DE ENTENDIMIENTO DEL PROYECTO POLICLINICO
+================================================
+
+1. DIAGNOSTICO: QUE ES ESTO
+----------------------------
+
+El proyecto intenta ser un sistema web para administrar una policlinica veterinaria universitaria.
+
+Tiene dos objetivos principales:
+
+- Mostrar una pagina publica de la Policlinica Veterinaria CENUR.
+- Permitir que usuarios autorizados gestionen informacion clinica y administrativa, como pacientes, tutores, consultas, servicios, profesionales y usuarios.
+
+La base del dominio esta definida en database/polivetdb.sql, donde aparecen tablas para usuarios, pacientes, tutores, consultas, anamnesis y servicios.
+
+Sin embargo, el proyecto esta en un estado parcialmente funcional. La landing y el login tienen bastante estructura, pero el dashboard y los modulos internos todavia son principalmente una maqueta visual. Muchos accesos no tienen rutas ni funcionalidades asociadas.
+
+Las carpetas de Practicas PHP parecen ser ejercicios independientes y no forman parte directa de la aplicacion principal.
+
+
+2. COMPONENTES CLAVE
+---------------------
+
+ENTRADA Y CONFIGURACION
+
+- public/index.php
+  Es el punto de entrada principal. Inicia la sesion, carga la configuracion, el nucleo MVC, los controladores y las rutas.
+
+- config/config.php
+  Define rutas internas del proyecto y la ubicacion publica de los recursos.
+
+- backend/Db/config.php
+  Contiene la configuracion efectiva de conexion a MariaDB.
+
+- docker-compose.yml
+  Define los contenedores de PHP/Apache, MariaDB y phpMyAdmin.
+
+NUCLEO DE LA APLICACION
+
+- backend/Core/Router.php
+  Registra y resuelve rutas HTTP. Actualmente trabaja con coincidencias exactas, sin parametros dinamicos ni middleware.
+
+- backend/Core/Database.php
+  Crea una conexion unica a MySQL/MariaDB mediante mysqli.
+
+- backend/Core/Model.php
+  Clase base para los modelos. Proporciona acceso a la conexion de base de datos.
+
+- backend/Core/Controller.php
+  Permite cargar vistas con distintos layouts e instanciar modelos dinamicamente.
+
+- backend/Core/Auth.php
+  Administra la sesion del usuario y las comprobaciones de autenticacion y permisos.
+
+- backend/Core/Csrf.php
+  Genera y valida tokens CSRF, utilizados principalmente en el login.
+
+CONTROLADORES
+
+- backend/Controllers/InicioController.php
+  Carga la landing principal y obtiene los servicios desde la base de datos.
+
+- backend/Controllers/AuthController.php
+  Muestra el formulario de login, valida credenciales, verifica la contrasena y crea la sesion.
+
+- backend/Controllers/DashboardController.php
+  Carga la vista del dashboard, aunque actualmente no obtiene datos reales.
+
+- backend/Controllers/UsuarioController.php
+  Esta pensado para administrar usuarios, pero depende de archivos que todavia no existen o no estan completos.
+
+MODELOS
+
+- backend/Models/Usuario.php
+  Busca usuarios por cedula y actualiza la fecha del ultimo inicio de sesion.
+
+- backend/Models/Servicio.php
+  Obtiene los servicios desde la tabla servicio.
+
+- backend/Models/DashboardModel.php
+  Existe, pero no tiene logica implementada.
+
+VISTAS
+
+- backend/Views/landing/inicio.php
+  Es la pagina principal. Contiene el hero, accesos rapidos y carruseles de servicios.
+
+- backend/Views/auth/login.php
+  Formulario de autenticacion con proteccion CSRF.
+
+- backend/Views/dashboard/index.php
+  Dashboard visual con estadisticas y pacientes, aunque varios valores estan escritos directamente en HTML.
+
+- backend/Views/layouts
+  Contiene los headers, footers, navbar y sidebar de la aplicacion.
+
+
+3. FLUJO DE LOS DATOS
+----------------------
+
+VISITA A LA PAGINA PRINCIPAL
+
+1. El usuario entra a /.
+2. Apache dirige la solicitud hacia public/index.php.
+3. index.php carga la configuracion, las clases principales y las rutas.
+4. routes/web.php relaciona GET / con InicioController::index().
+5. InicioController incluye la vista backend/Views/landing/inicio.php.
+6. La vista crea un InicioController manualmente.
+7. Se ejecuta obtenerServicios().
+8. El controlador carga el modelo Servicio.
+9. El modelo consulta la tabla servicio.
+10. Los registros devueltos se convierten en tarjetas HTML dentro de un carrusel.
+
+Actualmente la vista consulta los servicios tres veces: una para movil, otra para tablet y otra para escritorio. Es el mismo conjunto de datos, por lo que podria obtenerse una sola vez y reutilizarse.
+
+INICIO DE SESION
+
+1. El usuario visita /login.
+2. AuthController::login() genera un token CSRF.
+3. Se muestra backend/Views/auth/login.php.
+4. El formulario envia POST /login.
+5. AuthController::authenticate() recibe cedula, contrasena y token CSRF.
+6. Se valida el token.
+7. Usuario::buscarPorCedula() consulta la tabla usuarios.
+8. password_verify() compara la contrasena ingresada con la contrasena almacenada.
+9. Si los datos son correctos:
+   - Se regenera la sesion.
+   - Se guardan los datos del usuario.
+   - Se actualiza lastlogin_usuario.
+   - Se redirige al dashboard.
+
+DASHBOARD
+
+El dashboard tiene dos caminos distintos:
+
+- Existe un DashboardController.
+- Tambien existe public/dashboard.php, que carga el dashboard directamente.
+
+El dashboard no esta conectado a un flujo completo de rutas MVC. Ademas, la vista muestra estadisticas, pacientes y datos que parecen estar escritos manualmente, en lugar de venir de la base de datos.
+
+BASE DE DATOS
+
+Docker crea el contenedor de MariaDB, pero los archivos SQL no parecen estar conectados automaticamente al proceso de inicializacion del contenedor. Por eso la base puede requerir una importacion manual mediante phpMyAdmin o la consola de MariaDB.
+
+
+4. PUNTOS CRITICOS Y CUELLOS DE BOTELLA
+----------------------------------------
+
+RUTAS INCOMPLETAS
+
+En la landing aparecen enlaces como:
+
+- /pacientes
+- /turnos
+- /historias-clinicas
+- /profesionales
+- /consultorios
+- /reportes
+
+Pero actualmente routes/web.php solo registra:
+
+- /
+- /login
+- /logout
+
+Por lo tanto, la mayoria de los accesos visuales terminan en 404 o no tienen funcionalidad real.
+
+MEZCLA DE RESPONSABILIDADES
+
+La vista inicio.php crea directamente un controlador y consulta datos. En un MVC mas ordenado, el controlador deberia obtener los datos y pasarlos a la vista.
+
+Actualmente ocurre algo parecido a:
+
+Vista -> Controlador -> Modelo -> Base de datos
+
+Lo mas conveniente seria:
+
+Ruta -> Controlador -> Modelo -> Vista
+
+La vista deberia limitarse a mostrar los datos.
+
+CONSULTA REPETIDA DE SERVICIOS
+
+Los servicios se cargan tres veces desde la misma vista debido a los tres breakpoints del carrusel. Esto genera consultas innecesarias a la base de datos y complica el mantenimiento.
+
+DASHBOARD SIN DATOS REALES
+
+En backend/Views/dashboard/index.php, varias cifras y filas parecen ser estaticas. El proyecto tiene un DashboardModel, pero esta vacio.
+
+Esto significa que el dashboard actualmente muestra una representacion visual, no informacion operativa confiable.
+
+AUTENTICACION INCOMPLETA
+
+Existe una clase Auth, pero el acceso al dashboard no esta protegido de forma consistente. Si public/dashboard.php no exige sesion, una persona podria acceder a la vista sin autenticarse.
+
+Tambien hay funciones de roles y permisos, pero no estan conectadas a todos los modulos.
+
+ARCHIVOS Y MODULOS FALTANTES
+
+UsuarioController intenta utilizar elementos que no estan completos, como:
+
+- Un modelo Rol.
+- Una vista de usuarios.
+- Rutas administrativas.
+
+Esto puede provocar errores cuando se intente acceder a esas funcionalidades.
+
+CONFIGURACION SENSIBLE
+
+backend/Db/config.php contiene usuario y contrasena de la base de datos directamente en el codigo. Ademas, el secreto de autenticacion esta vacio.
+
+Para produccion deberian utilizarse variables de entorno y un secreto real.
+
+FALTA DE MANEJO CENTRALIZADO DE ERRORES
+
+El router responde directamente con un 404 textual y no parece existir un sistema global para manejar excepciones, errores de base de datos o errores de autorizacion.
+
+FORMULARIOS Y ENLACES INCOMPLETOS
+
+En el login hay elementos visuales que todavia no tienen funcionalidad:
+
+- Recuperacion de contrasena.
+- Contacto.
+- Checkbox "recordarme".
+
+En varios layouts del dashboard tambien existen enlaces que apuntan a #.
+
+CODIGO ANTIGUO O SOBRANTE
+
+El archivo backend/Models/Servicio.php tenia codigo de ejecucion directa al final, lo cual no corresponde a un modelo reutilizable. Ese tipo de codigo puede provocar comportamientos inesperados cuando el archivo se incluye desde otra parte.
+
+
+5. RESUMEN EJECUTIVO PARA HUMANOS
+----------------------------------
+
+El proyecto es el comienzo de un sistema web para una policlinica veterinaria universitaria. Permite mostrar informacion publica, iniciar sesion y consultar servicios desde una base de datos, pero la mayoria de los modulos administrativos todavia son estructuras visuales sin conexion completa con la base. La prioridad seria ordenar el flujo MVC, completar las rutas, proteger correctamente el dashboard y reemplazar los datos estaticos por consultas reales.
+
+
+OBSERVACION PUNTUAL SOBRE mostrarServicios
+-------------------------------------------
+
+El problema de los servicios estaba causado por varios desajustes entre capas:
+
+- El controlador llamaba a un nombre de metodo distinto al definido en el modelo.
+- El controlador no retornaba el resultado.
+- La consulta usaba servicios, pero la tabla real es servicio.
+- La consulta devolvia nombres de columnas diferentes a los que esperaba la vista.
+- La vista esperaba un enlace que no existe como columna en la base.
+
+Esos puntos fueron corregidos en:
+
+- backend/Controllers/InicioController.php
+- backend/Models/Servicio.php
+- backend/Views/landing/inicio.php
+
+La validacion con php -l no pudo ejecutarse porque PHP no esta instalado directamente en el entorno local y Docker tampoco estaba disponible desde el directorio utilizado.
