@@ -84,4 +84,6 @@ class Usuario extends Model
         $stmt->execute();
         $stmt->close();
     }
+
+    
 }
