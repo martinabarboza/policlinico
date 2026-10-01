@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1deb1+deb12u1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:3306
--- Tiempo de generación: 02-09-2026 a las 22:37:08
--- Versión del servidor: 10.11.18-MariaDB-0+deb12u1
--- Versión de PHP: 8.2.32
+-- Servidor: policlinico-db
+-- Tiempo de generación: 16-09-2026 a las 22:24:41
+-- Versión del servidor: 10.11.18-MariaDB-ubu2204
+-- Versión de PHP: 8.3.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -150,8 +150,9 @@ CREATE TABLE `usuarios` (
   `nombre_usuario` varchar(50) NOT NULL,
   `apellido_usuario` varchar(50) NOT NULL,
   `rol_usuario` varchar(11) NOT NULL,
-  `email_usuario` varchar(320) NOT NULL,
+  `email_usuario` varchar(320) DEFAULT NULL,
   `passwd_usuario` varchar(256) NOT NULL,
+  `estado_usuario` varchar(8) NOT NULL,
   `lastlogin_usuario` datetime NOT NULL,
   `dateupdate_usuario` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -160,9 +161,9 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id_usuario`, `cedula_usuario`, `nombre_usuario`, `apellido_usuario`, `rol_usuario`, `email_usuario`, `passwd_usuario`, `lastlogin_usuario`, `dateupdate_usuario`) VALUES
-(1, 23885203, 'Hector', 'Dir', 'director', 'dirhector@polivet.com', '$2y$10$7oZTaVgRnCUWre82w1JE0usixwMRZhuXBwJB.LdnvK78JH4S581H.', '2026-09-01 20:17:55', '2026-09-01 20:17:55'),
-(2, 97454155, 'Roberta', 'Hernandez', 'Estudiante', 'robertah@polivet.com', '$2y$10$L3pa1ANJtX0Bzf6pm2PXWOdmAfDNwrSqiXSnxeT/lBhBdx8aTlNbi', '2026-09-01 23:17:55', '2026-09-01 23:17:55');
+INSERT INTO `usuarios` (`id_usuario`, `cedula_usuario`, `nombre_usuario`, `apellido_usuario`, `rol_usuario`, `email_usuario`, `passwd_usuario`, `estado_usuario`, `lastlogin_usuario`, `dateupdate_usuario`) VALUES
+(1, 23885203, 'Hector', 'Dir', 'DIRECTOR', 'dirhector@polivet.com', '$2y$10$7oZTaVgRnCUWre82w1JE0usixwMRZhuXBwJB.LdnvK78JH4S581H.', 'activo', '2026-09-04 00:15:45', '2026-09-01 20:17:55'),
+(2, 97454155, 'Roberta', 'Hernandez', 'ESTUDIANTE', 'robertah@polivet.com', '$2y$10$L3pa1ANJtX0Bzf6pm2PXWOdmAfDNwrSqiXSnxeT/lBhBdx8aTlNbi', 'activo', '2026-09-01 23:17:55', '2026-09-01 23:17:55');
 
 -- --------------------------------------------------------
 
