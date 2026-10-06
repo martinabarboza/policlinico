@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: policlinico-db
--- Tiempo de generación: 06-10-2026 a las 00:00:58
--- Versión del servidor: 10.11.18-MariaDB-ubu2204
+-- Tiempo de generación: 06-10-2026 a las 23:16:51
+-- Versión del servidor: 10.11.19-MariaDB-ubu2204
 -- Versión de PHP: 8.3.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -124,22 +124,22 @@ INSERT INTO `ESPECIE` (`id_Especie`, `nombre_Especie`) VALUES
 --
 
 CREATE TABLE `EXAMEN_EQUINO` (
-  `id_ExamenEquino` int(11) NOT NULL,
+  `id_ExamenEq` int(11) NOT NULL,
   `id_ExamenG` int(11) NOT NULL,
-  `temperatura_cascos_ExamenEquino` varchar(50) DEFAULT NULL,
-  `pulso_digital_ExamenEquino` varchar(50) DEFAULT NULL,
-  `senos_ExamenEquino` varchar(100) DEFAULT NULL,
-  `csd_ExamenEquino` varchar(50) DEFAULT NULL,
-  `cid_ExamenEquino` varchar(50) DEFAULT NULL,
-  `csi_ExamenEquino` varchar(50) DEFAULT NULL,
-  `cii_ExamenEquino` varchar(50) DEFAULT NULL
+  `temperatura_cascos_ExamenEq` varchar(50) DEFAULT NULL,
+  `pulso_digital_ExamenEq` varchar(50) DEFAULT NULL,
+  `senos_ExamenEq` varchar(100) DEFAULT NULL,
+  `csd_ExamenEq` varchar(50) DEFAULT NULL,
+  `cid_ExamenEq` varchar(50) DEFAULT NULL,
+  `csi_ExamenEq` varchar(50) DEFAULT NULL,
+  `cii_ExamenEq` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `EXAMEN_EQUINO`
 --
 
-INSERT INTO `EXAMEN_EQUINO` (`id_ExamenEquino`, `id_ExamenG`, `temperatura_cascos_ExamenEquino`, `pulso_digital_ExamenEquino`, `senos_ExamenEquino`, `csd_ExamenEquino`, `cid_ExamenEquino`, `csi_ExamenEquino`, `cii_ExamenEquino`) VALUES
+INSERT INTO `EXAMEN_EQUINO` (`id_ExamenEq`, `id_ExamenG`, `temperatura_cascos_ExamenEq`, `pulso_digital_ExamenEq`, `senos_ExamenEq`, `csd_ExamenEq`, `cid_ExamenEq`, `csi_ExamenEq`, `cii_ExamenEq`) VALUES
 (1, 2, 'Normal', 'Aumentado', 'Sin secreción', 'Normal', 'Normal', 'Sensible', 'Normal');
 
 -- --------------------------------------------------------
@@ -449,7 +449,7 @@ ALTER TABLE `ESPECIE`
 -- Indices de la tabla `EXAMEN_EQUINO`
 --
 ALTER TABLE `EXAMEN_EQUINO`
-  ADD PRIMARY KEY (`id_ExamenEquino`),
+  ADD PRIMARY KEY (`id_ExamenEq`),
   ADD UNIQUE KEY `id_ExamenG` (`id_ExamenG`);
 
 --
@@ -570,7 +570,7 @@ ALTER TABLE `ESPECIE`
 -- AUTO_INCREMENT de la tabla `EXAMEN_EQUINO`
 --
 ALTER TABLE `EXAMEN_EQUINO`
-  MODIFY `id_ExamenEquino` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_ExamenEq` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `EXAMEN_GENERAL`
