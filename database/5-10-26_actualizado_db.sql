@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: policlinico-db
--- Tiempo de generación: 25-09-2026 a las 01:27:15
--- Versión del servidor: 10.11.19-MariaDB-ubu2204
+-- Tiempo de generación: 06-10-2026 a las 00:00:58
+-- Versión del servidor: 10.11.18-MariaDB-ubu2204
 -- Versión de PHP: 8.3.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -60,19 +60,19 @@ CREATE TABLE `CONSULTA` (
   `fecha_hora_Consulta` datetime NOT NULL,
   `estado_proceso_Consulta` varchar(50) DEFAULT 'Pendiente',
   `resultado_final_Consulta` varchar(100) DEFAULT NULL,
-  `fecha_proximo_control` date DEFAULT NULL,
-  `motivo_Consulta` text DEFAULT NULL,
-  `pronostico_Consulta` text DEFAULT NULL
+  `fecha_proximo_control_Consulta` date DEFAULT NULL,
+  `fecha_fin_Consulta` date DEFAULT NULL,
+  `motivo_Consulta` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `CONSULTA`
 --
 
-INSERT INTO `CONSULTA` (`id_Consulta`, `id_Paciente`, `tipo_Consulta`, `fecha_hora_Consulta`, `estado_proceso_Consulta`, `resultado_final_Consulta`, `fecha_proximo_control`, `motivo_Consulta`, `pronostico_Consulta`) VALUES
-(1, 1, 'Consulta general', '2026-09-20 10:30:00', 'Finalizada', 'Tratamiento ambulatorio', '2026-10-04', 'Vómitos y falta de apetito', 'Favorable'),
-(2, 3, 'Consulta equina', '2026-09-21 15:00:00', 'Finalizada', 'Seguimiento', '2026-10-21', 'Claudicación del miembro anterior', 'Reservado'),
-(3, 2, 'Control', '2026-09-22 09:30:00', 'En curso', NULL, NULL, 'Control dermatológico', NULL);
+INSERT INTO `CONSULTA` (`id_Consulta`, `id_Paciente`, `tipo_Consulta`, `fecha_hora_Consulta`, `estado_proceso_Consulta`, `resultado_final_Consulta`, `fecha_proximo_control_Consulta`, `fecha_fin_Consulta`, `motivo_Consulta`) VALUES
+(1, 1, 'Consulta general', '2026-09-20 10:30:00', 'Finalizada', 'Tratamiento ambulatorio', '2026-10-04', NULL, 'Vómitos y falta de apetito'),
+(2, 3, 'Consulta equina', '2026-09-21 15:00:00', 'Finalizada', 'Seguimiento', '2026-10-21', NULL, 'Claudicación del miembro anterior'),
+(3, 2, 'Control', '2026-09-22 09:30:00', 'En curso', NULL, NULL, NULL, 'Control dermatológico');
 
 -- --------------------------------------------------------
 
@@ -157,23 +157,25 @@ CREATE TABLE `EXAMEN_GENERAL` (
   `FC_ExamenG` varchar(20) DEFAULT NULL,
   `FR_ExamenG` varchar(20) DEFAULT NULL,
   `TLLC_ExamenG` varchar(20) DEFAULT NULL,
-  `pliegue_cutaneo_ExamenG` varchar(50) DEFAULT NULL,
-  `sensorio_ExamenG` varchar(50) DEFAULT NULL,
-  `facies_ExamenG` varchar(50) DEFAULT NULL,
+  `sensorio_ExamenG` varchar(100) DEFAULT NULL,
+  `facies_ExamenG` varchar(100) DEFAULT NULL,
   `piel_subcutaneo_ExamenG` varchar(100) DEFAULT NULL,
-  `mucosas_ExamenG` varchar(50) DEFAULT NULL,
+  `mucosas_ExamenG` varchar(100) DEFAULT NULL,
   `grandes_funciones_ExamenG` text DEFAULT NULL,
-  `actitudes_anomalas_ExamenG` text DEFAULT NULL
+  `actitudes_anomalas_ExamenG` text DEFAULT NULL,
+  `hidratacion_ExamenG` varchar(50) DEFAULT NULL,
+  `ganglios_linfaticos_ExamenG` text DEFAULT NULL,
+  `aparentes_ExamenG` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `EXAMEN_GENERAL`
 --
 
-INSERT INTO `EXAMEN_GENERAL` (`id_ExamenG`, `id_Consulta`, `peso_ExamenG`, `CC_ExamenG`, `TR_ExamenG`, `FC_ExamenG`, `FR_ExamenG`, `TLLC_ExamenG`, `pliegue_cutaneo_ExamenG`, `sensorio_ExamenG`, `facies_ExamenG`, `piel_subcutaneo_ExamenG`, `mucosas_ExamenG`, `grandes_funciones_ExamenG`, `actitudes_anomalas_ExamenG`) VALUES
-(1, 1, '18.5 kg', '5', '38.5 °C', '110 lpm', '24 rpm', '2 s', 'Normal', 'Alerta', 'Normal', NULL, 'Rosadas', NULL, NULL),
-(2, 2, '480 kg', '5', '37.8 °C', '42 lpm', '16 rpm', '2 s', 'Normal', 'Alerta', 'Normal', NULL, 'Rosadas', NULL, NULL),
-(3, 3, '4.2 kg', '4', '38.2 °C', '150 lpm', '30 rpm', '2 s', 'Normal', 'Alerta', 'Normal', NULL, 'Rosadas', NULL, NULL);
+INSERT INTO `EXAMEN_GENERAL` (`id_ExamenG`, `id_Consulta`, `peso_ExamenG`, `CC_ExamenG`, `TR_ExamenG`, `FC_ExamenG`, `FR_ExamenG`, `TLLC_ExamenG`, `sensorio_ExamenG`, `facies_ExamenG`, `piel_subcutaneo_ExamenG`, `mucosas_ExamenG`, `grandes_funciones_ExamenG`, `actitudes_anomalas_ExamenG`, `hidratacion_ExamenG`, `ganglios_linfaticos_ExamenG`, `aparentes_ExamenG`) VALUES
+(1, 1, '18.5 kg', '5', '38.5 °C', '110 lpm', '24 rpm', '2 s', 'Alerta', 'Normal', NULL, 'Rosadas', NULL, NULL, NULL, NULL, NULL),
+(2, 2, '480 kg', '5', '37.8 °C', '42 lpm', '16 rpm', '2 s', 'Alerta', 'Normal', NULL, 'Rosadas', NULL, NULL, NULL, NULL, NULL),
+(3, 3, '4.2 kg', '4', '38.2 °C', '150 lpm', '30 rpm', '2 s', 'Alerta', 'Normal', NULL, 'Rosadas', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -183,18 +185,19 @@ INSERT INTO `EXAMEN_GENERAL` (`id_ExamenG`, `id_Consulta`, `peso_ExamenG`, `CC_E
 
 CREATE TABLE `EXAMEN_PARTICULAR` (
   `id_ExamenP` int(11) NOT NULL,
-  `id_Consulta` int(11) NOT NULL,
-  `texto_libre_ExamenP` text DEFAULT NULL
+  `id_ExamenG` int(11) DEFAULT NULL,
+  `texto_libre_ExamenP` text DEFAULT NULL,
+  `observaciones_ExamenP` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `EXAMEN_PARTICULAR`
 --
 
-INSERT INTO `EXAMEN_PARTICULAR` (`id_ExamenP`, `id_Consulta`, `texto_libre_ExamenP`) VALUES
-(1, 1, 'Dolor leve a la palpación abdominal.'),
-(2, 2, 'Claudicación de miembro anterior izquierdo. Dolor a la flexión.'),
-(3, 3, 'Lesiones eritematosas y pruriginosas en región cervical.');
+INSERT INTO `EXAMEN_PARTICULAR` (`id_ExamenP`, `id_ExamenG`, `texto_libre_ExamenP`, `observaciones_ExamenP`) VALUES
+(1, NULL, 'Dolor leve a la palpación abdominal.', NULL),
+(2, NULL, 'Claudicación de miembro anterior izquierdo. Dolor a la flexión.', NULL),
+(3, NULL, 'Lesiones eritematosas y pruriginosas en región cervical.', NULL);
 
 -- --------------------------------------------------------
 
@@ -205,9 +208,11 @@ INSERT INTO `EXAMEN_PARTICULAR` (`id_ExamenP`, `id_Consulta`, `texto_libre_Exame
 CREATE TABLE `PACIENTE` (
   `id_Paciente` int(11) NOT NULL,
   `id_Tutor` int(11) NOT NULL,
-  `id_Especie` int(11) NOT NULL,
+  `id_Raza` int(11) DEFAULT NULL,
+  `numchip_Paciente` varchar(26) DEFAULT NULL,
   `nombre_Paciente` varchar(100) NOT NULL,
-  `fecha_nac_paciente` date DEFAULT NULL,
+  `fecha_nac_Paciente` date DEFAULT NULL,
+  `edad_Paciente` int(11) DEFAULT NULL,
   `sexo_Paciente` varchar(30) DEFAULT NULL,
   `color_Paciente` varchar(50) DEFAULT NULL,
   `foto_Paciente` varchar(255) DEFAULT NULL,
@@ -219,10 +224,10 @@ CREATE TABLE `PACIENTE` (
 -- Volcado de datos para la tabla `PACIENTE`
 --
 
-INSERT INTO `PACIENTE` (`id_Paciente`, `id_Tutor`, `id_Especie`, `nombre_Paciente`, `fecha_nac_paciente`, `sexo_Paciente`, `color_Paciente`, `foto_Paciente`, `datecreate_Paciente`, `dateupdate_Paciente`) VALUES
-(1, 1, 1, 'Rocky', '2021-05-12', 'Macho', 'Marrón', NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50'),
-(2, 2, 2, 'Luna', '2022-08-20', 'Hembra', 'Gris', NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50'),
-(3, 3, 3, 'Relámpago', '2018-03-15', 'Macho castrado', 'Zaino', NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50');
+INSERT INTO `PACIENTE` (`id_Paciente`, `id_Tutor`, `id_Raza`, `numchip_Paciente`, `nombre_Paciente`, `fecha_nac_Paciente`, `edad_Paciente`, `sexo_Paciente`, `color_Paciente`, `foto_Paciente`, `datecreate_Paciente`, `dateupdate_Paciente`) VALUES
+(1, 1, NULL, NULL, 'Rocky', '2021-05-12', NULL, 'Macho', 'Marrón', NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50'),
+(2, 2, NULL, NULL, 'Luna', '2022-08-20', NULL, 'Hembra', 'Gris', NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50'),
+(3, 3, NULL, NULL, 'Relámpago', '2018-03-15', NULL, 'Macho castrado', 'Zaino', NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50');
 
 -- --------------------------------------------------------
 
@@ -250,6 +255,42 @@ INSERT INTO `PARACLINICO` (`id_Paraclinico`, `id_Consulta`, `tipo_Paraclinico`, 
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `PRONOSTICO`
+--
+
+CREATE TABLE `PRONOSTICO` (
+  `id_Pronostico` int(11) NOT NULL,
+  `id_Consulta` int(11) DEFAULT NULL,
+  `tipo_Pronostico` varchar(80) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `RAZA`
+--
+
+CREATE TABLE `RAZA` (
+  `id_Raza` int(11) NOT NULL,
+  `id_Especie` int(11) NOT NULL,
+  `nombre_Raza` varchar(130) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `RESEÑA`
+--
+
+CREATE TABLE `RESEÑA` (
+  `id_Reseña` int(11) NOT NULL,
+  `id_ExamenG` int(11) DEFAULT NULL,
+  `archivoURL_RESEÑA` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `SERVICIO`
 --
 
@@ -271,7 +312,7 @@ CREATE TABLE `SERVICIO` (
 --
 
 INSERT INTO `SERVICIO` (`id_Servicio`, `id_Usuario`, `nombre_Servicio`, `descripcion_Servicio`, `precio_Servicio`, `duracion_Servicio`, `imagenURL_Servicio`, `iconoURL_Servicio`, `datecreate_Servicios`, `dateupdate_Servicios`) VALUES
-(1, 1, 'Consulta general', 'Evaluación clínica general', 1200.00, '30 min', NULL, NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50'),
+(1, 1, 'Consulta general', 'Evaluación clínica general', 1200.00, '30 min', NULL, NULL, '2026-09-25 01:22:50', '2026-09-28 13:47:17'),
 (2, 1, 'Consulta equina', 'Evaluación clínica de equinos', 1800.00, '45 min', NULL, NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50'),
 (3, 2, 'Control veterinario', 'Control posterior al tratamiento', 900.00, '20 min', NULL, NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50');
 
@@ -284,7 +325,6 @@ INSERT INTO `SERVICIO` (`id_Servicio`, `id_Usuario`, `nombre_Servicio`, `descrip
 CREATE TABLE `TRATAMIENTO` (
   `id_Tratamiento` int(11) NOT NULL,
   `id_Consulta` int(11) NOT NULL,
-  `tipo_Tratamiento` varchar(50) NOT NULL,
   `descripcion_Tratamiento` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -292,11 +332,11 @@ CREATE TABLE `TRATAMIENTO` (
 -- Volcado de datos para la tabla `TRATAMIENTO`
 --
 
-INSERT INTO `TRATAMIENTO` (`id_Tratamiento`, `id_Consulta`, `tipo_Tratamiento`, `descripcion_Tratamiento`) VALUES
-(1, 1, 'Farmacológico', 'Omeprazol 20 mg cada 24 horas durante 7 días.'),
-(2, 1, 'Dieta', 'Dieta blanda durante 3 días.'),
-(3, 2, 'Farmacológico', 'Antiinflamatorio según indicación veterinaria.'),
-(4, 3, 'Tópico', 'Limpieza de lesiones y aplicación de tratamiento tópico.');
+INSERT INTO `TRATAMIENTO` (`id_Tratamiento`, `id_Consulta`, `descripcion_Tratamiento`) VALUES
+(1, 1, 'Omeprazol 20 mg cada 24 horas durante 7 días.'),
+(2, 1, 'Dieta blanda durante 3 días.'),
+(3, 2, 'Antiinflamatorio según indicación veterinaria.'),
+(4, 3, 'Limpieza de lesiones y aplicación de tratamiento tópico.');
 
 -- --------------------------------------------------------
 
@@ -424,7 +464,7 @@ ALTER TABLE `EXAMEN_GENERAL`
 --
 ALTER TABLE `EXAMEN_PARTICULAR`
   ADD PRIMARY KEY (`id_ExamenP`),
-  ADD KEY `id_Consulta` (`id_Consulta`);
+  ADD KEY `id_FK_EP_ExamenG` (`id_ExamenG`);
 
 --
 -- Indices de la tabla `PACIENTE`
@@ -432,7 +472,7 @@ ALTER TABLE `EXAMEN_PARTICULAR`
 ALTER TABLE `PACIENTE`
   ADD PRIMARY KEY (`id_Paciente`),
   ADD KEY `id_Tutor` (`id_Tutor`),
-  ADD KEY `id_Especie` (`id_Especie`);
+  ADD KEY `id_FK_P_RAZA` (`id_Raza`);
 
 --
 -- Indices de la tabla `PARACLINICO`
@@ -440,6 +480,27 @@ ALTER TABLE `PACIENTE`
 ALTER TABLE `PARACLINICO`
   ADD PRIMARY KEY (`id_Paraclinico`),
   ADD KEY `id_Consulta` (`id_Consulta`);
+
+--
+-- Indices de la tabla `PRONOSTICO`
+--
+ALTER TABLE `PRONOSTICO`
+  ADD PRIMARY KEY (`id_Pronostico`),
+  ADD KEY `id_FK_PRONO_CONSULTA` (`id_Consulta`);
+
+--
+-- Indices de la tabla `RAZA`
+--
+ALTER TABLE `RAZA`
+  ADD PRIMARY KEY (`id_Raza`),
+  ADD KEY `id_FK_RAZA_ESPECIE` (`id_Especie`);
+
+--
+-- Indices de la tabla `RESEÑA`
+--
+ALTER TABLE `RESEÑA`
+  ADD PRIMARY KEY (`id_Reseña`),
+  ADD KEY `id_FK_RESEÑA_EXAMENGENERAL` (`id_ExamenG`);
 
 --
 -- Indices de la tabla `SERVICIO`
@@ -536,6 +597,24 @@ ALTER TABLE `PARACLINICO`
   MODIFY `id_Paraclinico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT de la tabla `PRONOSTICO`
+--
+ALTER TABLE `PRONOSTICO`
+  MODIFY `id_Pronostico` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `RAZA`
+--
+ALTER TABLE `RAZA`
+  MODIFY `id_Raza` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `RESEÑA`
+--
+ALTER TABLE `RESEÑA`
+  MODIFY `id_Reseña` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `SERVICIO`
 --
 ALTER TABLE `SERVICIO`
@@ -567,62 +646,80 @@ ALTER TABLE `USUARIO`
 -- Filtros para la tabla `ANAMNESIS`
 --
 ALTER TABLE `ANAMNESIS`
-  ADD CONSTRAINT `ANAMNESIS_ibfk_1` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
+  ADD CONSTRAINT `id_FK_A_CONSULTA` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `CONSULTA`
 --
 ALTER TABLE `CONSULTA`
-  ADD CONSTRAINT `CONSULTA_ibfk_1` FOREIGN KEY (`id_Paciente`) REFERENCES `PACIENTE` (`id_Paciente`) ON DELETE CASCADE;
+  ADD CONSTRAINT `id_FK_C_PACIENTE` FOREIGN KEY (`id_Paciente`) REFERENCES `PACIENTE` (`id_Paciente`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `DIAGNOSTICO`
 --
 ALTER TABLE `DIAGNOSTICO`
-  ADD CONSTRAINT `DIAGNOSTICO_ibfk_1` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
+  ADD CONSTRAINT `id_FK_D_CONSULTA` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `EXAMEN_EQUINO`
 --
 ALTER TABLE `EXAMEN_EQUINO`
-  ADD CONSTRAINT `EXAMEN_EQUINO_ibfk_1` FOREIGN KEY (`id_ExamenG`) REFERENCES `EXAMEN_GENERAL` (`id_ExamenG`) ON DELETE CASCADE;
+  ADD CONSTRAINT `id_FK_EQ_EXAMENGENERAL` FOREIGN KEY (`id_ExamenG`) REFERENCES `EXAMEN_GENERAL` (`id_ExamenG`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `EXAMEN_GENERAL`
 --
 ALTER TABLE `EXAMEN_GENERAL`
-  ADD CONSTRAINT `EXAMEN_GENERAL_ibfk_1` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
+  ADD CONSTRAINT `id_FK_EG_CONSULTA` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `EXAMEN_PARTICULAR`
 --
 ALTER TABLE `EXAMEN_PARTICULAR`
-  ADD CONSTRAINT `EXAMEN_PARTICULAR_ibfk_1` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
+  ADD CONSTRAINT `id_FK_EP_ExamenG` FOREIGN KEY (`id_ExamenG`) REFERENCES `EXAMEN_GENERAL` (`id_ExamenG`);
 
 --
 -- Filtros para la tabla `PACIENTE`
 --
 ALTER TABLE `PACIENTE`
-  ADD CONSTRAINT `PACIENTE_ibfk_1` FOREIGN KEY (`id_Tutor`) REFERENCES `TUTOR` (`id_Tutor`) ON DELETE CASCADE,
-  ADD CONSTRAINT `PACIENTE_ibfk_2` FOREIGN KEY (`id_Especie`) REFERENCES `ESPECIE` (`id_Especie`);
+  ADD CONSTRAINT `id_FK_P_RAZA` FOREIGN KEY (`id_Raza`) REFERENCES `RAZA` (`id_Raza`),
+  ADD CONSTRAINT `id_FK_P_TUTOR` FOREIGN KEY (`id_Tutor`) REFERENCES `TUTOR` (`id_Tutor`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `PARACLINICO`
 --
 ALTER TABLE `PARACLINICO`
-  ADD CONSTRAINT `PARACLINICO_ibfk_1` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
+  ADD CONSTRAINT `id_FK_PARA_CONSULTA` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `PRONOSTICO`
+--
+ALTER TABLE `PRONOSTICO`
+  ADD CONSTRAINT `id_FK_PRONO_CONSULTA` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`);
+
+--
+-- Filtros para la tabla `RAZA`
+--
+ALTER TABLE `RAZA`
+  ADD CONSTRAINT `id_FK_RAZA_ESPECIE` FOREIGN KEY (`id_Especie`) REFERENCES `ESPECIE` (`id_Especie`);
+
+--
+-- Filtros para la tabla `RESEÑA`
+--
+ALTER TABLE `RESEÑA`
+  ADD CONSTRAINT `id_FK_RESEÑA_EXAMENGENERAL` FOREIGN KEY (`id_ExamenG`) REFERENCES `EXAMEN_GENERAL` (`id_ExamenG`);
 
 --
 -- Filtros para la tabla `SERVICIO`
 --
 ALTER TABLE `SERVICIO`
-  ADD CONSTRAINT `SERVICIO_ibfk_1` FOREIGN KEY (`id_Usuario`) REFERENCES `USUARIO` (`id_Usuario`) ON DELETE CASCADE;
+  ADD CONSTRAINT `id_FK_SERVICIO_USUARIO` FOREIGN KEY (`id_Usuario`) REFERENCES `USUARIO` (`id_Usuario`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `TRATAMIENTO`
 --
 ALTER TABLE `TRATAMIENTO`
-  ADD CONSTRAINT `TRATAMIENTO_ibfk_1` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
+  ADD CONSTRAINT `id_FK_TRATAMIENTO_CONSULTA` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `USUARIO_CONSULTA`
