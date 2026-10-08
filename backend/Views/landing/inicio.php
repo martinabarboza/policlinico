@@ -19,9 +19,9 @@ function mostrarServicios($cartas, $cantidad)
         foreach ($grupo as $carta) {
             echo '
                 <div class="servicio-card">
-                    <img src="' . htmlspecialchars($carta['imagen'], ENT_QUOTES, 'UTF-8') . '"
+                    <img src="' . (!empty($carta['imagen']) ? htmlspecialchars($carta['imagen'] ?? ''): '#') . '"
                         class="card-img-top"
-                        alt="' . htmlspecialchars($carta['titulo']) . '">
+                        alt="' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? ''): '#') . '">
 
                     <div class="card-body">
                         <span class="servicio-categoria">
@@ -29,16 +29,16 @@ function mostrarServicios($cartas, $cantidad)
                         </span>
 
                         <h5 class="card-title">
-                            ' . htmlspecialchars($carta['titulo']) . '
+                            ' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? ''): '#') . '
                         </h5>
 
                         <p class="card-text">
-                            ' . htmlspecialchars($carta['descripcion']) . '
+                            ' . (!empty($carta['descripcion']) ? htmlspecialchars($carta['descripcion'] ?? ''): '#') . '
                         </p>
 
-                        <a href="' . htmlspecialchars($carta['link'], ENT_QUOTES, 'UTF-8') . '"
+                        <a href="' . (!empty($carta['link']) ? htmlspecialchars($carta['link'] ?? ''): '#') . '"
                             class="btn btn-primary">
-                            Acceder al portal
+                            Mas información sobre <u>'. (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? ''): '#') . '</u>
                             <i class="bi bi-arrow-right ms-2"></i>
                         </a>
                     </div>

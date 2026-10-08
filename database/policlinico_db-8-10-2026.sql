@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: policlinico-db
--- Tiempo de generación: 06-10-2026 a las 23:16:51
--- Versión del servidor: 10.11.19-MariaDB-ubu2204
+-- Tiempo de generación: 08-10-2026 a las 13:41:13
+-- Versión del servidor: 10.11.18-MariaDB-ubu2204
 -- Versión de PHP: 8.3.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -303,15 +303,15 @@ CREATE TABLE `SERVICIO` (
   `duracion_Servicio` varchar(50) DEFAULT NULL,
   `imagenURL_Servicio` varchar(255) DEFAULT NULL,
   `iconoURL_Servicio` varchar(255) DEFAULT NULL,
-  `datecreate_Servicios` timestamp NULL DEFAULT current_timestamp(),
-  `dateupdate_Servicios` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `datecreate_Servicio` timestamp NULL DEFAULT current_timestamp(),
+  `dateupdate_Servicio` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `SERVICIO`
 --
 
-INSERT INTO `SERVICIO` (`id_Servicio`, `id_Usuario`, `nombre_Servicio`, `descripcion_Servicio`, `precio_Servicio`, `duracion_Servicio`, `imagenURL_Servicio`, `iconoURL_Servicio`, `datecreate_Servicios`, `dateupdate_Servicios`) VALUES
+INSERT INTO `SERVICIO` (`id_Servicio`, `id_Usuario`, `nombre_Servicio`, `descripcion_Servicio`, `precio_Servicio`, `duracion_Servicio`, `imagenURL_Servicio`, `iconoURL_Servicio`, `datecreate_Servicio`, `dateupdate_Servicio`) VALUES
 (1, 1, 'Consulta general', 'Evaluación clínica general', 1200.00, '30 min', NULL, NULL, '2026-09-25 01:22:50', '2026-09-28 13:47:17'),
 (2, 1, 'Consulta equina', 'Evaluación clínica de equinos', 1800.00, '45 min', NULL, NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50'),
 (3, 2, 'Control veterinario', 'Control posterior al tratamiento', 900.00, '20 min', NULL, NULL, '2026-09-25 01:22:50', '2026-09-25 01:22:50');

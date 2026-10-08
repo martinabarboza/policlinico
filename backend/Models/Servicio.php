@@ -6,11 +6,11 @@ class Servicio extends Model
 
         $stmt = $this->db->prepare(
             "SELECT
-                nombre_servicio AS titulo,
-                descripcion_servicio AS descripcion,
-                imagenURL_servicio AS imagen,
+                nombre_Servicio AS titulo,
+                descripcion_Servicio AS descripcion,
+                imagenURL_Servicio AS imagen,
                 '/login' AS link
-             FROM servicio"
+             FROM SERVICIO"
         );
 
         $stmt->execute();
