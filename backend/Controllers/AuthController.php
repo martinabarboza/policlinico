@@ -53,13 +53,13 @@ class AuthController extends Controller
 
         //  $usuario = $usuarioModel->buscarPorCedula($cedula);
 
-        if (!$usuario || !password_verify($password, $usuario['passwd_usuario'])) {
+        if (!$usuario || !password_verify($password, $usuario['passw_Usuario'])) {
             $this->fallarLogin('Documento o contraseña incorrectos.', $cedula);
             return;
         }
 
         Auth::login($usuario);
-        $usuarioModel->actualizarUltimoLogin((int) $usuario['id_usuario']);
+        $usuarioModel->actualizarUltimoLogin((int) $usuario['id_Usuario']);
 
         header('Location: ' . url('dashboard.php'));
         exit;

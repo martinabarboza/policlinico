@@ -15,12 +15,12 @@ class Auth
 
         //ALMACENA LOS DATOS DEL USUARIO EN LA SESION
         $_SESSION[self::SESSION_KEY] = [
-            'id'       => (int) $usuario['id_usuario'],
-            'nombre'   => $usuario['nombre_usuario'],
-            'apellido' => $usuario['apellido_usuario'],
-            'cedula' => $usuario['cedula_usuario'],
-            'email'    => $usuario['email_usuario'],
-            'rol'      => $usuario['rol_usuario'],
+            'id'       => (int) $usuario['id_Usuario'],
+            'nombre'   => $usuario['nombre_Usuario'],
+            'apellido' => $usuario['apellido_Usuario'],
+            'cedula' => $usuario['cedula_Usuario'],
+            'email'    => $usuario['email_Usuario'],
+            'rol'      => $usuario['rol_Usuario'],
         ];
     }
 

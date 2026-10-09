@@ -5,16 +5,16 @@ class Usuario extends Model
 
     //
     // Busca un usuario por su cedula. Devuelve el registro completo
-    //(incluye passwd_usuario hasheada) o null si no existe.
+    //(incluye passw_usuario hasheada) o null si no existe.
     //
 
     public function buscarPorCedula(int $cedula): ?array
     {
         $stmt = $this->db->prepare(
-            'SELECT id_usuario, cedula_usuario, nombre_usuario, apellido_usuario,
-                    rol_usuario, email_usuario, passwd_usuario
-             FROM usuarios
-             WHERE cedula_usuario = ?
+            'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario,
+                    rol_Usuario, email_Usuario, passw_Usuario
+             FROM USUARIO
+             WHERE cedula_Usuario = ?
              LIMIT 1'
         );
 
@@ -35,7 +35,7 @@ class Usuario extends Model
     public function actualizarUltimoLogin(int $idUsuario): void
     {
         $stmt = $this->db->prepare(
-            'UPDATE usuarios SET lastlogin_usuario = NOW() WHERE id_usuario = ?'
+            'UPDATE USUARIO SET lastlogin_Usuario = NOW() WHERE id_Usuario = ?'
         );
 
         $stmt->bind_param('i', $idUsuario);
@@ -47,30 +47,30 @@ class Usuario extends Model
     // Agrega un Nuevo Usuario a la Base de Datos
     //
 
-    public function crearUsuarioNuevo(int $cedula, string $nombre, string $apellido, string $rol, string $email, string $passwd)
+    public function crearUsuarioNuevo(int $cedula, string $nombre, string $apellido, string $rol, string $email, string $passw)
     {
-        password_hash($passwd, PASSWORD_DEFAULT);
+        password_hash($passw, PASSWORD_DEFAULT);
         $stmt = $this->db->prepare(
-            'INSERT INTO usuarios (cedula_usuario, nombre_usuario, apellido_usuario, rol_usuario, email_usuario, passwd_usuario, lastlogin_usuario, dateupdate_usuario)
+            'INSERT INTO USUARIO (cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario, email_Usuario, passw_Usuario, lastlogin_Usuario, dateupdate_Usuario)
             VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW()'
         );
 
-        $stmt->bind_param('isssss', $cedula, $nombre, $apellido, $rol, $email, $passwd);
+        $stmt->bind_param('isssss', $cedula, $nombre, $apellido, $rol, $email, $passw);
         $stmt->execute();
         $stmt->close();
     }
 
-     //
-     // Función para modificar usuarios tomando en cuenta un objeto usuario almacenado en $usuarioObj.
-     //
-    
+    //
+    // Función para modificar usuarios tomando en cuenta un objeto usuario almacenado en $usuarioObj.
+    //
+
     public function modificarUsuario($usuarioObj)
     {
         $usuarioObj->setPasswdUsuario(password_hash($usuarioObj->getPasswdUsuario(), PASSWORD_DEFAULT));
         $stmt = $this->db->prepare(
-            'UPDATE usuarios 
-            SET cedula_usuario = ?, nombre_usuario = ?, apellido_usuario = ?, rol_usuario = ?, email_usuario = ?, passwd_usuario = ?, dateupdate_usuario = NOW()
-            WHERE cedula_usuario = ?'
+            'UPDATE USUARIO 
+            SET cedula_Usuario = ?, nombre_Usuario = ?, apellido_Usuario = ?, rol_Usuario = ?, email_Usuario = ?, passw_Usuario = ?, dateupdate_Usuario = NOW()
+            WHERE cedula_Usuario = ?'
         );
 
         $cedula   = $usuarioObj->getCedulaUsuario();
@@ -78,12 +78,10 @@ class Usuario extends Model
         $apellido = $usuarioObj->getApellidoUsuario();
         $rol      = $usuarioObj->getRolUsuario();
         $email    = $usuarioObj->getEmailUsuario();
-        $passwd   = $usuarioObj->getPasswdUsuario();
+        $passw   = $usuarioObj->getPasswUsuario();
 
-        $stmt->bind_param('isssssi', $cedula, $nombre, $apellido, $rol, $email, $passwd, $cedula);
+        $stmt->bind_param('isssssi', $cedula, $nombre, $apellido, $rol, $email, $passw, $cedula);
         $stmt->execute();
         $stmt->close();
     }
-
-    
 }
