@@ -17,7 +17,7 @@ class Router{
     {
         if (!isset($this->routes[$method][$uri])) {
             http_response_code(404);
-            echo 'Página no encontrada';
+            require VIEWS_PATH . '/errors/404.php';
             return;
         }
 

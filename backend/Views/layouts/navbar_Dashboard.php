@@ -1,3 +1,4 @@
+<?php $usuario = Auth::user();?>
 <!-- Empieza Navbar -->
 <div id="content" class="content">
 
@@ -97,7 +98,7 @@
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                         <i class="bi bi-person-fill"></i>
                     </div>
-                    <span class="d-none d-lg-inline-flex">Martina Barboza</span>
+                    <span class="d-none d-lg-inline-flex"><?= $usuario['nombre'] ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                     <a href="#" class="dropdown-item">Mi Perfil</a>

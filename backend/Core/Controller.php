@@ -14,6 +14,7 @@ class Controller
         string $view,
         array $data = [],
         string $layout = 'app'
+        //COMO LLAMAR "$this->view('landing/inicio', [], 'landing');"
     ): void {
         
         $viewFile = VIEWS_PATH . '/' . $view . '.php';
@@ -28,22 +29,25 @@ class Controller
 
             case 'landing':
 
-                require INCLUDES_PATH . '/header_landing.php';
+                require INCLUDES_PATH . '/header_Landing.php';
 
                 require $viewFile;
+
+                require INCLUDES_PATH . '/footer_Landing.php';
+
 
                 break;
 
 
             case 'app':
 
-                require INCLUDES_PATH . '/header.php';
-                require INCLUDES_PATH . '/navbar.php';
-                require INCLUDES_PATH . '/sidebar.php';
+                require INCLUDES_PATH . '/header_Dashboard.php';
+                require INCLUDES_PATH . '/navbar_Dashboard.php';
+                require INCLUDES_PATH . '/sidebar_Dashboard.php';
 
                 require $viewFile;
 
-                require INCLUDES_PATH . '/footer.php';
+                require INCLUDES_PATH . '/footer_Dashboard.php';
 
                 break;
 

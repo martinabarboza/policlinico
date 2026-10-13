@@ -3,7 +3,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ?>
-<?php include __DIR__ . '/../layouts/header_landing.php'; ?>
 <?php
 function mostrarServicios($cartas, $cantidad)
 {
@@ -54,7 +53,7 @@ function mostrarServicios($cartas, $cantidad)
 ?>
 
 <body>
-    <?php include __DIR__ . '/../layouts/navbar_landing.php'; ?>
+    <?php include __DIR__ . '/../layouts/navbar_Landing.php'; ?>
     <!--HERO-->
     <section class="hero p-2">
         <div class=" container-fluid w-100 px-4 py-5">
@@ -523,7 +522,6 @@ function mostrarServicios($cartas, $cantidad)
             </div>
         </div>
     </section>
-    <?php include __DIR__ . '/../layouts/footer_landing.php'; ?>
 </body>
 
 </html>

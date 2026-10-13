@@ -20,8 +20,10 @@ require_once APP_PATH . '/Core/Controller.php';
 require_once APP_PATH . '/Core/Auth.php';
 require_once APP_PATH . '/Core/Csrf.php';
 
+//Instanciar los controllers para hacer accesible.
 require_once APP_PATH . '/Controllers/InicioController.php';
 require_once APP_PATH . '/Controllers/AuthController.php';
+require_once APP_PATH . '/Controllers/DashboardController.php';
 
 
 $router = new Router();

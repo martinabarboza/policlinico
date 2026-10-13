@@ -22,16 +22,16 @@
                 <h5 class="text-uppercase text-justify text-light">Enlaces rapidos</h5>
                 <ul class="list-unstyled mb-0 text-justify d-flex flex-column gap-2">
                     <li>
-                        <a class="text-justify enlace-rapido">Inicio</a>
+                        <a class="text-justify enlace-rapido" href="">Inicio</a>
                     </li>
                     <li>
-                        <a class="text-justify enlace-rapido">Sobre Nosotros</a>
+                        <a class="text-justify enlace-rapido" href="about_us">Sobre Nosotros</a>
                     </li>
                     <li>
-                        <a class="text-justify enlace-rapido">Servicios</a>
+                        <a class="text-justify enlace-rapido" href="servicios">Servicios</a>
                     </li>
                     <li>
-                        <a class="text-justify enlace-rapido">Contacto</a>
+                        <a class="text-justify enlace-rapido" href="contacto">Contacto</a>
                     </li>
                 </ul>
             </div>
@@ -94,7 +94,7 @@
     <!-- Copyright -->
     <div class="text-center p-3 pie-pagina d-flex flex-column flex-lg-row justify-content-center align-items-center">
         <p class=" text-justify mb-0  mt-0 me-lg-auto"> ©2026 Copyright: Policlínica Veterinaria CENUR, Todos los derechos reservados</p>
-        <p class=" text-justify mb-0  mt-0 ms-lg-auto">Desarrollado por <img src="<?= ASSETS_URL ?>/imgs/petcraft-logo.png" alt="Huella" class=" mx-2 paw-dog"> PetCraft</p>
+        <a href="https://github.com/martinabarboza/policlinico" class=" text-justify mb-0  mt-0 ms-lg-auto text-white">Desarrollado por <img src="<?= ASSETS_URL ?>/imgs/petcraft-logo.png" alt="Huella" class=" mx-2 paw-dog"> PetCraft</a>
     </div>
     <!-- Copyright -->
 </footer>

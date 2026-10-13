@@ -9,7 +9,7 @@ class AuthController extends Controller
     {
         // Si ya está logueado, no tiene sentido mostrarle el login de nuevo.
         if (Auth::check()) {
-            header('Location: ' . url('dashboard.php'));
+            header('Location: ' . url('dashboard'));
             exit;
         }
 
@@ -43,15 +43,12 @@ class AuthController extends Controller
 
         $usuarioModel = $this->model('Usuario');
 
-         if (!empty($cedula) && ctype_digit((string)$cedula)) {
-            $usuario = $usuarioModel->buscarPorCedula ((int)$cedula);
-           } else {
-               $usuario = null;
-                $data['error'] = "La cédula debe contener solamente números.";
+        if (!ctype_digit($cedula)) {
+            $this->fallarLogin('La cédula debe contener solamente números.', $cedula);
+            return;
+        }
 
-             }
-
-        //  $usuario = $usuarioModel->buscarPorCedula($cedula);
+        $usuario = $usuarioModel->buscarPorCedula((int) $cedula);
 
         if (!$usuario || !password_verify($password, $usuario['passw_Usuario'])) {
             $this->fallarLogin('Documento o contraseña incorrectos.', $cedula);
@@ -61,7 +58,7 @@ class AuthController extends Controller
         Auth::login($usuario);
         $usuarioModel->actualizarUltimoLogin((int) $usuario['id_Usuario']);
 
-        header('Location: ' . url('dashboard.php'));
+        header('Location: ' . url('dashboard'));
         exit;
     }
 
@@ -76,18 +73,10 @@ class AuthController extends Controller
         exit;
     }
 
-    private function fallarLogin(string $mensaje, $cedula): void
-    {   
-        $cedulaINT;
-        try {
-            $cedulaINT = (int) $cedula;
-        } catch (Exception $e) {
-            throw new Exception("Error Processing Request", $e);
-        }
-
-
+    private function fallarLogin(string $mensaje, string $cedula): void
+    {
         $_SESSION['auth_error'] = $mensaje;
-        $_SESSION['old_cedula']  = $cedulaINT;
+        $_SESSION['old_cedula'] = $cedula;
         header('Location: ' . url('login'));
         exit;
     }

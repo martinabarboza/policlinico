@@ -2,8 +2,8 @@
 class InicioController extends  Controller
 {
     public function index()
-    {
-        require __DIR__ . '/../Views/landing/inicio.php';
+    {   
+        $this->view('landing/inicio', [], 'landing');
     }
     
     public function obtenerServicios(): array
