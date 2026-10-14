@@ -1,4 +1,4 @@
-<?php $usuario = Auth::user();?>
+<?php $usuario = Auth::user(); ?>
 <!-- Empieza Navbar -->
 <div id="content" class="content">
 
@@ -75,22 +75,25 @@
                     <span class="d-none d-lg-inline-flex">Notificaciones</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="#" class="dropdown-item">
-                        <h6 class="fw-normal mb-0">Perfil actualizado</h6>
-                        <small>hace 15 minutos</small>
-                    </a>
-                    <hr class="dropdown-divider">
-                    <a href="#" class="dropdown-item">
-                        <h6 class="fw-normal mb-0">Nuevo usuario agregado</h6>
-                        <small>hace 2 días</small>
-                    </a>
-                    <hr class="dropdown-divider">
-                    <a href="#" class="dropdown-item">
-                        <h6 class="fw-normal mb-0">Contraseña cambiada</h6>
-                        <small>hace 1 mes</small>
-                    </a>
-                    <hr class="dropdown-divider">
-                    <a href="#" class="dropdown-item text-center">Ver todas las notificaciones</a>
+                    <!-- 
+                        <a href="#" class="dropdown-item">
+                            <h6 class="fw-normal mb-0">Perfil actualizado</h6>
+                            <small>hace 15 minutos</small>
+                        </a>
+
+                        <hr class="dropdown-divider">
+                        <a href="#" class="dropdown-item">
+                            <h6 class="fw-normal mb-0">Nuevo usuario agregado</h6>
+                            <small>hace 2 días</small>
+                        </a>
+                        <hr class="dropdown-divider">
+                        <a href="#" class="dropdown-item">
+                            <h6 class="fw-normal mb-0">Contraseña cambiada</h6>
+                            <small>hace 1 mes</small>
+                        </a>
+                        <hr class="dropdown-divider">
+                    -->
+                    <a href="centro-notificaciones" class="dropdown-item text-center">Ver todas las notificaciones</a>
                 </div>
             </div>
             <div class="nav-item dropdown">

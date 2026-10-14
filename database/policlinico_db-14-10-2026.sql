@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: policlinico-db
--- Tiempo de generación: 08-10-2026 a las 13:41:13
+-- Tiempo de generación: 14-10-2026 a las 22:14:25
 -- Versión del servidor: 10.11.18-MariaDB-ubu2204
 -- Versión de PHP: 8.3.33
 
@@ -72,7 +72,13 @@ CREATE TABLE `CONSULTA` (
 INSERT INTO `CONSULTA` (`id_Consulta`, `id_Paciente`, `tipo_Consulta`, `fecha_hora_Consulta`, `estado_proceso_Consulta`, `resultado_final_Consulta`, `fecha_proximo_control_Consulta`, `fecha_fin_Consulta`, `motivo_Consulta`) VALUES
 (1, 1, 'Consulta general', '2026-09-20 10:30:00', 'Finalizada', 'Tratamiento ambulatorio', '2026-10-04', NULL, 'Vómitos y falta de apetito'),
 (2, 3, 'Consulta equina', '2026-09-21 15:00:00', 'Finalizada', 'Seguimiento', '2026-10-21', NULL, 'Claudicación del miembro anterior'),
-(3, 2, 'Control', '2026-09-22 09:30:00', 'En curso', NULL, NULL, NULL, 'Control dermatológico');
+(3, 2, 'Control', '2026-09-22 09:30:00', 'En curso', NULL, NULL, NULL, 'Control dermatológico'),
+(4, 1, 'Consulta general', '2026-10-14 21:56:22', 'Pendiente', NULL, NULL, NULL, 'Control de rutina'),
+(5, 1, 'Consulta general', '2026-10-14 21:58:41', 'Pendiente', NULL, NULL, NULL, 'Control de rutina'),
+(6, 1, 'Consulta general', '2026-10-14 21:58:41', 'En curso', NULL, NULL, NULL, 'Control de rutina'),
+(7, 1, 'Consulta general', '2026-10-14 21:58:57', 'Pendiente', NULL, NULL, NULL, 'Control de rutina'),
+(8, 1, 'Consulta general', '2026-10-14 21:58:57', 'En curso', NULL, NULL, NULL, 'Control de rutina'),
+(9, 1, 'Consulta general', '2026-10-14 21:58:57', 'Finalizada', NULL, NULL, NULL, 'Control de rutina');
 
 -- --------------------------------------------------------
 
@@ -389,9 +395,9 @@ CREATE TABLE `USUARIO` (
 --
 
 INSERT INTO `USUARIO` (`id_Usuario`, `cedula_Usuario`, `nombre_Usuario`, `apellido_Usuario`, `email_Usuario`, `passw_Usuario`, `rol_Usuario`, `estado_Usuario`, `lastlogin_Usuario`, `dateupdate_Usuario`) VALUES
-(1, '51234567', 'Juan', 'Pérez', 'juan.perez@polivet.com', '123456', 'Veterinario', 'Activo', NULL, '2026-09-25 01:22:50'),
-(2, '49876543', 'María', 'Rodríguez', 'maria.rodriguez@polivet.com', '123456', 'Veterinario', 'Activo', NULL, '2026-09-25 01:22:50'),
-(3, '53456789', 'Ana', 'Silva', 'ana.silva@polivet.com', '123456', 'Recepción', 'Activo', NULL, '2026-09-25 01:22:50');
+(1, '51234567', 'Juan', 'Pérez', 'juan.perez@polivet.com', '$2y$10$OUdEYLLCRLbKjl6df6xhZ.HiBVMjyGCOt140qWTN.72PTqBCMBdHi', 'Veterinario', 'Activo', NULL, '2026-10-13 12:13:50'),
+(2, '12345678', 'María', 'Rodríguez', 'maria.rodriguez@polivet.com', '$2y$10$OUdEYLLCRLbKjl6df6xhZ.HiBVMjyGCOt140qWTN.72PTqBCMBdHi', 'Veterinario', 'Activo', '2026-10-14 22:09:00', '2026-10-14 22:09:00'),
+(3, '53456789', 'Ana', 'Silva', 'ana.silva@polivet.com', '$2y$10$OUdEYLLCRLbKjl6df6xhZ.HiBVMjyGCOt140qWTN.72PTqBCMBdHi', 'Recepción', 'Activo', NULL, '2026-10-13 12:13:59');
 
 -- --------------------------------------------------------
 
@@ -552,7 +558,7 @@ ALTER TABLE `ANAMNESIS`
 -- AUTO_INCREMENT de la tabla `CONSULTA`
 --
 ALTER TABLE `CONSULTA`
-  MODIFY `id_Consulta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_Consulta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `DIAGNOSTICO`
