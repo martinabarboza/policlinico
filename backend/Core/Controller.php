@@ -13,7 +13,8 @@ class Controller
     protected function view(
         string $view,
         array $data = [],
-        string $layout = 'app'
+        string $layout = 'app',
+        array $hojasEstilo = []
         //COMO LLAMAR "$this->view('landing/inicio', [], 'landing');"
     ): void {
         

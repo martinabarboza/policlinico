@@ -19,9 +19,12 @@
     <!-- Iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/dashboard.css">
+    <!-- Libs -->
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/libs/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <!-- Estilos CSS -->
+    <?php foreach ($hojasEstilo as $hojaEstilo): ?>
+        <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/<?= htmlspecialchars($hojaEstilo, ENT_QUOTES, 'UTF-8') ?>">
+    <?php endforeach; ?>
 </head>
 
 <body>

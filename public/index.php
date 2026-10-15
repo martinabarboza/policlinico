@@ -24,6 +24,7 @@ require_once APP_PATH . '/Core/Csrf.php';
 require_once APP_PATH . '/Controllers/InicioController.php';
 require_once APP_PATH . '/Controllers/AuthController.php';
 require_once APP_PATH . '/Controllers/DashboardController.php';
+require_once APP_PATH . '/Controllers/Centro_ConsultasController.php';
 
 
 $router = new Router();

@@ -36,7 +36,7 @@ class DashboardController extends Controller
             'agendaDelDia' => $agendaDelDia,
             'pacientesEnEspera' => $pacientesEnEspera,
             'fechaDelDashboard' => $fechaActual->format('d/m/Y'),
-        ]);
+        ],'app',['dashboard.css','app-layout.css']);
     }
 
     /**
