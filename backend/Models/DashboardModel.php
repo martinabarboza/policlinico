@@ -3,7 +3,17 @@
 class DashboardModel extends Model
 {
     /**
-     * Obtiene las consultas del día junto con los datos de paciente y tutor.
+     * Obtiene las consultas de una fecha, con paciente y tutor, ordenadas por hora.
+     * El rango incluye la medianoche inicial y excluye la del día siguiente.
+     *
+     * @return list<array{
+     *     fecha_hora: string,
+     *     tipo: string|null,
+     *     estado: string|null,
+     *     motivo: string|null,
+     *     nombre_paciente: string,
+     *     nombre_tutor: string
+     * }>
      */
     public function obtenerConsultasDelDia(DateTimeImmutable $fecha): array
     {

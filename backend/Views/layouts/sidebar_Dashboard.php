@@ -1,5 +1,5 @@
         <!-- Empieza Sidebar -->
-        <div class="sidebar pe-4 pb-3">
+        <div class="menu-lateral pe-4 pb-3">
             <nav class="navbar">
                 <!-- bg-light navbar-light -->
                 <a href="index.php" class="navbar-brand mx-4 mt-4 mb-4">
@@ -18,15 +18,35 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="dashboard" class="nav-item nav-link active"><i class="fa fa-home me-2"></i>Inicio</a>
-                    <a href="centro-consultas" class="nav-item nav-link"><i class="fa fa-search me-2"></i>Consultorio</a>
-                    <a href="centro-tutores" class="nav-item nav-link"><i class="fa fa-users me-2"></i>Tutores</a>
-                    <a href="agenda" class="nav-item nav-link"><i class="fa fa-calendar-alt me-2"></i>Agenda</a>
-                    <a href="hospitalizacion" class="nav-item nav-link"><i class="fa fa-hospital-alt me-2"></i>Hospitalización</a>
+                    <a href="dashboard" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'dashboard')) {
+                                                    echo 'nav-item nav-link active';
+                                                } else {
+                                                    echo 'nav-item nav-link';
+                                                } ?>"><i class="fa fa-home me-2"></i>Inicio</a>
+                    <a href="centro-consultas" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-consultas')) {
+                                                            echo 'nav-item nav-link active';
+                                                        } else {
+                                                            echo 'nav-item nav-link';
+                                                        } ?>"><i class="fa fa-search me-2"></i>Consultorio</a>
+                    <a href="centro-tutores" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-tutores')) {
+                                                        echo 'nav-item nav-link active';
+                                                    } else {
+                                                        echo 'nav-item nav-link';
+                                                    } ?>"><i class="fa fa-users me-2"></i>Tutores</a>
+                    <a href="agenda" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'agenda')) {
+                                                echo 'nav-item nav-link active';
+                                            } else {
+                                                echo 'nav-item nav-link';
+                                            } ?>"><i class="fa fa-calendar-alt me-2"></i>Agenda</a>
+                    <a href="hospitalizacion" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'hospitalizacion')) {
+                                                            echo 'nav-item nav-link active';
+                                                        } else {
+                                                            echo 'nav-item nav-link';
+                                                        } ?>"><i class="fa fa-hospital-alt me-2"></i>Hospitalización</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-stethoscope me-2"></i>Solicitudes</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="solicitudes-hitorias" class="dropdown-item">Solicitudes de historias</a>
+                            <a href="solicitudes-historias" class="dropdown-item">Solicitudes de historias</a>
                             <a href="solicitudes-citas" class="dropdown-item">Solicitudes de citas</a>
                             <a href="solicitudes-examenes" class="dropdown-item">Solicitudes de exámenes</a>
                         </div>

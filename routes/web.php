@@ -5,5 +5,8 @@ $router->post('/login', [AuthController::class, 'authenticate']);
 $router->get('/logout', [AuthController::class, 'logout']);
 $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/centro-consultas', [Centro_ConsultasController::class, 'index']);
+$router->get('/centro-tutores', [Centro_TutoresController::class, 'index']);
+$router->get('/agenda', [AgendaController::class, 'index']);
+$router->get('/hospitalizacion', [HospitalizacionController::class, 'index']);
 
 ?>

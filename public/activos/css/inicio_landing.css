@@ -1,4 +1,4 @@
-.hero {
+.portada {
     width: 100%;
     background-size: cover;
     background-position: center 1px;
@@ -10,25 +10,25 @@
         url('../imgs/Hero_Background.png');
 }
 
-.img-policlinico {
+.imagen-policlinica {
     width: 700px;
     height: 300px;
     object-position: center center;
 }
 
-.hero-titulo {
+.portada-titulo {
     font-family: 'MONTSERRAT-NEGRITA';
     font-size: 36px;
     color: white;
 }
 
-.hero-parrafo {
+.portada-parrafo {
     font-family: 'INTER-NORMAL';
     font-size: 16px;
     color: white;
 }
 
-.section1-h2 {
+.titulo-seccion {
     font-family: 'MONTSERRAT-NEGRITA';
     font-size: 24px;
     color: #004a82;
@@ -69,7 +69,7 @@
 
 
 /* Tarjeta completa que funciona como enlace */
-.shortcut-card {
+.tarjeta-acceso {
 
     /* Distribuye número, contenido y flecha horizontalmente */
     display: flex;
@@ -112,7 +112,7 @@
         border-color 0.2s ease;
 }
 
-.shortcut-card:hover {
+.tarjeta-acceso:hover {
 
     /* Mantiene el color del texto */
     color: #004a82;
@@ -127,7 +127,7 @@
     box-shadow: 0 8px 20px rgba(0, 74, 130, 0.12);
 }
 
-.shortcut-number {
+.tarjeta-acceso__numero {
 
     /* Tipografía del número */
     font-family: 'MONTSERRAT-NEGRITA';
@@ -142,12 +142,12 @@
     flex-shrink: 0;
 }
 
-.shortcut-content {
+.tarjeta-acceso__contenido {
     /* Ocupa el espacio disponible */
     flex: 1;
 }
 
-.shortcut-category {
+.tarjeta-acceso__categoria {
 
     /* Permite controlar margen y tamaño */
     display: block;
@@ -171,7 +171,7 @@
     letter-spacing: 0.08em;
 }
 
-.shortcut-content h3 {
+.tarjeta-acceso__contenido h3 {
 
     /* Tipografía principal */
     font-family: 'MONTSERRAT-NEGRITA';
@@ -186,7 +186,7 @@
     color: #004a82;
 }
 
-.shortcut-content p {
+.tarjeta-acceso__contenido p {
 
     /* Separación respecto al título */
     margin: 0.5rem 0 0;
@@ -205,7 +205,7 @@
 }
 
 
-.shortcut-arrow {
+.tarjeta-acceso__flecha {
 
     /* Tipografía */
     font-family: 'MONTSERRAT-NEGRITA';
@@ -223,13 +223,13 @@
     transition: transform 0.2s ease;
 }
 
-.shortcut-card:hover .shortcut-arrow {
+.tarjeta-acceso:hover .tarjeta-acceso__flecha {
 
     /* Desplaza la flecha hacia arriba y derecha */
     transform: translate(4px, -4px);
 }
 
-.servicio-card {
+.tarjeta-servicio {
     width: 18rem;
     flex: 0 0 18rem;
     overflow: hidden;
@@ -243,27 +243,27 @@
         border-color 0.2s ease;
 }
 
-.servicio-card:hover {
+.tarjeta-servicio:hover {
     transform: translateY(-5px);
     border-color: rgba(0, 74, 130, 0.25);
     box-shadow: 0 10px 24px rgba(0, 74, 130, 0.15);
 }
 
-.servicio-card .card-img-top {
+.tarjeta-servicio .card-img-top {
     display: block;
     width: 100%;
     height: 170px;
     object-fit: cover;
 }
 
-.servicio-card .card-body {
+.tarjeta-servicio .card-body {
     display: flex;
     flex-direction: column;
     min-height: 220px;
     padding: 1.25rem;
 }
 
-.servicio-categoria {
+.categoria-servicio {
     margin-bottom: 0.4rem;
     font-family: 'INTER-NEGRITA';
     font-size: 11px;
@@ -273,7 +273,7 @@
     color: #04714c;
 }
 
-.servicio-card .card-title {
+.tarjeta-servicio .card-title {
     margin-bottom: 0.65rem;
     font-family: 'MONTSERRAT-NEGRITA';
     font-size: 17px;
@@ -281,7 +281,7 @@
     color: #004a82;
 }
 
-.servicio-card .card-text {
+.tarjeta-servicio .card-text {
     margin-bottom: 1.25rem;
     font-family: 'INTER-NORMAL';
     font-size: 14px;
@@ -289,7 +289,7 @@
     color: #4f5f6b;
 }
 
-.servicio-card .btn-primary {
+.tarjeta-servicio .btn-primary {
     align-self: flex-start;
     margin-top: auto;
     padding: 0.55rem 1rem;
@@ -303,7 +303,7 @@
         background-color 0.2s ease;
 }
 
-.servicio-card .btn-primary:hover {
+.tarjeta-servicio .btn-primary:hover {
     transform: translateY(-2px);
     background-color: #004a82 !important;
 }
@@ -317,17 +317,17 @@
     height: 40px;
 }
 
-.inner-movil .servicio-card {
+.interior-movil .tarjeta-servicio {
     width: min(18rem, 100%);
     flex-basis: min(18rem, 100%);
 }
 
-.inner-tablet .servicio-card {
+.interior-tablet .tarjeta-servicio {
     width: 18rem;
     flex-basis: 18rem;
 }
 
-.inner-desktop .servicio-card {
+.interior-escritorio .tarjeta-servicio {
     width: 18rem;
     flex-basis: 18rem;
 }
@@ -342,7 +342,7 @@
 }
 
 /* El banner principal debe estar al frente para la sombra */
-.banner-horario {
+.franja-horario {
     z-index: 2;
     border-radius: 0 10px 10px 10px;
     /* Si los colores exactos difieren de Bootstrap por defecto: */
@@ -350,7 +350,7 @@
 }
 
 /* Posicionamiento y tamaño del perro sobresalido */
-.img-golden {
+.imagen-perro {
     height: 125%;
     /* Hace que sea más alto que la caja verde */
     bottom: 0;
@@ -362,11 +362,11 @@
     /* Evita interacciones accidentales */
 }
 
-.horario-mobile {
+.horario-movil {
     padding: 2rem 1rem;
 }
 
-.horario-mobile-titulo {
+.horario-movil-titulo {
     display: inline-block;
     position: relative;
     z-index: 1;
@@ -377,14 +377,14 @@
     border-radius: 8px 8px 0 0;
 }
 
-.horario-mobile-titulo h2 {
+.horario-movil-titulo h2 {
     margin: 0;
     font-family: 'MONTSERRAT-NEGRITA';
     font-size: 14px;
     color: white;
 }
 
-.horario-mobile-banner {
+.horario-movil-franja {
     position: relative;
     z-index: 2;
     display: flex;
@@ -397,39 +397,39 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-.horario-mobile-reloj {
+.horario-movil-reloj {
     margin-bottom: 0.75rem;
 }
 
-.horario-mobile-info {
+.horario-movil-info {
     text-align: center;
 }
 
-.horario-mobile-info h3 {
+.horario-movil-info h3 {
     margin: 0;
     font-family: 'MONTSERRAT-NEGRITA';
     font-size: 16px;
 }
 
-.horario-mobile-info p {
+.horario-movil-info p {
     margin: 0.25rem 0 0;
     font-family: 'INTER-NEGRITA';
     font-size: 14px;
 }
 
-.horario-mobile-info span {
+.horario-movil-info span {
     display: block;
     margin-top: 0.2rem;
     font-family: 'INTER-NORMAL';
     font-size: 14px;
 }
 
-.horario-mobile-telefono {
+.horario-movil-telefono {
     width: 100%;
     margin-top: 1rem;
 }
 
-.horario-mobile-telefono a {
+.horario-movil-telefono a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -447,31 +447,31 @@
 
 
 @media (max-width: 500px) {
-    .servicio-card {
+    .tarjeta-servicio {
         width: 100%;
         flex-basis: 100%;
     }
 
-    .servicio-card .card-img-top {
+    .tarjeta-servicio .card-img-top {
         height: 180px;
     }
 
-    .servicio-card .card-body {
+    .tarjeta-servicio .card-body {
         min-height: 210px;
         padding: 1.15rem;
     }
 
-    .servicio-card .card-title {
+    .tarjeta-servicio .card-title {
         font-size: 16px;
     }
 
-    .servicio-card .card-text {
+    .tarjeta-servicio .card-text {
         font-size: 13px;
     }
 }
 
 @media (max-width: 992px) {
-    .img-policlinico {
+    .imagen-policlinica {
         width: 100%;
         height: 300px;
         object-fit: cover;
@@ -480,53 +480,53 @@
 }
 
 @media (max-width: 500px) {
-    .img-policlinico {
+    .imagen-policlinica {
         width: 100%;
         height: 200px;
         object-fit: cover;
         object-position: center;
     }
 
-    .hero-parrafo {
+    .portada-parrafo {
         font-size: 14px;
     }
 
-    .hero-btn {
+    .boton-portada {
         font-size: 14px;
     }
 
-    .section1-h2 {
+    .titulo-seccion {
         font-size: 18px;
         text-align: center;
     }
 
     /* Reduce el espacio interno de las tarjetas */
-    .shortcut-card {
+    .tarjeta-acceso {
         padding: 1.25rem;
     }
 
     /* Número */
-    .shortcut-number {
+    .tarjeta-acceso__numero {
         font-size: 12px;
     }
 
     /* Categoría */
-    .shortcut-category {
+    .tarjeta-acceso__categoria {
         font-size: 11px;
     }
 
     /* Título */
-    .shortcut-content h3 {
+    .tarjeta-acceso__contenido h3 {
         font-size: 16px;
     }
 
     /* Descripción */
-    .shortcut-content p {
+    .tarjeta-acceso__contenido p {
         font-size: 13px;
     }
 
     /* Flecha */
-    .shortcut-arrow {
+    .tarjeta-acceso__flecha {
         font-size: 18px;
     }
 }

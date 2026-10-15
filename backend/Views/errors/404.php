@@ -18,7 +18,7 @@
             padding: 24px;
             background: #f4f8f6;
             color: #193b30;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, class="Segoe UI", sans-serif;
         }
 
         main {
@@ -31,7 +31,7 @@
             text-align: center;
         }
 
-        .code {
+        .codigo-error {
             margin: 0;
             color: #04714c;
             font-size: clamp(5rem, 20vw, 8rem);
@@ -71,7 +71,7 @@
 
 <body>
     <main>
-        <p class="code" aria-hidden="true">404</p>
+        <p class="codigo-error" aria-hidden="true">404</p>
         <h1>Esta página no está disponible</h1>
         <p>La dirección puede ser incorrecta o la página puede haberse movido.</p>
         <a href="<?= htmlspecialchars(url(), ENT_QUOTES, 'UTF-8') ?>">Volver al inicio</a>

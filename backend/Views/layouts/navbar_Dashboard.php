@@ -1,12 +1,12 @@
 <?php $usuario = Auth::user(); ?>
 <!-- Empieza Navbar -->
-<div id="content" class="content">
+<div id="content" class="contenido-principal">
 
     <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
         <a href="index.php" class="navbar-brand d-flex d-lg-none me-4">
             <h2 class="text-light mb-0"><i class="fa fa-horse"></i></h2>
         </a>
-        <a href="#" class="sidebar-toggler flex-shrink-0 bg-light text-secondary">
+        <a href="#" class="boton-menu-lateral flex-shrink-0 bg-light text-secondary">
             <i class="fa fa-ellipsis-v"></i>
         </a>
         <form class="d-none d-md-flex ms-4">

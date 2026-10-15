@@ -12,32 +12,32 @@ function mostrarServicios($cartas, $cantidad)
         $active = $index === 0 ? 'active' : '';
 
         echo '
-        <div class="carousel-item ' . $active . '">
+        <div "carousel-item ' . $active . '">
             <div class="d-flex justify-content-center align-items-stretch gap-4 px-5">';
 
         foreach ($grupo as $carta) {
             echo '
-                <div class="servicio-card">
-                    <img src="' . (!empty($carta['imagen']) ? htmlspecialchars($carta['imagen'] ?? ''): '#') . '"
+                <div class="tarjeta-servicio">
+                    <img src="' . (!empty($carta['imagen']) ? htmlspecialchars($carta['imagen'] ?? '') : '#') . '"
                         class="card-img-top"
-                        alt="' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? ''): '#') . '">
+                        alt="' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? '') : '#') . '">
 
                     <div class="card-body">
-                        <span class="servicio-categoria">
+                        <span class="categoria-servicio">
                             Servicio
                         </span>
 
                         <h5 class="card-title">
-                            ' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? ''): '#') . '
+                            ' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? '') : '#') . '
                         </h5>
 
                         <p class="card-text">
-                            ' . (!empty($carta['descripcion']) ? htmlspecialchars($carta['descripcion'] ?? ''): '#') . '
+                            ' . (!empty($carta['descripcion']) ? htmlspecialchars($carta['descripcion'] ?? '') : '#') . '
                         </p>
 
-                        <a href="' . (!empty($carta['link']) ? htmlspecialchars($carta['link'] ?? ''): '#') . '"
+                        <a href="' . (!empty($carta['link']) ? htmlspecialchars($carta['link'] ?? '') : '#') . '"
                             class="btn btn-primary">
-                            Mas información sobre <u>'. (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? ''): '#') . '</u>
+                            Mas información sobre <u>' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? '') : '#') . '</u>
                             <i class="bi bi-arrow-right ms-2"></i>
                         </a>
                     </div>
@@ -55,15 +55,15 @@ function mostrarServicios($cartas, $cantidad)
 <body>
     <?php include __DIR__ . '/../layouts/navbar_Landing.php'; ?>
     <!--HERO-->
-    <section class="hero p-2">
+    <section class="portada p-2">
         <div class=" container-fluid w-100 px-4 py-5">
             <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
                 <div class="col-12 col-lg-6">
-                    <img src="<?= ASSETS_URL ?>/imgs/policlinico.png" class="d-block mx-lg-auto img-fluid rounded rounded-3 img-policlinico" alt="Policlinico Veterinario CENUR" loading="lazy">
+                    <img src="<?= ASSETS_URL ?>/imgs/policlinico.png" class="d-block mx-lg-auto img-fluid rounded rounded-3 imagen-policlinica" alt="Policlinico Veterinario CENUR" loading="lazy">
                 </div>
                 <div class="col-lg-6">
-                    <h1 class="display-5 hero-titulo lh-1 mb-3">Gestión clínica e investigación veterinaria</h1>
-                    <p class="lead hero-parrafo text-justify">Optimizando la administración de pacientes, profesionales veterinarios y datos clínicos de la Policlínica CENUR para mejorar la atención y potenciar la investigación epidemiológica.</p>
+                    <h1 class="display-5 portada-titulo lh-1 mb-3">Gestión clínica e investigación veterinaria</h1>
+                    <p class="lead portada-parrafo texto-justificado">Optimizando la administración de pacientes, profesionales veterinarios y datos clínicos de la Policlínica CENUR para mejorar la atención y potenciar la investigación epidemiológica.</p>
                 </div>
             </div>
         </div>
@@ -74,10 +74,10 @@ function mostrarServicios($cartas, $cantidad)
         <!-- Título de la sección -->
         <div class="d-flex justify-content-center px-4">
 
-            <ul class="ul-h2-container list-unstyled">
+            <ul class="lista-titulos-seccion list-unstyled">
 
                 <li>
-                    <h2 class="m-0 section1-h2 text-justify">
+                    <h2 class="m-0 titulo-seccion texto-justificado">
                         Soluciones operativas y accesos rápidos
                     </h2>
                 </li>
@@ -109,17 +109,17 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/pacientes" class="shortcut-card">
+                    <a href="/pacientes" class="tarjeta-acceso">
 
                         <!-- Número del acceso -->
-                        <div class="shortcut-number">
+                        <div class="tarjeta-acceso__numero">
                             01
                         </div>
 
                         <!-- Información -->
-                        <div class="shortcut-content">
+                        <div class="tarjeta-acceso__contenido">
 
-                            <span class="shortcut-category">
+                            <span class="tarjeta-acceso__categoria">
                                 Gestión
                             </span>
 
@@ -134,7 +134,7 @@ function mostrarServicios($cartas, $cantidad)
                         </div>
 
                         <!-- Indicador de acceso -->
-                        <span class="shortcut-arrow">
+                        <span class="tarjeta-acceso__flecha">
                             ↗
                         </span>
 
@@ -148,15 +148,15 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/turnos" class="shortcut-card">
+                    <a href="/turnos" class="tarjeta-acceso">
 
-                        <div class="shortcut-number">
+                        <div class="tarjeta-acceso__numero">
                             02
                         </div>
 
-                        <div class="shortcut-content">
+                        <div class="tarjeta-acceso__contenido">
 
-                            <span class="shortcut-category">
+                            <span class="tarjeta-acceso__categoria">
                                 Agenda
                             </span>
 
@@ -170,7 +170,7 @@ function mostrarServicios($cartas, $cantidad)
 
                         </div>
 
-                        <span class="shortcut-arrow">
+                        <span class="tarjeta-acceso__flecha">
                             ↗
                         </span>
 
@@ -184,15 +184,15 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/historias-clinicas" class="shortcut-card">
+                    <a href="/historias-clinicas" class="tarjeta-acceso">
 
-                        <div class="shortcut-number">
+                        <div class="tarjeta-acceso__numero">
                             03
                         </div>
 
-                        <div class="shortcut-content">
+                        <div class="tarjeta-acceso__contenido">
 
-                            <span class="shortcut-category">
+                            <span class="tarjeta-acceso__categoria">
                                 Registros
                             </span>
 
@@ -206,7 +206,7 @@ function mostrarServicios($cartas, $cantidad)
 
                         </div>
 
-                        <span class="shortcut-arrow">
+                        <span class="tarjeta-acceso__flecha">
                             ↗
                         </span>
 
@@ -220,15 +220,15 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/profesionales" class="shortcut-card">
+                    <a href="/profesionales" class="tarjeta-acceso">
 
-                        <div class="shortcut-number">
+                        <div class="tarjeta-acceso__numero">
                             04
                         </div>
 
-                        <div class="shortcut-content">
+                        <div class="tarjeta-acceso__contenido">
 
-                            <span class="shortcut-category">
+                            <span class="tarjeta-acceso__categoria">
                                 Personal
                             </span>
 
@@ -242,7 +242,7 @@ function mostrarServicios($cartas, $cantidad)
 
                         </div>
 
-                        <span class="shortcut-arrow">
+                        <span class="tarjeta-acceso__flecha">
                             ↗
                         </span>
 
@@ -256,15 +256,15 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/consultorios" class="shortcut-card">
+                    <a href="/consultorios" class="tarjeta-acceso">
 
-                        <div class="shortcut-number">
+                        <div class="tarjeta-acceso__numero">
                             05
                         </div>
 
-                        <div class="shortcut-content">
+                        <div class="tarjeta-acceso__contenido">
 
-                            <span class="shortcut-category">
+                            <span class="tarjeta-acceso__categoria">
                                 Organización
                             </span>
 
@@ -278,7 +278,7 @@ function mostrarServicios($cartas, $cantidad)
 
                         </div>
 
-                        <span class="shortcut-arrow">
+                        <span class="tarjeta-acceso__flecha">
                             ↗
                         </span>
 
@@ -292,15 +292,15 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/reportes" class="shortcut-card">
+                    <a href="/reportes" class="tarjeta-acceso">
 
-                        <div class="shortcut-number">
+                        <div class="tarjeta-acceso__numero">
                             06
                         </div>
 
-                        <div class="shortcut-content">
+                        <div class="tarjeta-acceso__contenido">
 
-                            <span class="shortcut-category">
+                            <span class="tarjeta-acceso__categoria">
                                 Información
                             </span>
 
@@ -314,7 +314,7 @@ function mostrarServicios($cartas, $cantidad)
 
                         </div>
 
-                        <span class="shortcut-arrow">
+                        <span class="tarjeta-acceso__flecha">
                             ↗
                         </span>
 
@@ -331,9 +331,9 @@ function mostrarServicios($cartas, $cantidad)
     <!--ACCESOS DIRECTOS-->
     <section class=" pb-5">
         <div class="d-flex justify-content-center px-4">
-            <ul class="ul-h2-container list-unstyled">
+            <ul class="lista-titulos-seccion list-unstyled">
                 <li>
-                    <h2 class=" m-0 section1-h2 text-justify">Nuestros servicios</h2>
+                    <h2 class=" m-0 titulo-seccion texto-justificado">Nuestros servicios</h2>
                 </li>
                 <li class=" d-flex justify-content-center">
                     <div class="separador-con-huella my-4">
@@ -350,7 +350,7 @@ function mostrarServicios($cartas, $cantidad)
                     data-bs-ride="carousel"
                     data-bs-interval="5000">
 
-                    <div class="carousel-inner inner-movil">
+                    <div class="carousel-inner interior-movil">
                         <?php
                         $InicioController = new InicioController();
                         $cartas = $InicioController->obtenerServicios();
@@ -385,7 +385,7 @@ function mostrarServicios($cartas, $cantidad)
                     data-bs-ride="carousel"
                     data-bs-interval="5000">
 
-                    <div class="carousel-inner inner-tablet">
+                    <div class="carousel-inner interior-tablet">
                         <?php
                         $InicioController = new InicioController();
                         $cartas = $InicioController->obtenerServicios();
@@ -420,7 +420,7 @@ function mostrarServicios($cartas, $cantidad)
                     data-bs-ride="carousel"
                     data-bs-interval="3000">
 
-                    <div class="carousel-inner inner-desktop">
+                    <div class="carousel-inner interior-escritorio">
                         <?php
                         $InicioController = new InicioController();
                         $cartas = $InicioController->obtenerServicios();
@@ -460,7 +460,7 @@ function mostrarServicios($cartas, $cantidad)
                 </div>
 
                 <!-- Banner Principal Verde -->
-                <div class="banner-horario bg-success p-3 text-white d-flex flex-column flex-md-row align-items-center shadow position-relative">
+                <div class="franja-horario bg-success p-3 text-white d-flex flex-column flex-md-row align-items-center shadow position-relative">
 
                     <!-- Icono Reloj -->
                     <div class="px-3">
@@ -483,34 +483,34 @@ function mostrarServicios($cartas, $cantidad)
                     </div>
 
                     <!-- Imagen del Perro (sobresale) -->
-                    <img src="<?= ASSETS_URL ?>/imgs/golden.png" alt="Golden Retriever" class="img-golden position-absolute end-0 d-none d-md-inline-block">
+                    <img src="<?= ASSETS_URL ?>/imgs/golden.png" alt="Golden Retriever" class="imagen-perro position-absolute end-0 d-none d-md-inline-block">
 
                 </div>
 
             </div>
             <!-- MOBIL -->
-            <div class="horario-mobile d-lg-none">
+            <div class="horario-movil d-lg-none">
 
-                <div class="horario-mobile-titulo">
+                <div class="horario-movil-titulo">
                     <h2>Horario de Atención</h2>
                 </div>
 
-                <div class="horario-mobile-banner">
+                <div class="horario-movil-franja">
 
-                    <div class="horario-mobile-reloj">
+                    <div class="horario-movil-reloj">
                         <img src="<?= ASSETS_URL ?>/svgs/reloj.svg"
                             alt="Reloj"
                             width="48"
                             height="48">
                     </div>
 
-                    <div class="horario-mobile-info">
+                    <div class="horario-movil-info">
                         <h3>Horario de atención</h3>
                         <p>Lunes a Viernes</p>
                         <span>10:00 a 17:00 horas</span>
                     </div>
 
-                    <div class="horario-mobile-telefono">
+                    <div class="horario-movil-telefono">
                         <a href="tel:098230818">
                             <i class="bi bi-telephone-fill"></i>
                             <span>098 230 818</span>

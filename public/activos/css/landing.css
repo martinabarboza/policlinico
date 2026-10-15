@@ -90,7 +90,7 @@ header {
     color: #04714c !important;
 }
 
-.li-ingresar {
+.elemento-ingresar {
     background-color: #04714c;
     width: fit-content !important;
     transition: background-color 0.2s ease, transform 0.2s ease;
@@ -99,13 +99,13 @@ header {
 
 }
 
-.li-ingresar:hover {
+.elemento-ingresar:hover {
     background-color: #04714c !important;
     transform: scale(1.05);
     border: solid 1px black;
 }
 
-.btn-ingresar {
+.boton-ingresar {
     font-family: 'INTER-NEGRITA';
     font-size: 18px;
     background: none;
@@ -121,7 +121,7 @@ header {
 
 /* ---- INICIO del FOOTER ---- */
 
-.footer-landing {
+.pie-inicio {
     background-color: #04714c;
 
 
@@ -137,7 +137,7 @@ header {
     font-size: 18px;
 }
 
-.text-justify {
+.texto-justificado {
     text-align: justify;
     hyphens: auto;
     overflow-wrap: break-word;
@@ -150,21 +150,21 @@ header {
     color: white;
 }
 
-.footer-p {
+.parrafo-pie {
     font-family: 'INTER-NORMAl';
     font-size: 16px;
     color: white;
 }
 
 @media (min-width: 992px) {
-    .border-bottom-lg {
+    .borde-inferior-lg {
         border-right: 1px solid var(--bs-secondary) !important;
     }
 }
 
 @media (max-width: 992px) {
 
-    .footer-p {
+    .parrafo-pie {
         font-size: 14px;
     }
 
@@ -172,13 +172,13 @@ header {
         font-size: 14px;
     }
 
-    .li-ingresar {
+    .elemento-ingresar {
         transform-origin: left center;
     }
 
 }
 
-.info-vet {
+.info-veterinaria {
     text-decoration: none;
 }
 
@@ -188,7 +188,7 @@ header {
     color: white;
 }
 
-.paw-dog {
+.huella-perro {
     width: 30px;
     height: 30px;
 }
@@ -203,32 +203,32 @@ main {
     min-height: 100vh;
 }
 
-.top-bar {
+.barra-superior {
     height: 6px;
     background: linear-gradient(to right, #1f7a4d 0%, #1f7a4d 50%, #1a3fae 50%, #1a3fae 100%);
 }
 
-.login-card {
+.tarjeta-inicio-sesion {
     max-width: 480px;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-.logo-circle {
+.logo-circular {
     width: 72px;
     height: 72px;
 }
 
-.brand-green {
+.marca-verde {
     color: #1f7a4d;
 }
 
-.btn-brand {
+.boton-marca {
     background-color: #1f7a4d;
     border-color: #1f7a4d;
 }
 
-.btn-brand:hover {
+.boton-marca:hover {
     background-color: #17603c;
     border-color: #17603c;
 }

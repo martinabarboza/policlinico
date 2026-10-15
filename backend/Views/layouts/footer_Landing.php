@@ -1,14 +1,14 @@
-<footer class="footer-landing text-center text-lg-start">
+<footer class="pie-inicio text-center text-lg-start">
     <!-- Grid container -->
     <div class="container-fluid px-4 py-5">
         <!--Grid row-->
         <div class="row gx-4 gy-4 justify-content-center">
             <!--Grid column-->
-            <div class="col-12 col-md-5 col-lg-3 mx-auto mb-4 mb-md-0 text-center mt-sm-3 border-bottom-lg p-lg-3 p-2">
-                <h5 class="text-uppercase text-justify text-light">Sobre nosotros</h5>
+            <div class="col-12 col-md-5 col-lg-3 mx-auto mb-4 mb-md-0 text-center mt-sm-3 borde-inferior-lg p-lg-3 p-2">
+                <h5 class="text-uppercase texto-justificado text-light">Sobre nosotros</h5>
                 <ul class="list-unstyled mb-0">
                     <li>
-                        <p class="text-justify footer-p text-light">Somos la Policlinica Veterinaria de CENUR, comprometidas con la salud animal, la eduación y la investigación para una mejor sociedad</p>
+                        <p class="texto-justificado parrafo-pie text-light">Somos la Policlinica Veterinaria de CENUR, comprometidas con la salud animal, la eduación y la investigación para una mejor sociedad</p>
                     </li>
                     <li>
                         <img src="" alt="">
@@ -18,32 +18,32 @@
             <!--Grid column-->
 
             <!--Grid column-->
-            <div class="col-12 col-md-5 col-lg-3 mx-auto mb-4 mb-md-0 text-center mt-sm-3 border-bottom-lg p-lg-3 p-2">
-                <h5 class="text-uppercase text-justify text-light">Enlaces rapidos</h5>
-                <ul class="list-unstyled mb-0 text-justify d-flex flex-column gap-2">
+            <div class="col-12 col-md-5 col-lg-3 mx-auto mb-4 mb-md-0 text-center mt-sm-3 borde-inferior-lg p-lg-3 p-2">
+                <h5 class="text-uppercase texto-justificado text-light">Enlaces rapidos</h5>
+                <ul class="list-unstyled mb-0 texto-justificado d-flex flex-column gap-2">
                     <li>
-                        <a class="text-justify enlace-rapido" href="">Inicio</a>
+                        <a class="texto-justificado enlace-rapido" href="">Inicio</a>
                     </li>
                     <li>
-                        <a class="text-justify enlace-rapido" href="about_us">Sobre Nosotros</a>
+                        <a class="texto-justificado enlace-rapido" href="about_us">Sobre Nosotros</a>
                     </li>
                     <li>
-                        <a class="text-justify enlace-rapido" href="servicios">Servicios</a>
+                        <a class="texto-justificado enlace-rapido" href="servicios">Servicios</a>
                     </li>
                     <li>
-                        <a class="text-justify enlace-rapido" href="contacto">Contacto</a>
+                        <a class="texto-justificado enlace-rapido" href="contacto">Contacto</a>
                     </li>
                 </ul>
             </div>
             <!--Grid column-->
 
             <!--Grid column-->
-            <div class="col-12 col-md-5 col-lg-3 mx-auto mb-4 mb-md-0 text-center mt-sm-3 border-bottom-lg p-lg-3 p-2">
-                <h5 class="text-uppercase text-justify text-light">Horarios</h5>
+            <div class="col-12 col-md-5 col-lg-3 mx-auto mb-4 mb-md-0 text-center mt-sm-3 borde-inferior-lg p-lg-3 p-2">
+                <h5 class="text-uppercase texto-justificado text-light">Horarios</h5>
                 <ul class="list-unstyled mb-0">
                     <li>
-                        <p class="text-justify footer-p">Lunes a Viernes <br> 10:00 - 17:00 Hs</p>
-                        <p class="text-justify footer-p">Fines de Semanas Cerrado</p>
+                        <p class="texto-justificado parrafo-pie">Lunes a Viernes <br> 10:00 - 17:00 Hs</p>
+                        <p class="texto-justificado parrafo-pie">Fines de Semanas Cerrado</p>
                     </li>
                 </ul>
             </div>
@@ -52,7 +52,7 @@
             <!--Grid column-->
             <div class="col-12 col-md-5 col-lg-3 mx-auto mb-4 mb-md-0 text-center mt-sm-3 p-lg-3 p-2">
 
-                <h5 class="text-uppercase text-light text-justify">Contactanos</h5>
+                <h5 class="text-uppercase text-light texto-justificado">Contactanos</h5>
 
                 <ul class="list-unstyled mb-0 d-flex flex-column gap-3">
 
@@ -60,21 +60,21 @@
                         <img src="<?= ASSETS_URL ?>/svgs/location.svg" alt="">
                         <a href="https://www.google.com/maps/search/?api=1&query=Policlínico+Veterinario+CENUR+Litoral+Norte+Salto+Parque+Harriague"
                             target="_blank"
-                            class="footer-p mb-0 text-justify info-vet ">
+                            class="parrafo-pie mb-0 texto-justificado info-veterinaria ">
                             Avenida Juan Harriague 930, Salto, Uruguay
                         </a>
                     </li>
 
                     <li class="d-flex align-items-center gap-1">
                         <img src="<?= ASSETS_URL ?>/svgs/call.svg" alt="">
-                        <a href="tel:+59898230818" class="footer-p mb-0 info-vet ">
+                        <a href="tel:+59898230818" class="parrafo-pie mb-0 info-veterinaria ">
                             098 230 818
                         </a>
                     </li>
 
                     <li class="d-flex align-items-center gap-1">
                         <img src="<?= ASSETS_URL ?>/svgs/mail.svg" alt="">
-                        <a href="mailto:iribarne2012@gmail.com" class="footer-p mb-0 info-vet ">
+                        <a href="mailto:iribarne2012@gmail.com" class="parrafo-pie mb-0 info-veterinaria ">
                             iribarne2012@gmail.com
                         </a>
                     </li>
@@ -93,8 +93,8 @@
     <!-- Grid container -->
     <!-- Copyright -->
     <div class="text-center p-3 pie-pagina d-flex flex-column flex-lg-row justify-content-center align-items-center">
-        <p class=" text-justify mb-0  mt-0 me-lg-auto"> ©2026 Copyright: Policlínica Veterinaria CENUR, Todos los derechos reservados</p>
-        <a href="https://github.com/martinabarboza/policlinico" class=" text-justify mb-0  mt-0 ms-lg-auto text-white">Desarrollado por <img src="<?= ASSETS_URL ?>/imgs/petcraft-logo.png" alt="Huella" class=" mx-2 paw-dog"> PetCraft</a>
+        <p class=" texto-justificado mb-0  mt-0 me-lg-auto"> ©2026 Copyright: Policlínica Veterinaria CENUR, Todos los derechos reservados</p>
+        <a href="https://github.com/martinabarboza/policlinico" class=" texto-justificado mb-0  mt-0 ms-lg-auto text-white">Desarrollado por <img src="<?= ASSETS_URL ?>/imgs/petcraft-logo.png" alt="Huella" class=" mx-2 huella-perro"> PetCraft</a>
     </div>
     <!-- Copyright -->
 </footer>

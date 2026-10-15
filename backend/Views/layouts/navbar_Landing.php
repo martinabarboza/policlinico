@@ -21,10 +21,10 @@
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <a aria-current="page" href="<?= url('login') ?>">
-                <li class="nav-item btn li-ingresar rounded rounded-2 d-flex  w-auto align-items-center gap-2">
-                    <img src="<?= ASSETS_URL ?>/svgs/user-svgrepo-com.svg" alt="">
-                    <label class="btn-ingresar">Ingresar al portal</label>
-                </li>
+                    <li class="nav-item btn elemento-ingresar rounded rounded-2 d-flex  w-auto align-items-center gap-2">
+                        <img src="<?= ASSETS_URL ?>/svgs/user-svgrepo-com.svg" alt="">
+                        <label class="boton-ingresar">Ingresar al portal</label>
+                    </li>
                 </a>
             </ul>
         </div>

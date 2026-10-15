@@ -1,156 +1,181 @@
 <?php
+
 /**
- * Datos entregados por DashboardController para renderizar la agenda.
+ * Datos entregados por DashboardController para renderizar el dashboard.
  *
- * @var array $agendaDelDia
- * @var array $pacientesEnEspera
+ * @var list<array{hora: string, fecha_hora: string, tipo: string, estado: string, clase_estado: string, motivo: string|null, nombre_paciente: string, nombre_tutor: string}> $agendaDelDia
+ * @var list<array{hora: string, fecha_hora: string, tipo: string, estado: string, clase_estado: string, motivo: string|null, nombre_paciente: string, nombre_tutor: string}> $pacientesEnEspera
  * @var string $fechaDelDashboard
+ * @var string $fechaSeleccionada
+ * @var string|null $errorFecha
  */
 ?>
 
 <!-- Empieza Contenido -->
 
 <!-- Botones Principales -->
+<!-- Tarjetas y valores de ejemplo; no están conectados a consultas reales. -->
 <div class="container-fluid pt-4 px-4 d-flex flex-wrap gap-3">
-    <a href="nueva-ficha" class="dashboard-card">
-        <span class="dashboard-card__icon dashboard-card__icon--primary">
+    <a href="nueva-ficha" class="tarjeta-inicio">
+        <span class="tarjeta-inicio__icono tarjeta-inicio__icono--principal">
             <i class="fa fa-plus-circle"></i>
         </span>
-        <span class="dashboard-card__content">
-            <span class="dashboard-card__title">Nueva ficha</span>
-            <span class="dashboard-card__value">Crear registro</span>
+        <span class="tarjeta-inicio__contenido">
+            <span class="tarjeta-inicio__titulo">Nueva ficha</span>
+            <span class="tarjeta-inicio__valor">Crear registro</span>
         </span>
-        <i class="fa fa-chevron-right dashboard-card__arrow"></i>
+        <i class="fa fa-chevron-right tarjeta-inicio__flecha"></i>
     </a>
 
     <!-- Consultas diarias -->
-    <a href="consultas-diarias" class="dashboard-card">
-        <span class="dashboard-card__icon dashboard-card__icon--success">
+    <a href="consultas-diarias" class="tarjeta-inicio">
+        <span class="tarjeta-inicio__icono tarjeta-inicio__icono--exito">
             <i class="fa fa-calendar-day" aria-hidden="true"></i>
         </span>
-        <span class="dashboard-card__content">
-            <span class="dashboard-card__title">Consultas diarias</span>
-            <span class="dashboard-card__value">0</span>
+        <span class="tarjeta-inicio__contenido">
+            <span class="tarjeta-inicio__titulo">Consultas diarias</span>
+            <span class="tarjeta-inicio__valor">0</span>
         </span>
-        <i class="fa fa-chevron-right dashboard-card__arrow" aria-hidden="true"></i>
+        <i class="fa fa-chevron-right tarjeta-inicio__flecha" aria-hidden="true"></i>
     </a>
 
     <!-- Consultas incompletas -->
-    <a href="consultas-incompletas" class="dashboard-card">
-        <span class="dashboard-card__icon dashboard-card__icon--danger">
+    <a href="consultas-incompletas" class="tarjeta-inicio">
+        <span class="tarjeta-inicio__icono tarjeta-inicio__icono--peligro">
             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
         </span>
-        <span class="dashboard-card__content">
-            <span class="dashboard-card__title">Consultas incompletas</span>
-            <span class="dashboard-card__value">0</span>
+        <span class="tarjeta-inicio__contenido">
+            <span class="tarjeta-inicio__titulo">Consultas incompletas</span>
+            <span class="tarjeta-inicio__valor">0</span>
         </span>
-        <i class="fa fa-chevron-right dashboard-card__arrow" aria-hidden="true"></i>
+        <i class="fa fa-chevron-right tarjeta-inicio__flecha" aria-hidden="true"></i>
     </a>
 
     <!-- Próximas consultas -->
-    <a href="proximas-consultas" class="dashboard-card">
-        <span class="dashboard-card__icon dashboard-card__icon--warning">
+    <a href="proximas-consultas" class="tarjeta-inicio">
+        <span class="tarjeta-inicio__icono tarjeta-inicio__icono--aviso">
             <i class="fa fa-clock" aria-hidden="true"></i>
         </span>
-        <span class="dashboard-card__content">
-            <span class="dashboard-card__title">Próximas consultas</span>
-            <span class="dashboard-card__value">Ver consultas</span>
+        <span class="tarjeta-inicio__contenido">
+            <span class="tarjeta-inicio__titulo">Próximas consultas</span>
+            <span class="tarjeta-inicio__valor">Ver consultas</span>
         </span>
-        <i class="fa fa-chevron-right dashboard-card__arrow" aria-hidden="true"></i>
+        <i class="fa fa-chevron-right tarjeta-inicio__flecha" aria-hidden="true"></i>
     </a>
 </div>
 <!-- Termina Botones Principales -->
 
+<div class="container-fluid pt-4 px-4">
+    <form method="get" action="dashboard" class="d-flex flex-wrap align-items-end gap-2">
+        <div>
+            <label for="fecha-dashboard" class="form-label">Consultar agenda por fecha</label>
+            <input
+                type="date"
+                id="fecha-dashboard"
+                name="fecha"
+                class="form-control"
+                value="<?= htmlspecialchars($fechaSeleccionada, ENT_QUOTES, 'UTF-8') ?>"
+                required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ver fecha</button>
+    </form>
+    <?php if ($errorFecha !== null): ?>
+        <p class="text-danger mt-2 mb-0" role="alert"><?= htmlspecialchars($errorFecha, ENT_QUOTES, 'UTF-8') ?></p>
+    <?php endif; ?>
+</div>
 
 <!-- Agenda y pacientes en espera -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="col-sm-12 col-xl-6">
-            <section class="dashboard-panel" aria-labelledby="waiting-title">
-                <div class="dashboard-panel__header">
+            <section class="panel-inicio" aria-labelledby="waiting-title">
+                <div class="panel-inicio__encabezado">
                     <div class="d-flex align-items-center gap-3">
-                        <span class="dashboard-panel__icon dashboard-panel__icon--waiting" aria-hidden="true">
+                        <span class="panel-inicio__icono panel-inicio__icono--espera" aria-hidden="true">
                             <i class="fa fa-hourglass-half"></i>
                         </span>
                         <div>
-                            <h2 class="dashboard-panel__title" id="waiting-title">Pacientes en espera</h2>
-                            <p class="dashboard-panel__subtitle">Consultas pendientes · <?= htmlspecialchars($fechaDelDashboard, ENT_QUOTES, 'UTF-8') ?></p>
+                            <h2 class="panel-inicio__titulo" id="waiting-title">Pacientes en espera</h2>
+                            <p class="panel-inicio__subtitulo">Consultas pendientes · <?= htmlspecialchars($fechaDelDashboard, ENT_QUOTES, 'UTF-8') ?></p>
                         </div>
                     </div>
-                    <span class="dashboard-panel__count" aria-label="<?= count($pacientesEnEspera) ?> pacientes en espera">
+                    <span class="panel-inicio__contador" aria-label="<?= count($pacientesEnEspera) ?> pacientes en espera">
                         <?= count($pacientesEnEspera) ?>
                     </span>
                 </div>
 
                 <?php if ($pacientesEnEspera): ?>
-                    <ul class="dashboard-list">
+                    <ul class="lista-inicio">
                         <?php foreach ($pacientesEnEspera as $pacienteEnEspera): ?>
-                            <li class="dashboard-list__item">
-                                <time class="dashboard-list__time" datetime="<?= htmlspecialchars($pacienteEnEspera['fecha_hora'], ENT_QUOTES, 'UTF-8') ?>">
+                            <li class="lista-inicio__elemento">
+                                <time class="lista-inicio__hora" datetime="<?= htmlspecialchars($pacienteEnEspera['fecha_hora'], ENT_QUOTES, 'UTF-8') ?>">
                                     <?= htmlspecialchars($pacienteEnEspera['hora'], ENT_QUOTES, 'UTF-8') ?>
                                 </time>
-                                <div class="dashboard-list__details">
-                                    <h3 class="dashboard-list__name"><?= htmlspecialchars($pacienteEnEspera['nombre_paciente'], ENT_QUOTES, 'UTF-8') ?></h3>
-                                    <p class="dashboard-list__meta">
+                                <div class="lista-inicio__detalles">
+                                    <h3 class="lista-inicio__nombre"><?= htmlspecialchars($pacienteEnEspera['nombre_paciente'], ENT_QUOTES, 'UTF-8') ?></h3>
+                                    <p class="lista-inicio__metadatos">
                                         Tutor: <?= htmlspecialchars($pacienteEnEspera['nombre_tutor'], ENT_QUOTES, 'UTF-8') ?>
                                         <?php if (!empty($pacienteEnEspera['motivo'])): ?>
-                                            <span class="dashboard-list__separator" aria-hidden="true">·</span>
+                                            <span class="lista-inicio__separador" aria-hidden="true">·</span>
                                             <?= htmlspecialchars($pacienteEnEspera['motivo'], ENT_QUOTES, 'UTF-8') ?>
                                         <?php endif; ?>
                                     </p>
                                 </div>
-                                <span class="dashboard-status dashboard-status--pending">Pendiente</span>
+                                <span class="estado-inicio estado-inicio--pendiente">Pendiente</span>
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 <?php else: ?>
-                    <div class="dashboard-empty">
+                    <div class="vacio-inicio">
                         <i class="fa fa-circle-check" aria-hidden="true"></i>
                         <p>No hay pacientes en espera</p>
-                        <span>Las consultas pendientes de hoy aparecerán aquí.</span>
+                        <span>Las consultas pendientes de esta fecha aparecerán aquí.</span>
                     </div>
                 <?php endif; ?>
             </section>
         </div>
         <div class="col-sm-12 col-xl-6">
-            <section class="dashboard-panel" aria-labelledby="schedule-title">
-                <div class="dashboard-panel__header">
+            <section class="panel-inicio" aria-labelledby="schedule-title">
+                <div class="panel-inicio__encabezado">
                     <div class="d-flex align-items-center gap-3">
-                        <span class="dashboard-panel__icon dashboard-panel__icon--schedule" aria-hidden="true">
+                        <span class="panel-inicio__icono panel-inicio__icono--agenda" aria-hidden="true">
                             <i class="fa fa-calendar-day"></i>
                         </span>
                         <div>
-                            <h2 class="dashboard-panel__title" id="schedule-title">Agenda del día</h2>
-                            <p class="dashboard-panel__subtitle"><?= htmlspecialchars($fechaDelDashboard, ENT_QUOTES, 'UTF-8') ?> · <?= count($agendaDelDia) ?> consultas</p>
+                            <h2 class="panel-inicio__titulo" id="schedule-title">Agenda del día</h2>
+                            <p class="panel-inicio__subtitulo"><?= htmlspecialchars($fechaDelDashboard, ENT_QUOTES, 'UTF-8') ?></p>
                         </div>
                     </div>
+                    <span class="panel-inicio__contador" aria-label="<?= count($agendaDelDia) ?> consultas en agenda">
+                        <?= count($agendaDelDia) ?>
+                    </span>
                 </div>
 
                 <?php if ($agendaDelDia): ?>
-                    <ol class="dashboard-list dashboard-list--schedule">
+                    <ol class="lista-inicio lista-inicio--agenda">
                         <?php foreach ($agendaDelDia as $consulta): ?>
-                            <li class="dashboard-list__item">
-                                <time class="dashboard-list__time" datetime="<?= htmlspecialchars($consulta['fecha_hora'], ENT_QUOTES, 'UTF-8') ?>">
+                            <li class="lista-inicio__elemento">
+                                <time class="lista-inicio__hora" datetime="<?= htmlspecialchars($consulta['fecha_hora'], ENT_QUOTES, 'UTF-8') ?>">
                                     <?= htmlspecialchars($consulta['hora'], ENT_QUOTES, 'UTF-8') ?>
                                 </time>
-                                <div class="dashboard-list__details">
-                                    <h3 class="dashboard-list__name"><?= htmlspecialchars($consulta['nombre_paciente'], ENT_QUOTES, 'UTF-8') ?></h3>
-                                    <p class="dashboard-list__meta">
+                                <div class="lista-inicio__detalles">
+                                    <h3 class="lista-inicio__nombre"><?= htmlspecialchars($consulta['nombre_paciente'], ENT_QUOTES, 'UTF-8') ?></h3>
+                                    <p class="lista-inicio__metadatos">
                                         <?= htmlspecialchars($consulta['tipo'], ENT_QUOTES, 'UTF-8') ?>
-                                        <span class="dashboard-list__separator" aria-hidden="true">·</span>
+                                        <span class="lista-inicio__separador" aria-hidden="true">·</span>
                                         Tutor: <?= htmlspecialchars($consulta['nombre_tutor'], ENT_QUOTES, 'UTF-8') ?>
                                     </p>
                                 </div>
-                                <span class="dashboard-status <?= htmlspecialchars($consulta['clase_estado'], ENT_QUOTES, 'UTF-8') ?>">
+                                <span class="estado-inicio <?= htmlspecialchars($consulta['clase_estado'], ENT_QUOTES, 'UTF-8') ?>">
                                     <?= htmlspecialchars($consulta['estado'], ENT_QUOTES, 'UTF-8') ?>
                                 </span>
                             </li>
                         <?php endforeach; ?>
                     </ol>
                 <?php else: ?>
-                    <div class="dashboard-empty">
+                    <div class="vacio-inicio">
                         <i class="fa fa-calendar-xmark" aria-hidden="true"></i>
-                        <p>No hay consultas agendadas para hoy</p>
+                        <p>No hay consultas agendadas para esta fecha</p>
                         <span>Cuando se registren consultas, las verás ordenadas por horario.</span>
                     </div>
                 <?php endif; ?>
@@ -162,6 +187,7 @@
 
 
 <!-- Empieza Hospitalizados -->
+<!-- Tabla de marcador: todavía no está conectada a datos de hospitalización. -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">

@@ -13,7 +13,7 @@
     z-index: 99999;
 }
 
-#spinner.show {
+#spinner.visible {
     transition: opacity .5s ease-out, visibility 0s linear 0s;
     visibility: visible;
     opacity: 1;
@@ -55,7 +55,7 @@
 }
 
 /*** Estructura del dashboard ***/
-.sidebar {
+.menu-lateral {
     position: fixed;
     top: 0;
     left: 0;
@@ -68,7 +68,7 @@
     z-index: 999;
 }
 
-.content {
+.contenido-principal {
     margin-left: 250px;
     min-height: 100vh;
     background: #FFFFFF;
@@ -76,41 +76,41 @@
 }
 
 @media (min-width: 992px) {
-    .sidebar {
+    .menu-lateral {
         margin-left: 0;
     }
 
-    .sidebar.open {
+    .menu-lateral.abierto {
         margin-left: -250px;
     }
 
-    .content {
+    .contenido-principal {
         width: calc(100% - 250px);
     }
 
-    .content.open {
+    .contenido-principal.abierto {
         width: 100%;
         margin-left: 0;
     }
 }
 
 @media (max-width: 991.98px) {
-    .sidebar {
+    .menu-lateral {
         margin-left: -250px;
     }
 
-    .sidebar.open {
+    .menu-lateral.abierto {
         margin-left: 0;
     }
 
-    .content {
+    .contenido-principal {
         width: 100%;
         margin-left: 0;
     }
 }
 
 /*** Barra lateral ***/
-.sidebar .navbar .navbar-nav .nav-link {
+.menu-lateral .navbar .navbar-nav .nav-link {
     padding: 7px 20px;
     color: var(--light);
     font-weight: 500;
@@ -120,14 +120,14 @@
     outline: none;
 }
 
-.sidebar .navbar .navbar-nav .nav-link:hover,
-.sidebar .navbar .navbar-nav .nav-link.active {
+.menu-lateral .navbar .navbar-nav .nav-link:hover,
+.menu-lateral .navbar .navbar-nav .nav-link.active {
     color: var(--light);
     background: #048359;
     border-color: var(--light);
 }
 
-.sidebar .navbar .navbar-nav .nav-link i {
+.menu-lateral .navbar .navbar-nav .nav-link i {
     width: 40px;
     height: 40px;
     display: inline-flex;
@@ -136,12 +136,12 @@
     border-radius: 40px;
 }
 
-.sidebar .navbar .navbar-nav .nav-link:hover i,
-.sidebar .navbar .navbar-nav .nav-link.active i {
+.menu-lateral .navbar .navbar-nav .nav-link:hover i,
+.menu-lateral .navbar .navbar-nav .nav-link.active i {
     background: var(--primary);
 }
 
-.sidebar .navbar .dropdown-toggle::after {
+.menu-lateral .navbar .dropdown-toggle::after {
     position: absolute;
     top: 15px;
     right: 15px;
@@ -152,23 +152,23 @@
     transition: .5s;
 }
 
-.sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
+.menu-lateral .navbar .dropdown-toggle[aria-expanded=true]::after {
     transform: rotate(-180deg);
 }
 
-.sidebar .navbar .dropdown-item {
+.menu-lateral .navbar .dropdown-item {
     padding-left: 25px;
     border-radius: 0 30px 30px 0;
 }
 
 /*** Barra superior ***/
-.content > .navbar .navbar-nav .nav-link:hover,
-.content > .navbar .navbar-nav .nav-link.active {
+.contenido-principal > .navbar .navbar-nav .nav-link:hover,
+.contenido-principal > .navbar .navbar-nav .nav-link.active {
     color: var(--primary);
 }
 
-.content > .navbar .sidebar-toggler,
-.content > .navbar .navbar-nav .nav-link i {
+.contenido-principal > .navbar .boton-menu-lateral,
+.contenido-principal > .navbar .navbar-nav .nav-link i {
     width: 40px;
     height: 40px;
     display: inline-flex;
@@ -178,7 +178,7 @@
     border-radius: 40px;
 }
 
-.content .navbar .dropdown-toggle::after {
+.contenido-principal .navbar .dropdown-toggle::after {
     margin-left: 6px;
     vertical-align: middle;
     border: none;
@@ -188,12 +188,12 @@
     transition: .5s;
 }
 
-.content .navbar .dropdown-toggle[aria-expanded=true]::after {
+.contenido-principal .navbar .dropdown-toggle[aria-expanded=true]::after {
     transform: rotate(-180deg);
 }
 
 @media (max-width: 575.98px) {
-    .content .navbar .navbar-nav .nav-link {
+    .contenido-principal .navbar .navbar-nav .nav-link {
         margin-left: 15px;
     }
 }
