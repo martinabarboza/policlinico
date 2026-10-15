@@ -67,6 +67,7 @@ class Usuario extends Model
     public function modificarUsuario($usuarioObj)
     {
         $usuarioObj->setPasswdUsuario(password_hash($usuarioObj->getPasswdUsuario(), PASSWORD_DEFAULT));
+        
         $stmt = $this->db->prepare(
             'UPDATE USUARIO 
             SET cedula_Usuario = ?, nombre_Usuario = ?, apellido_Usuario = ?, rol_Usuario = ?, email_Usuario = ?, passw_Usuario = ?, dateupdate_Usuario = NOW()
@@ -80,7 +81,7 @@ class Usuario extends Model
         $email    = $usuarioObj->getEmailUsuario();
         $passw   = $usuarioObj->getPasswUsuario();
 
-        $stmt->bind_param('isssssi', $cedula, $nombre, $apellido, $rol, $email, $passw, $cedula);
+        $stmt->bind_param('sssssss', $cedula, $nombre, $apellido, $rol, $email, $passw, $cedula);
         $stmt->execute();
         $stmt->close();
     }

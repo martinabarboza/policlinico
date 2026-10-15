@@ -18,4 +18,69 @@ class UsuarioController extends Controller
             'roles'        => $this->model('Rol')->activos(),
         ]);
     }
+
+    //
+    // Llama a la vista de modificar usuario, utilizando la cédula del usuario.
+    //
+
+    public function modificarUsuario($cedula): void {
+        Auth::requireLogin();
+        Auth::requirePermiso('admin.total');
+
+        $usuario = $this->model('Usuario')->buscarPorCedula($cedula);
+
+        if ($usuario) {
+            $this->view('usuarios/modificarUsuario', [
+                'tituloPagina' => 'Modificar Usuario',
+                'activeMenu' => 'usuaios',
+                'usuario' => $usuario
+            ]);
+        }
+    }
+    // Permite Actualizar un Usuario en la base de datos utilizando la cédula.
+    public function actualizarUsuario(): void {
+
+        Auth::requireLogin();
+        Auth::requirePermiso('admin.total');
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $usuarioObj = new Usuario();
+
+            // Comprueba si el usuario existe antes de intentar modificarlo.
+            $usuarioActual = $this->model('Usuario')->buscarPorCedula($_POST('cedula'));
+
+            $usuarioObj->setCedulaUsuario($_POST['cedula']);
+            $usuarioObj->setNombreUsuario($_POST['nombre']);
+            $usuarioObj->setApellidoUsuario($_POST['apellido']);
+            $usuarioObj->setRolUsuario($_POST['rol']);
+            $usuarioObj->setEmailUsuario($_POST['email']);
+            $usuarioObj->setPasswUsuario($_POST['passw']);
+
+            $comprobacion = $this->model('Usuario')->modificarUsuario($usuarioObj);
+
+            // Mantiene la contraseña actual si el campo está vacío.
+            if (!empty($_POST['passw'])) {
+                $usuarioObj->setPasswUsuario($_POST['passw']);
+            }
+            else {
+                $usuarioObj->setPasswUsuario($usuarioActual['passw_Usuario']);
+            }
+
+            // Redirige si el usuario no existe.
+            if (!$usuarioActual) {
+                header('Location: /usuarios?error=Usuario_No_Encontrado');
+                exit;
+            }
+
+            // Comprueba si se modificó correctamente y redirige a la página de usuarios con un mensaje de éxito o error.
+            if ($comprobacion) {
+                header('Location: /usuarios?success=Usuario_Modificado_Correctamente');
+                exit;
+            }
+            else {
+                header('Location: /usuarios?error=Error_al_Modificar_Usuario');
+                exit;
+            }
+        }
+    }
 }
