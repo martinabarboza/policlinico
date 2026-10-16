@@ -15,15 +15,23 @@
     <link rel="apple-touch-icon" href="/favicon_io/apple-touch-icon.png">
     <link rel="manifest" href="/favicon_io/site.webmanifest">
 
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/libs/bootstrap-5.3.8-dist/css/bootstrap.min.css">
 
     <!-- Iconos -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Libs -->
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/libs/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <?php foreach ($libs as $lib): ?>
+        <script src="<?= ASSETS_URL ?>/libs/<?= htmlspecialchars($lib, ENT_QUOTES, 'UTF-8') ?>"></script>
+    <?php endforeach; ?>
     <!-- Estilos CSS -->
     <?php foreach ($hojasEstilo as $hojaEstilo): ?>
         <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/<?= htmlspecialchars($hojaEstilo, ENT_QUOTES, 'UTF-8') ?>">
+    <?php endforeach; ?>
+    <!-- Scripts JS -->
+    <?php foreach ($scriptsJS as $scriptJS): ?>
+        <script src="<?= ASSETS_URL ?>/js/<?= htmlspecialchars($scriptJS, ENT_QUOTES, 'UTF-8') ?>"></script>
     <?php endforeach; ?>
 </head>
 

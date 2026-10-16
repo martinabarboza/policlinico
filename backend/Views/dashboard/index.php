@@ -2,9 +2,18 @@
 
 /**
  * Datos entregados por DashboardController para renderizar el dashboard.
+ * Agenda: incluye todas las consultas del día seleccionado, cualquiera sea su estado.
+ * En espera: consultas de la agenda cuyo estado normalizado es `Pendiente`.
+ * Hospitalizados: filas HOSPITALIZACION con estado `Activa` y fecha de egreso NULL.
+ * Para cargar datos: registrar fecha y estado en CONSULTA; para internar, crear además
+ * una fila HOSPITALIZACION ligada al paciente, con estado `Activa` y egreso NULL.
+ * Al dar el alta, completar la fecha de egreso para excluirla del listado de activos.
  *
  * @var list<array{hora: string, fecha_hora: string, tipo: string, estado: string, clase_estado: string, motivo: string|null, nombre_paciente: string, nombre_tutor: string}> $agendaDelDia
  * @var list<array{hora: string, fecha_hora: string, tipo: string, estado: string, clase_estado: string, motivo: string|null, nombre_paciente: string, nombre_tutor: string}> $pacientesEnEspera
+ * @var list<array{fecha_ingreso: string, fecha_ingreso_formateada: string, nombre_paciente: string, nombre_tutor: string, motivo: string|null, responsable: string, estado: string}> $pacientesHospitalizados
+ * @var int $cantidadConsultasDiarias Total de consultas de hoy, sin filtrar estado.
+ * @var int $cantidadConsultasIncompletas Total histórico con estado Pendiente o En curso.
  * @var string $fechaDelDashboard
  * @var string $fechaSeleccionada
  * @var string|null $errorFecha
@@ -14,7 +23,7 @@
 <!-- Empieza Contenido -->
 
 <!-- Botones Principales -->
-<!-- Tarjetas y valores de ejemplo; no están conectados a consultas reales. -->
+<!-- Los contadores de consultas son reales; los demás accesos siguen como ejemplos. -->
 <div class="container-fluid pt-4 px-4 d-flex flex-wrap gap-3">
     <a href="nueva-ficha" class="tarjeta-inicio">
         <span class="tarjeta-inicio__icono tarjeta-inicio__icono--principal">
@@ -27,26 +36,26 @@
         <i class="fa fa-chevron-right tarjeta-inicio__flecha"></i>
     </a>
 
-    <!-- Consultas diarias -->
+    <!-- Cuenta y enlaza todas las consultas de hoy, independientemente del estado. -->
     <a href="consultas-diarias" class="tarjeta-inicio">
         <span class="tarjeta-inicio__icono tarjeta-inicio__icono--exito">
             <i class="fa fa-calendar-day" aria-hidden="true"></i>
         </span>
         <span class="tarjeta-inicio__contenido">
             <span class="tarjeta-inicio__titulo">Consultas diarias</span>
-            <span class="tarjeta-inicio__valor">0</span>
+            <span class="tarjeta-inicio__valor"><?= $cantidadConsultasDiarias ?></span>
         </span>
         <i class="fa fa-chevron-right tarjeta-inicio__flecha" aria-hidden="true"></i>
     </a>
 
-    <!-- Consultas incompletas -->
+    <!-- Cuenta y enlaza consultas de cualquier fecha en estado Pendiente o En curso. -->
     <a href="consultas-incompletas" class="tarjeta-inicio">
         <span class="tarjeta-inicio__icono tarjeta-inicio__icono--peligro">
             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
         </span>
         <span class="tarjeta-inicio__contenido">
             <span class="tarjeta-inicio__titulo">Consultas incompletas</span>
-            <span class="tarjeta-inicio__valor">0</span>
+            <span class="tarjeta-inicio__valor"><?= $cantidadConsultasIncompletas ?></span>
         </span>
         <i class="fa fa-chevron-right tarjeta-inicio__flecha" aria-hidden="true"></i>
     </a>
@@ -187,11 +196,13 @@
 
 
 <!-- Empieza Hospitalizados -->
-<!-- Tabla de marcador: todavía no está conectada a datos de hospitalización. -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Pacientes Hospitalizados</h6>
+            <div class="text-start">
+                <h6 class="mb-1">Pacientes Hospitalizados</h6>
+                <small class="text-muted">Internaciones activas registradas en el sistema.</small>
+            </div>
         </div>
         <div class="table-responsive">
             <table class="table bg-transparent text-start align-middle table-hover mb-0">
@@ -207,20 +218,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Ejemplo
-        <tr>
-            <td>02 May 2026</td>
-            <td>Relámpago</td>
-            <td>Silva</td>
-            <td>Herida en miembro anterior</td>
-            <td>Dr. Pérez</td>
-            <td><span class="badge bg-warning text-dark p-2">En observación</span></td>
-            <td><a class="btn btn-sm btn-primary" href="">Ver ficha</a></td>
-        </tr>
-    -->
-                    <tr>
-                        <td colspan="7" class="text-center py-4 text-muted">No hay datos disponibles</td>
-                    </tr>
+                    <?php if ($pacientesHospitalizados): ?>
+                        <?php foreach ($pacientesHospitalizados as $pacienteHospitalizado): ?>
+                            <tr>
+                                <td>
+                                    <time datetime="<?= htmlspecialchars($pacienteHospitalizado['fecha_ingreso'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <?= htmlspecialchars($pacienteHospitalizado['fecha_ingreso_formateada'], ENT_QUOTES, 'UTF-8') ?>
+                                    </time>
+                                </td>
+                                <td><?= htmlspecialchars($pacienteHospitalizado['nombre_paciente'], ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($pacienteHospitalizado['nombre_tutor'], ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($pacienteHospitalizado['motivo'] ?: 'Sin motivo registrado', ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><?= htmlspecialchars($pacienteHospitalizado['responsable'], ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><span class="badge bg-warning text-dark p-2"><?= htmlspecialchars($pacienteHospitalizado['estado'], ENT_QUOTES, 'UTF-8') ?></span></td>
+                                <td><a class="btn btn-sm btn-primary" href="hospitalizacion">Ver módulo</a></td>
+                            </tr>
+                        <?php endforeach; ?>
+
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-muted">No hay pacientes hospitalizados actualmente.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>

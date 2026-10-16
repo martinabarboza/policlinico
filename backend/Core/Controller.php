@@ -14,8 +14,10 @@ class Controller
         string $view,
         array $data = [],
         string $layout = 'app',
-        array $hojasEstilo = []
-        //COMO LLAMAR "$this->view('landing/inicio', [], 'landing');"
+        array $hojasEstilo = [],
+        array $scriptsJS = [],
+        array $libs = []
+        //COMO LLAMAR "$this->view('landing/inicio', [], 'landing',[],[]);"
     ): void {
         
         $viewFile = VIEWS_PATH . '/' . $view . '.php';

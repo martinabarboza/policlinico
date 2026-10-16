@@ -1,7 +1,7 @@
 (function ($) {
     "use strict";
 
-    // Cargador de página
+    // Oculta el cargador cuando termina de cargar el documento.
     var spinner = function () {
         setTimeout(function () {
             if ($('#spinner').length > 0) {
@@ -9,15 +9,13 @@
             }
         }, 1);
     };
-    spinner();
-    
-    
+    $(function () {
+        spinner();
 
-    // Sidebar desplegable
-    $('.boton-menu-lateral').click(function () {
-        $('.menu-lateral, .contenido-principal').toggleClass("abierto");
-        return false;
+        // Este archivo se carga en el <head>; esperamos a que exista el botón del navbar.
+        $('.boton-menu-lateral').on('click', function (event) {
+            event.preventDefault();
+            $('.menu-lateral, .contenido-principal').toggleClass('abierto');
+        });
     });
-
-
 })(jQuery);

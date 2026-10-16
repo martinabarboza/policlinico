@@ -9,18 +9,25 @@
         <a href="#" class="boton-menu-lateral flex-shrink-0 bg-light text-secondary">
             <i class="fa fa-ellipsis-v"></i>
         </a>
-        <form class="d-none d-md-flex ms-4">
-            <div class="dropdown w-100">
-                <input class="form-control border-0 dropdown-toggle"
-                    type="search"
-                    placeholder="Buscar paciente..."
-                    data-bs-toggle="dropdown">
-                <div class="dropdown-menu w-100 bg-white border-0 shadow">
-                    <a href="#" class="dropdown-item">Buscar por paciente</a>
-                    <a href="#" class="dropdown-item">Buscar por tutor</a>
-                    <a href="#" class="dropdown-item">Buscar por médico</a>
-                </div>
-            </div>
+        <!-- tipoBusqueda decide el centro; busqueda se conserva como parámetro GET. -->
+        <form class="d-none d-md-flex ms-4 align-items-center gap-2" action="/buscar-centro" method="get">
+            <label class="visually-hidden" for="tipo-busqueda-navbar">Buscar en</label>
+            <select class="form-select border-0" id="tipo-busqueda-navbar" name="tipoBusqueda" aria-label="Tipo de búsqueda">
+                <option value="paciente" selected>Paciente</option>
+                <option value="tutor">Tutor</option>
+            </select>
+            <label class="visually-hidden" for="texto-busqueda-navbar">Texto a buscar</label>
+            <input class="form-control border-0"
+                id="texto-busqueda-navbar"
+                type="search"
+                name="busqueda"
+                placeholder="Nombre, chip, documento o teléfono..."
+                minlength="1"
+                maxlength="100"
+                required>
+            <button class="btn btn-primary" type="submit" aria-label="Buscar">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
         </form>
 
         <div class="navbar-nav align-items-center ms-auto">
@@ -30,30 +37,7 @@
                     <span class="d-none d-lg-inline-flex">Mensajes</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="#" class="dropdown-item">
-                        <div class="d-flex align-items-center">
-                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                <i class="bi bi-person-fill"></i>
-                            </div>
-                            <div class="ms-2">
-                                <h6 class="fw-normal mb-0">Bryan te ha mandado un mensaje</h6>
-                                <small>Ahora</small>
-                            </div>
-                        </div>
-                    </a>
-                    <hr class="dropdown-divider">
-                    <a href="#" class="dropdown-item">
-                        <div class="d-flex align-items-center">
-                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                <i class="bi bi-person-fill"></i>
-                            </div>
-                            <div class="ms-2">
-                                <h6 class="fw-normal mb-0">Andres te ha mandado un mensaje</h6>
-                                <small>hace 2 minutos</small>
-                            </div>
-                        </div>
-                    </a>
-                    <hr class="dropdown-divider">
+                    <!--
                     <a href="#" class="dropdown-item">
                         <div class="d-flex align-items-center">
                             <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
@@ -65,8 +49,9 @@
                             </div>
                         </div>
                     </a>
+                    -->
                     <hr class="dropdown-divider">
-                    <a href="#" class="dropdown-item text-center">Ver todos los mensajes</a>
+                    <a href="centro-mensajes" class="dropdown-item text-center">Ver todos los mensajes</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
@@ -104,9 +89,8 @@
                     <span class="d-none d-lg-inline-flex"><?= $usuario['nombre'] ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="#" class="dropdown-item">Mi Perfil</a>
-                    <a href="#" class="dropdown-item">Configuración</a>
-                    <a href="#" class="dropdown-item">Cerrar Sesión</a>
+                    <a href="perfil" class="dropdown-item">Mi Perfil</a>
+                    <a href="cerrar-sesion" class="dropdown-item">Cerrar Sesión</a>
                 </div>
             </div>
         </div>
