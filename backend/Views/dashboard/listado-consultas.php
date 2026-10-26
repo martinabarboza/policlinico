@@ -6,7 +6,7 @@
  * o En curso de cualquier fecha. El filtro se decide en el modelo antes de renderizar.
  * @var string $titulo
  * @var string $subtitulo
- * @var list<array{fecha_hora: string, fecha_formateada: string, tipo: string|null, estado: string|null, clase_estado: string, motivo: string|null, nombre_paciente: string, nombre_tutor: string}> $consultas
+ * @var list<array{id_consulta: int, fecha_hora: string, fecha_formateada: string, detalle_url: string, tipo: string|null, estado: string|null, clase_estado: string, motivo: string|null, nombre_paciente: string, nombre_tutor: string}> $consultas
  */
 ?>
 <div class="container-fluid pt-4 px-4">
@@ -30,6 +30,7 @@
                             <th scope="col">Tipo</th>
                             <th scope="col">Motivo</th>
                             <th scope="col">Estado</th>
+                            <th scope="col">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,6 +45,12 @@
                                     <span class="estado-inicio <?= htmlspecialchars($consulta['clase_estado'], ENT_QUOTES, 'UTF-8') ?>">
                                         <?= htmlspecialchars($consulta['estado'] ?: 'Sin estado', ENT_QUOTES, 'UTF-8') ?>
                                     </span>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-primary"
+                                       href="<?= htmlspecialchars($consulta['detalle_url'], ENT_QUOTES, 'UTF-8') ?>">
+                                        Ver consulta
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

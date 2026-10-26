@@ -7,8 +7,17 @@ $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/buscar-centro', [DashboardController::class, 'buscarEnCentro']);
 $router->get('/consultas-diarias', [DashboardController::class, 'consultasDiarias']);
 $router->get('/consultas-incompletas', [DashboardController::class, 'consultasIncompletas']);
+$router->get('/proximas-consultas', [DashboardController::class, 'proximasConsultas']);
 $router->get('/centro-consultas', [Centro_ConsultasController::class, 'index']);
-$router->get('/centro-tutores', [Centro_TutoresController::class, 'index']);
+$router->get('/centro-consultas/nueva', [Centro_ConsultasController::class, 'nueva']);
+$router->get('/pacientes/crear', [PacienteController::class, 'crear']);
+$router->post('/pacientes/guardar', [PacienteController::class, 'guardar']);
+$router->get('/centro-consultas/resenia', [Centro_ConsultasController::class, 'mostrarResenia']);
+$router->get('/centro-consultas/paraclinico', [Centro_ConsultasController::class, 'mostrarArchivoParaclinico']);
+$router->post('/centro-consultas/guardar', [Centro_ConsultasController::class, 'guardar']);
+$router->post('/centro-consultas/actualizar-estado', [Centro_ConsultasController::class, 'actualizarEstado']);
+$router->get('/centro-tutores', [TutorController::class, 'index']);
+$router->post('/centro-tutores/guardar', [TutorController::class, 'guardar']);
 $router->get('/agenda', [AgendaController::class, 'index']);
 $router->get('/hospitalizacion', [HospitalizacionController::class, 'index']);
 

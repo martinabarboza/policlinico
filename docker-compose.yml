@@ -10,6 +10,9 @@ services:
     ports:
       - "8080:80"
 
+    environment:
+      STORAGE_GID: ${STORAGE_GID:-1000}
+
     volumes:
       - .:/var/www/html
       - ./docker/apache.conf:/etc/apache2/sites-available/000-default.conf
@@ -18,7 +21,11 @@ services:
       - db
 
     command: >
-      sh -c "docker-php-ext-install mysqli pdo pdo_mysql && apache2-foreground"
+      sh -c "docker-php-ext-install mysqli pdo pdo_mysql &&
+             mkdir -p /var/www/html/storage/resenas /var/www/html/storage/paraclinicos &&
+             chown -R www-data:$$STORAGE_GID /var/www/html/storage/resenas /var/www/html/storage/paraclinicos &&
+             chmod 2770 /var/www/html/storage/resenas /var/www/html/storage/paraclinicos &&
+             apache2-foreground"
 
 
   db:

@@ -9,6 +9,7 @@ class DashboardModel extends Model
      * Para que una consulta aparezca, `fecha_hora_Consulta` debe estar dentro del día.
      *
      * @return list<array{
+     *     id_consulta: int,
      *     fecha_hora: string,
      *     tipo: string|null,
      *     estado: string|null,
@@ -24,6 +25,7 @@ class DashboardModel extends Model
 
         $stmt = $this->db->prepare(
             "SELECT
+                c.id_Consulta AS id_consulta,
                 c.fecha_hora_Consulta AS fecha_hora,
                 c.tipo_Consulta AS tipo,
                 c.estado_proceso_Consulta AS estado,
@@ -94,6 +96,7 @@ class DashboardModel extends Model
      * el contador coincida con la cantidad de filas mostradas.
      *
      * @return list<array{
+     *     id_consulta: int,
      *     fecha_hora: string,
      *     tipo: string|null,
      *     estado: string|null,
@@ -106,6 +109,7 @@ class DashboardModel extends Model
     {
         $stmt = $this->db->prepare(
             "SELECT
+                c.id_Consulta AS id_consulta,
                 c.fecha_hora_Consulta AS fecha_hora,
                 c.tipo_Consulta AS tipo,
                 c.estado_proceso_Consulta AS estado,
@@ -117,6 +121,46 @@ class DashboardModel extends Model
              INNER JOIN TUTOR t ON t.id_Tutor = p.id_Tutor
              WHERE LOWER(TRIM(c.estado_proceso_Consulta)) IN ('pendiente', 'en curso')
              ORDER BY c.fecha_hora_Consulta DESC"
+        );
+        $stmt->execute();
+
+        $consultas = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        return $consultas;
+    }
+
+    /**
+     * Lista consultas futuras no finalizadas ni canceladas, ordenadas cronológicamente.
+     *
+     * @return list<array{
+     *     id_consulta: int,
+     *     fecha_hora: string,
+     *     tipo: string|null,
+     *     estado: string|null,
+     *     motivo: string|null,
+     *     nombre_paciente: string,
+     *     nombre_tutor: string
+     * }>
+     */
+    public function obtenerProximasConsultas(): array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT
+                c.id_Consulta AS id_consulta,
+                c.fecha_hora_Consulta AS fecha_hora,
+                c.tipo_Consulta AS tipo,
+                c.estado_proceso_Consulta AS estado,
+                c.motivo_Consulta AS motivo,
+                p.nombre_Paciente AS nombre_paciente,
+                t.nombre_Tutor AS nombre_tutor
+             FROM CONSULTA c
+             INNER JOIN PACIENTE p ON p.id_Paciente = c.id_Paciente
+             INNER JOIN TUTOR t ON t.id_Tutor = p.id_Tutor
+             WHERE c.fecha_hora_Consulta >= NOW()
+               AND COALESCE(LOWER(TRIM(c.estado_proceso_Consulta)), '') NOT IN
+                   ('finalizada', 'cancelada', 'cancelado')
+             ORDER BY c.fecha_hora_Consulta ASC"
         );
         $stmt->execute();
 
