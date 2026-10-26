@@ -1,4 +1,3 @@
-
 <?php
 
 class TutorModel extends Model
