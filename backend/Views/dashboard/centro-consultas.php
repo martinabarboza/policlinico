@@ -154,7 +154,7 @@ $claseEstado = [
 
         <!-- Tabla de consultas -->
         <div class="col-lg-8">
-            <div class="card centro-card">
+            <div class="card centro-card<?= count($consultas) > 8 ? ' centro-card--consultas-limitada' : '' ?>">
                 <?php if ($filtros['paciente'] !== ''): ?>
                     <?php
                     $filtrosSinPaciente = $filtros;
@@ -167,7 +167,7 @@ $claseEstado = [
                     </div>
                 <?php endif; ?>
                 <?php if ($consultas): ?>
-                    <div class="table-responsive">
+                    <div class="table-responsive<?= count($consultas) > 8 ? ' centro-consultas__tabla--limitada' : '' ?>">
                         <table class="table align-middle mb-0 centro-tabla">
                             <thead>
                                 <tr>
@@ -245,7 +245,7 @@ $claseEstado = [
         <div class="col-lg-4">
             <div class="card centro-card mb-4">
                 <h2 class="h6 card-header bg-transparent py-3">Hospitalizados activos</h2>
-                <ul class="list-group list-group-flush">
+                <ul class="list-group list-group-flush<?= count($hospitalizados) > 8 ? ' centro-lista--limitada' : '' ?>">
                     <?php if ($hospitalizados): ?>
                         <?php foreach ($hospitalizados as $h): ?>
                             <li class="list-group-item">
@@ -263,7 +263,7 @@ $claseEstado = [
 
             <div class="card centro-card">
                 <h2 class="h6 card-header bg-transparent py-3">Próximos controles</h2>
-                <ul class="list-group list-group-flush">
+                <ul class="list-group list-group-flush<?= count($proximosControles) > 8 ? ' centro-lista--limitada' : '' ?>">
                     <?php if ($proximosControles): ?>
                         <?php foreach ($proximosControles as $p): ?>
                             <li class="list-group-item">

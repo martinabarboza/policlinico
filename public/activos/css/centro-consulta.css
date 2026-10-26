@@ -1,9 +1,15 @@
 /* Centro de consulta: complementa Bootstrap 5, no lo reemplaza. */
 
+.contenido-principal {
+    display: flex;
+    flex-direction: column;
+}
+
 .centro-consulta {
     --centro-acento: #0f766e;
     --centro-borde: #dde5e5;
-    min-height: calc(100vh - 56px);
+    flex: 1 0 auto;
+    min-height: 0;
     padding: 1.5rem;
     background: #f8fafc;
 }
@@ -63,6 +69,30 @@
 
 .centro-consulta .table-responsive {
     border-radius: 12px;
+}
+
+.centro-consulta .centro-card--consultas-limitada {
+    max-height: 32rem;
+    min-width: 0;
+}
+
+.centro-consultas__tabla--limitada {
+    max-height: 28rem;
+    overflow-x: auto;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+
+.centro-consultas__tabla--limitada thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.centro-lista--limitada {
+    max-height: 28rem;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
 }
 
 .centro-tabla {
