@@ -20,3 +20,8 @@ $router->get('/centro-tutores', [TutorController::class, 'index']);
 $router->post('/centro-tutores/guardar', [TutorController::class, 'guardar']);
 $router->get('/agenda', [AgendaController::class, 'index']);
 $router->get('/hospitalizacion', [HospitalizacionController::class, 'index']);
+$router->get('/usuarios', [UsuarioController::class, 'index']);
+$router->get('/usuarios/editar', [UsuarioController::class, 'modificarUsuario']);
+$router->post('/usuarios/actualizarUsuario', [UsuarioController::class, 'actualizarUsuario']);
+?>
+

@@ -1,5 +1,5 @@
 <?php
-
+require_once APP_PATH . '/Helpers/UsuarioClase.php';
 class UsuarioController extends Controller
 {
 
@@ -15,7 +15,8 @@ class UsuarioController extends Controller
         $this->view('usuarios/index', [
             'tituloPagina' => 'Usuarios',
             'activeMenu'   => 'usuarios',
-            'roles'        => $this->model('Rol')->activos(),
+            //'roles'        => $this->model('Rol')->activos(),
+            'usuarios'     => $this->model('Usuario')->listadoUsuarios()
         ]);
     }
 
@@ -23,17 +24,29 @@ class UsuarioController extends Controller
     // Llama a la vista de modificar usuario, utilizando la cédula del usuario.
     //
 
-    public function modificarUsuario($cedula): void {
+    public function modificarUsuario(): void {
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
 
-        $usuario = $this->model('Usuario')->buscarPorCedula($cedula);
+        if (!isset($_GET['cedula'])) {
+            header('Location: /usuarios?error=Usuario_No_Encontrado');
+            exit;
+        }
 
-        if ($usuario) {
+        $cedula = $_GET['cedula'];
+
+        $usuarioEdit = $this->model('Usuario')->buscarPorCedula($cedula);
+
+        if (!$usuarioEdit) {
+            header('Location: /usuarios?error=Usuario_No_Encontrado');
+            exit;
+        }
+
+        if ($usuarioEdit) {
             $this->view('usuarios/modificarUsuario', [
                 'tituloPagina' => 'Modificar Usuario',
-                'activeMenu' => 'usuaios',
-                'usuario' => $usuario
+                'activeMenu' => 'usuarios',
+                'usuarioEdit' => $usuarioEdit
             ]);
         }
     }
@@ -44,33 +57,44 @@ class UsuarioController extends Controller
         Auth::requirePermiso('admin.total');
 
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $usuarioObj = new Usuario();
+            $usuarioObj = new UsuarioObj();
+
+            if (!isset($_POST['cedulaOld'])){
+                header('Location: /usuarios?error=Falta_identificador');
+                exit;
+            }
+
+            // Guarda la cédula antigua para encontrar al usuario en la bd.
+            $cedulaOld = /*(int)*/ $_POST['cedulaOld'];
 
             // Comprueba si el usuario existe antes de intentar modificarlo.
-            $usuarioActual = $this->model('Usuario')->buscarPorCedula($_POST('cedula'));
+            $usuarioActual = $this->model('Usuario')->buscarPorCedula($cedulaOld);
 
-            $usuarioObj->setCedulaUsuario($_POST['cedula']);
-            $usuarioObj->setNombreUsuario($_POST['nombre']);
-            $usuarioObj->setApellidoUsuario($_POST['apellido']);
-            $usuarioObj->setRolUsuario($_POST['rol']);
-            $usuarioObj->setEmailUsuario($_POST['email']);
-            $usuarioObj->setPasswUsuario($_POST['passw']);
-
-            $comprobacion = $this->model('Usuario')->modificarUsuario($usuarioObj);
-
-            // Mantiene la contraseña actual si el campo está vacío.
-            if (!empty($_POST['passw'])) {
-                $usuarioObj->setPasswUsuario($_POST['passw']);
-            }
-            else {
-                $usuarioObj->setPasswUsuario($usuarioActual['passw_Usuario']);
-            }
+            /*if (!$usuarioActual){
+                die("No existe: ". $cedulaOld); <-- Es para probar si busca correctamente la cedula.
+            }*/
 
             // Redirige si el usuario no existe.
             if (!$usuarioActual) {
                 header('Location: /usuarios?error=Usuario_No_Encontrado');
                 exit;
             }
+
+            $usuarioObj->setCedulaUsuario($_POST['cedula']);
+            $usuarioObj->setNombreUsuario($_POST['nombre']);
+            $usuarioObj->setApellidoUsuario($_POST['apellido']);
+            $usuarioObj->setRolUsuario($_POST['rol']);
+            $usuarioObj->setEmailUsuario($_POST['email']);
+
+            // Mantiene la contraseña actual si el campo está vacío.
+            if (!empty($_POST['passw'])) {
+                $usuarioObj->setPasswUsuario(password_hash($_POST['passw'], PASSWORD_DEFAULT));
+            }
+            else {
+                $usuarioObj->setPasswUsuario($usuarioActual['passw_Usuario']);
+            }
+
+            $comprobacion = $this->model('Usuario')->modificarUsuario($usuarioObj, $cedulaOld);
 
             // Comprueba si se modificó correctamente y redirige a la página de usuarios con un mensaje de éxito o error.
             if ($comprobacion) {

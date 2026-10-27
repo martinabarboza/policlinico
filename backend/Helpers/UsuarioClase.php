@@ -1,5 +1,5 @@
-    <?php
-    class Usuario
+<?php
+    class UsuarioObj
     {
         //
         // Atributos de la clase Usuario.

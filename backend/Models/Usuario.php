@@ -18,7 +18,7 @@ class Usuario extends Model
              LIMIT 1'
         );
 
-        $stmt->bind_param('i', $cedula);
+        $stmt->bind_param('s', $cedula);
         $stmt->execute();
 
         $resultado = $stmt->get_result()->fetch_assoc();
@@ -43,6 +43,19 @@ class Usuario extends Model
         $stmt->close();
     }
 
+    public function listadoUsuarios(): array 
+    {
+        $stmt = $this->db->prepare(
+            'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario
+            FROM USUARIO'
+        );
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        $usuario = $resultado->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $usuario;
+    }
+
     //
     // Agrega un Nuevo Usuario a la Base de Datos
     //
@@ -55,7 +68,7 @@ class Usuario extends Model
             VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW()'
         );
 
-        $stmt->bind_param('isssss', $cedula, $nombre, $apellido, $rol, $email, $passw);
+        $stmt->bind_param('ssssss', $cedula, $nombre, $apellido, $rol, $email, $passw);
         $stmt->execute();
         $stmt->close();
     }
@@ -64,10 +77,8 @@ class Usuario extends Model
     // Función para modificar usuarios tomando en cuenta un objeto usuario almacenado en $usuarioObj.
     //
 
-    public function modificarUsuario($usuarioObj)
+    public function modificarUsuario($usuarioObj, $cedulaOld)
     {
-        $usuarioObj->setPasswdUsuario(password_hash($usuarioObj->getPasswdUsuario(), PASSWORD_DEFAULT));
-        
         $stmt = $this->db->prepare(
             'UPDATE USUARIO 
             SET cedula_Usuario = ?, nombre_Usuario = ?, apellido_Usuario = ?, rol_Usuario = ?, email_Usuario = ?, passw_Usuario = ?, dateupdate_Usuario = NOW()
@@ -80,9 +91,11 @@ class Usuario extends Model
         $rol      = $usuarioObj->getRolUsuario();
         $email    = $usuarioObj->getEmailUsuario();
         $passw   = $usuarioObj->getPasswUsuario();
+        $cedulaOldTrim = trim($cedulaOld);
 
-        $stmt->bind_param('sssssss', $cedula, $nombre, $apellido, $rol, $email, $passw, $cedula);
-        $stmt->execute();
+        $stmt->bind_param('sssssss', $cedula, $nombre, $apellido, $rol, $email, $passw, $cedulaOldTrim);
+        $resultado = $stmt->execute();
         $stmt->close();
+        return $resultado;
     }
 }

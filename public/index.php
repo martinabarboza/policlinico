@@ -30,7 +30,7 @@ require_once APP_PATH . '/Controllers/TutorController.php';
 require_once APP_PATH . '/Controllers/PacienteController.php';
 require_once APP_PATH . '/Controllers/AgendaController.php';
 require_once APP_PATH . '/Controllers/HospitalizacionController.php';
-
+require_once APP_PATH . '/Controllers/UsuarioController.php';
 
 
 $router = new Router();
