@@ -3,14 +3,14 @@
 <div id="content" class="contenido-principal">
 
     <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
-        <a href="index.php" class="navbar-brand d-flex d-lg-none me-4">
+        <a href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>" class="navbar-brand d-flex d-lg-none me-4">
             <h2 class="text-light mb-0"><i class="fa fa-horse"></i></h2>
         </a>
         <a href="#" class="boton-menu-lateral flex-shrink-0 bg-light text-secondary">
             <i class="fa fa-ellipsis-v"></i>
         </a>
         <!-- tipoBusqueda decide el centro; busqueda se conserva como parámetro GET. -->
-        <form class="d-none d-md-flex ms-4 align-items-center gap-2" action="/buscar-centro" method="get">
+        <form class="d-none d-md-flex ms-4 align-items-center gap-2 form-navbar-busqueda" action="/buscar-centro" method="get">
             <label class="visually-hidden" for="tipo-busqueda-navbar">Buscar en</label>
             <select class="form-select border-0" id="tipo-busqueda-navbar" name="tipoBusqueda" aria-label="Tipo de búsqueda">
                 <option value="paciente" selected>Paciente</option>
@@ -51,7 +51,7 @@
                     </a>
                     -->
                     <hr class="dropdown-divider">
-                    <a href="centro-mensajes" class="dropdown-item text-center">Ver todos los mensajes</a>
+                    <a href="<?= htmlspecialchars(url('centro-mensajes'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item text-center">Ver todos los mensajes</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
@@ -78,7 +78,7 @@
                         </a>
                         <hr class="dropdown-divider">
                     -->
-                    <a href="centro-notificaciones" class="dropdown-item text-center">Ver todas las notificaciones</a>
+                    <a href="<?= htmlspecialchars(url('centro-notificaciones'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item text-center">Ver todas las notificaciones</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
@@ -89,8 +89,8 @@
                     <span class="d-none d-lg-inline-flex"><?= $usuario['nombre'] ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <a href="perfil" class="dropdown-item">Mi Perfil</a>
-                    <a href="cerrar-sesion" class="dropdown-item">Cerrar Sesión</a>
+                    <a href="<?= htmlspecialchars(url('perfil'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">Mi Perfil</a>
+                    <a href="<?= htmlspecialchars(url('cerrar-sesion'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">Cerrar Sesión</a>
                 </div>
             </div>
         </div>

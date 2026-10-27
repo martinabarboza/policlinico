@@ -23,9 +23,10 @@
 <!-- Empieza Contenido -->
 
 <!-- Botones Principales -->
-<!-- Los contadores de consultas son reales; los demás accesos siguen como ejemplos. -->
+<!-- Accesos a funciones de registro y consulta disponibles en el sistema. -->
 <div class="container-fluid pt-4 px-4 d-flex flex-wrap gap-3">
-    <a href="nueva-ficha" class="tarjeta-inicio">
+    <?php if (in_array(strtoupper(trim(Auth::rol() ?? '')), ['ESTUDIANTE', 'PROFESOR', 'DIRECTOR'], true)): ?>
+    <a href="<?= htmlspecialchars(url('pacientes/crear'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio">
         <span class="tarjeta-inicio__icono tarjeta-inicio__icono--principal">
             <i class="fa fa-plus-circle"></i>
         </span>
@@ -35,9 +36,10 @@
         </span>
         <i class="fa fa-chevron-right tarjeta-inicio__flecha"></i>
     </a>
+    <?php endif; ?>
 
     <!-- Cuenta y enlaza todas las consultas de hoy, independientemente del estado. -->
-    <a href="consultas-diarias" class="tarjeta-inicio">
+    <a href="<?= htmlspecialchars(url('consultas-diarias'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio">
         <span class="tarjeta-inicio__icono tarjeta-inicio__icono--exito">
             <i class="fa fa-calendar-day" aria-hidden="true"></i>
         </span>
@@ -49,7 +51,7 @@
     </a>
 
     <!-- Cuenta y enlaza consultas de cualquier fecha en estado Pendiente o En curso. -->
-    <a href="consultas-incompletas" class="tarjeta-inicio">
+    <a href="<?= htmlspecialchars(url('consultas-incompletas'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio">
         <span class="tarjeta-inicio__icono tarjeta-inicio__icono--peligro">
             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
         </span>
@@ -61,13 +63,13 @@
     </a>
 
     <!-- Próximas consultas -->
-    <a href="proximas-consultas" class="tarjeta-inicio">
+    <a href="<?= htmlspecialchars(url('proximas-consultas'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio">
         <span class="tarjeta-inicio__icono tarjeta-inicio__icono--aviso">
             <i class="fa fa-clock" aria-hidden="true"></i>
         </span>
         <span class="tarjeta-inicio__contenido">
             <span class="tarjeta-inicio__titulo">Próximas consultas</span>
-            <span class="tarjeta-inicio__valor">Ver consultas</span>
+            <span class="tarjeta-inicio__valor">Ver agenda futura</span>
         </span>
         <i class="fa fa-chevron-right tarjeta-inicio__flecha" aria-hidden="true"></i>
     </a>

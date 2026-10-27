@@ -115,6 +115,19 @@ class DashboardController extends Controller
         );
     }
 
+    /** Muestra las consultas futuras activas en orden de fecha y hora. */
+    public function proximasConsultas(): void
+    {
+        Auth::requireLogin();
+
+        $consultas = $this->model('DashboardModel')->obtenerProximasConsultas();
+        $this->mostrarListadoConsultas(
+            'Próximas consultas',
+            'Consultas futuras no finalizadas ni canceladas',
+            $consultas
+        );
+    }
+
     /**
      * Prepara fecha y clase de estado antes de entregar las consultas a la tabla compartida.
      * El listado de consultas diarias y el de incompletas reutilizan esta misma vista.
@@ -125,6 +138,8 @@ class DashboardController extends Controller
             $consultas[$indice]['fecha_formateada'] =
                 (new DateTimeImmutable($consulta['fecha_hora']))->format('d/m/Y H:i');
             $consultas[$indice]['clase_estado'] = $this->obtenerClaseEstado($consulta['estado']);
+            $consultas[$indice]['detalle_url'] =
+                url('centro-consultas') . '?consulta=' . (int) $consulta['id_consulta'];
         }
 
         $this->view(

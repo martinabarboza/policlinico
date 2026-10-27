@@ -75,6 +75,23 @@
     transition: 0.5s;
 }
 
+.form-navbar-busqueda {
+    width: 600px;
+}
+
+.form-navbar-busqueda .btn-primary {
+    color: var(--secondary);
+    background-color: #FFFFFF;
+    border-color: var(--secondary);
+}
+
+.form-navbar-busqueda .btn-primary:hover,
+.form-navbar-busqueda .btn-primary:focus-visible {
+    color: #FFFFFF;
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+
 @media (min-width: 992px) {
     .menu-lateral {
         margin-left: 0;

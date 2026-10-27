@@ -1,0 +1,227 @@
+/* Centro de consulta: complementa Bootstrap 5, no lo reemplaza. */
+
+.contenido-principal {
+    display: flex;
+    flex-direction: column;
+}
+
+.centro-consulta {
+    --centro-acento: #0f766e;
+    --centro-borde: #dde5e5;
+    flex: 1 0 auto;
+    min-height: 0;
+    padding: 1.5rem;
+    background: #f8fafc;
+}
+
+.centro-consulta h1 {
+    color: #172554;
+    font-weight: 700;
+}
+
+.centro-consulta > .d-flex p {
+    font-size: .95rem;
+}
+
+.centro-card {
+    border: 1px solid var(--centro-borde);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgb(15 23 42 / 4%);
+}
+
+.centro-consulta > .d-flex .btn {
+    border-radius: 8px;
+    padding: .6rem 1rem;
+}
+
+.centro-consulta .form-label {
+    font-weight: 600;
+    color: #475569 !important;
+}
+
+.centro-consulta .form-control,
+.centro-consulta .form-select {
+    min-height: 42px;
+    border-color: #d7e0e5;
+    border-radius: 8px;
+}
+
+.centro-consulta .form-control:focus,
+.centro-consulta .form-select:focus {
+    border-color: #0f766e;
+    box-shadow: 0 0 0 .2rem rgb(15 118 110 / 12%);
+}
+
+.centro-kpi {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.centro-consulta .centro-card .card-body {
+    padding: 1.15rem;
+}
+
+.centro-kpi--en-curso  { color: #075985; }
+.centro-kpi--pendiente { color: #92400e; }
+.centro-kpi--hosp      { color: var(--centro-acento); }
+
+.centro-consulta .table-responsive {
+    border-radius: 12px;
+}
+
+.centro-consulta .centro-card--consultas-limitada {
+    max-height: 32rem;
+    min-width: 0;
+}
+
+.centro-consultas__tabla--limitada {
+    max-height: 28rem;
+    overflow-x: auto;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+
+.centro-consultas__tabla--limitada thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.centro-lista--limitada {
+    max-height: 28rem;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+
+.centro-tabla {
+    min-width: 700px;
+}
+
+.centro-tabla thead th {
+    font-size: .75rem;
+    font-weight: 500;
+    color: #475569;
+    background: #f4f7f7;
+    padding: .65rem 1rem;
+    white-space: nowrap;
+    border-bottom: 1px solid var(--centro-borde);
+}
+
+.centro-tabla tbody td {
+    padding: .75rem 1rem;
+    border-color: #e8edef;
+}
+
+.centro-tabla tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.centro-tabla a {
+    color: #075985;
+    text-decoration: none;
+}
+
+.centro-tabla a:hover {
+    color: #0f766e;
+    text-decoration: underline;
+}
+
+.centro-tabla small {
+    line-height: 1.45;
+}
+
+.centro-tabla td:last-child {
+    min-width: 130px;
+}
+
+.centro-estado {
+    display: inline-block;
+    font-size: .75rem;
+    font-weight: 500;
+    padding: .2rem .65rem;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+.centro-estado--pendiente  { background: #fef3c7; color: #92400e; }
+.centro-estado--en-curso   { background: #e0f2fe; color: #075985; }
+.centro-estado--finalizada { background: #dcfce7; color: #166534; }
+
+.centro-consulta .card-header {
+    border-bottom-color: var(--centro-borde);
+    color: #1e293b;
+    font-weight: 600;
+}
+
+.centro-consulta .list-group-item {
+    padding: .85rem 1rem;
+    border-color: #e8edef;
+}
+
+.centro-consulta .list-group-item strong {
+    color: #1e293b;
+}
+
+.consulta-detalle {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+}
+
+.consulta-detalle__seccion {
+    overflow: hidden;
+}
+
+.consulta-detalle__campos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 1rem 1.5rem;
+}
+
+.consulta-detalle__campos dt {
+    margin-bottom: .25rem;
+    color: #64748b;
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.consulta-detalle__campos dd {
+    margin-bottom: 0;
+    color: #1e293b;
+    overflow-wrap: anywhere;
+}
+
+.consulta-detalle__resenia {
+    display: block;
+    max-width: 100%;
+    max-height: 700px;
+    margin: 0 auto;
+    object-fit: contain;
+    border: 1px solid var(--centro-borde);
+    border-radius: 8px;
+}
+
+@media (max-width: 767.98px) {
+    .centro-consulta {
+        padding: 1rem;
+    }
+
+    .centro-kpi {
+        font-size: 1.65rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .centro-consulta {
+        padding: .75rem;
+    }
+
+    .centro-consulta > .d-flex {
+        align-items: stretch !important;
+    }
+
+    .centro-consulta > .d-flex .btn {
+        width: 100%;
+    }
+}

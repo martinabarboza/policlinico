@@ -2,7 +2,7 @@
         <div class="menu-lateral pe-4 pb-3">
             <nav class="navbar">
                 <!-- bg-light navbar-light -->
-                <a href="index.php" class="navbar-brand mx-4 mt-4 mb-4">
+                <a href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>" class="navbar-brand mx-4 mt-4 mb-4">
                     <h3 class="text-light"><i class="fa fa-paw me-2"></i>PetCraft</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
@@ -18,27 +18,27 @@
                     </div>
                 </div>
                 <div class="navbar-nav w-100">
-                    <a href="dashboard" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'dashboard')) {
+                    <a href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'dashboard')) {
                                                     echo 'nav-item nav-link active';
                                                 } else {
                                                     echo 'nav-item nav-link';
                                                 } ?>"><i class="fa fa-home me-2"></i>Inicio</a>
-                    <a href="centro-consultas" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-consultas')) {
+                    <a href="<?= htmlspecialchars(url('centro-consultas'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-consultas')) {
                                                             echo 'nav-item nav-link active';
                                                         } else {
                                                             echo 'nav-item nav-link';
                                                         } ?>"><i class="fa fa-search me-2"></i>Consultorio</a>
-                    <a href="centro-tutores" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-tutores')) {
+                    <a href="<?= htmlspecialchars(url('centro-tutores'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-tutores')) {
                                                         echo 'nav-item nav-link active';
                                                     } else {
                                                         echo 'nav-item nav-link';
                                                     } ?>"><i class="fa fa-users me-2"></i>Tutores</a>
-                    <a href="agenda" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'agenda')) {
+                    <a href="<?= htmlspecialchars(url('agenda'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'agenda')) {
                                                 echo 'nav-item nav-link active';
                                             } else {
                                                 echo 'nav-item nav-link';
                                             } ?>"><i class="fa fa-calendar-alt me-2"></i>Agenda</a>
-                    <a href="hospitalizacion" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'hospitalizacion')) {
+                    <a href="<?= htmlspecialchars(url('hospitalizacion'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'hospitalizacion')) {
                                                             echo 'nav-item nav-link active';
                                                         } else {
                                                             echo 'nav-item nav-link';
@@ -46,9 +46,9 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-stethoscope me-2"></i>Solicitudes</a>
                         <div class="dropdown-menu bg-transparent border-0">
-                            <a href="solicitudes-historias" class="dropdown-item">Solicitudes de historias</a>
-                            <a href="solicitudes-citas" class="dropdown-item">Solicitudes de citas</a>
-                            <a href="solicitudes-examenes" class="dropdown-item">Solicitudes de exámenes</a>
+                            <a href="<?= htmlspecialchars(url('solicitudes-historias'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">Solicitudes de historias</a>
+                            <a href="<?= htmlspecialchars(url('solicitudes-citas'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">Solicitudes de citas</a>
+                            <a href="<?= htmlspecialchars(url('solicitudes-examenes'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">Solicitudes de exámenes</a>
                         </div>
                     </div>
 
