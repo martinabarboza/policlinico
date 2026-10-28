@@ -57,7 +57,7 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user-cog me-2"></i>Administración</a>
                         <div class="dropdown-menu bg-transparent border-0">
                             <a href="" class="dropdown-item">Ajustes de la Veterinaria</a>
-                            <a href="" class="dropdown-item">Usuarios</a>
+                            <a href="/usuarios" class="dropdown-item">Usuarios</a>
                             <a href="" class="dropdown-item">Propietarios</a>
                             <a href="" class="dropdown-item">Variables</a>
                         </div>

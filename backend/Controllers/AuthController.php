@@ -41,7 +41,7 @@ class AuthController extends Controller
             return;
         }
 
-        $usuarioModel = $this->model('Usuario');
+        $usuarioModel = $this->model('UsuarioModel');
 
         if (!ctype_digit($cedula)) {
             $this->fallarLogin('La cédula debe contener solamente números.', $cedula);

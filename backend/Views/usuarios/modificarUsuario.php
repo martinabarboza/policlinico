@@ -1,49 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-    <style>
-    /* Ocultar el spinner */
-    #spinner {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }
-</style>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modificar Usuario</title>
-</head>
-<body>
-    <h2>Modificar Usuario</h2>
-    <form action="/usuarios/actualizarUsuario" method="POST">
-        <input type="hidden" name="cedulaOld" value="<?php echo htmlspecialchars($usuarioEdit['cedula_Usuario']); ?>">
-        <label for="cedula"> Cedula: </label>
-        <input type="text" name="cedula" value="<?php echo htmlspecialchars($usuarioEdit['cedula_Usuario']); ?>" required><br>
-        <label for="nombre"> Nombre: </label>
-        <input type="text" name="nombre" value="<?php echo htmlspecialchars($usuarioEdit['nombre_Usuario']); ?>" required><br>
-        <label for="apellido"> Apellido: </label>
-        <input type="text" name="apellido" value="<?php echo htmlspecialchars($usuarioEdit['apellido_Usuario']); ?>" required><br>
-        <label for="rol"> Rol: </label>
-        <select name="rol" id="rol" required>
-            <option value="">SELECCIONE UN ROL</option>
-            <?php $rolesUsuario = [
-                'DIRECTOR' => 'Director',
-                'VETERINARIO' => 'Veterinario',
-                'RECEPCION' => 'Recepción'
-            ];
+<?php
+$usuarioEdit = $usuarioEdit ?? [];
+$rolesUsuario = [
+    'DIRECTOR' => 'Director',
+    'ESTUDIANTE' => 'Estudiante',
+    'PROFESOR' => 'Profesor'
+];
+?>
 
-            foreach($rolesUsuario as $i => $etiqueta){
-                $selected =($usuarioEdit['rol_Usuario'] === $i) ? 'selected' : '';
-                echo "<option value=\"$i\" $selected>$etiqueta</option>";
-            } ?>
-        </select><br>
-        <!--<input type="text" name="rol" value="<?php// echo htmlspecialchars($usuarioEdit['rol_Usuario']); ?>" required><br>-->
-        <label for="email"> Email: </label>
-        <input type="email" name="email" value="<?php echo htmlspecialchars($usuarioEdit['email_Usuario']); ?>" required><br>
-        <label for="passw"> Contraseña: </label>
-        <input type="password" name="passw"><br>
-        <button type="submit">Guardar Cambios</button>
-    </form>
-</body>
-</html>
+<div class="usuarios-form-page container-fluid py-4">
+    <div class="usuarios-form-header">
+        <div class="usuarios-form-title">
+            <div class="usuarios-form-icon">
+                <i class="fa-solid fa-user-pen"></i>
+            </div>
+            <div>
+                <p class="text-uppercase small fw-bold text-primary mb-1">Edición</p>
+                <h1 class="h3 mb-0">Modificar usuario</h1>
+            </div>
+        </div>
+        <a class="btn btn-outline-secondary" href="/usuarios">
+            <i class="fa-solid fa-arrow-left me-1"></i>Volver
+        </a>
+    </div>
+
+    <section class="card usuarios-form-card border-0">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="h5 mb-0">Datos del usuario</h2>
+            </div>
+            <span class="badge text-bg-light border"><?php echo htmlspecialchars(($usuarioEdit['rol_Usuario'] ?? 'Sin rol'), ENT_QUOTES, 'UTF-8'); ?></span>
+        </div>
+
+        <div class="card-body p-4">
+            <form action="/usuarios/actualizarUsuario" method="POST" class="row g-4">
+                <input type="hidden" name="cedulaOld" value="<?php echo htmlspecialchars($usuarioEdit['cedula_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+
+                <div class="col-12 col-md-6">
+                    <label for="cedula" class="form-label">Cédula</label>
+                    <input class="form-control" type="text" id="cedula" name="cedula" value="<?php echo htmlspecialchars($usuarioEdit['cedula_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input class="form-control" type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($usuarioEdit['nombre_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <input class="form-control" type="text" id="apellido" name="apellido" value="<?php echo htmlspecialchars($usuarioEdit['apellido_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="rol" class="form-label">Rol</label>
+                    <select class="form-select" name="rol" id="rol" required>
+                        <option value="">Seleccione un rol</option>
+                        <?php foreach ($rolesUsuario as $valor => $etiqueta): ?>
+                            <option value="<?php echo htmlspecialchars($valor, ENT_QUOTES, 'UTF-8'); ?>" <?php echo (($usuarioEdit['rol_Usuario'] ?? '') === $valor) ? 'selected' : ''; ?>><?php echo htmlspecialchars($etiqueta, ENT_QUOTES, 'UTF-8'); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input class="form-control" type="email" id="email" name="email" value="<?php echo htmlspecialchars($usuarioEdit['email_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <label for="passw" class="form-label">Contraseña</label>
+                    <input class="form-control" type="password" id="passw" name="passw" placeholder="Dejar vacío para conservar la actual">
+                </div>
+
+                <div class="col-12 pt-2 border-top mt-2">
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa-solid fa-floppy-disk me-1"></i>Guardar cambios
+                        </button>
+                        <a class="btn btn-outline-secondary" href="/usuarios">
+                            Cancelar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>

@@ -1,13 +1,12 @@
 <?php
 
-class Usuario extends Model
+class UsuarioModel extends Model
 {
 
     //
     // Busca un usuario por su cedula. Devuelve el registro completo
     //(incluye passw_usuario hasheada) o null si no existe.
     //
-
     public function buscarPorCedula(int $cedula): ?array
     {
         $stmt = $this->db->prepare(
@@ -31,7 +30,6 @@ class Usuario extends Model
     //
     // Actualiza la fecha de último login del usuario.
     //
-
     public function actualizarUltimoLogin(int $idUsuario): void
     {
         $stmt = $this->db->prepare(
@@ -43,12 +41,28 @@ class Usuario extends Model
         $stmt->close();
     }
 
-    public function listadoUsuarios(): array 
+    //
+    // Lista Los Usuarios Registrados en la Base de Datos.
+    //
+    public function listadoUsuarios(string $busqueda = ''): array 
     {
-        $stmt = $this->db->prepare(
-            'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario
+        $resultado = [];
+        $busqueda = trim($busqueda);
+        if (empty($busqueda)) {
+             $stmt = $this->db->prepare(
+            'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario, email_Usuario
             FROM USUARIO'
         );
+        } else {
+            $busqueda = "%$busqueda%";
+            $stmt = $this->db->prepare(
+                'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario, email_Usuario
+                FROM USUARIO
+                WHERE cedula_Usuario LIKE ?
+                OR nombre_Usuario LIKE ?
+                OR apellido_Usuario LIKE ?');
+            $stmt->bind_param('sss', $busqueda, $busqueda, $busqueda);
+        }
         $stmt->execute();
         $resultado = $stmt->get_result();
         $usuario = $resultado->fetch_all(MYSQLI_ASSOC);
@@ -59,7 +73,6 @@ class Usuario extends Model
     //
     // Agrega un Nuevo Usuario a la Base de Datos
     //
-
     public function crearUsuarioNuevo(int $cedula, string $nombre, string $apellido, string $rol, string $email, string $passw)
     {
         password_hash($passw, PASSWORD_DEFAULT);
@@ -76,7 +89,6 @@ class Usuario extends Model
     //
     // Función para modificar usuarios tomando en cuenta un objeto usuario almacenado en $usuarioObj.
     //
-
     public function modificarUsuario($usuarioObj, $cedulaOld)
     {
         $stmt = $this->db->prepare(

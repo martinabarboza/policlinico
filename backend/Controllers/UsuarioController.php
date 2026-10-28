@@ -12,12 +12,14 @@ class UsuarioController extends Controller
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
 
+        $busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
+
         $this->view('usuarios/index', [
             'tituloPagina' => 'Usuarios',
             'activeMenu'   => 'usuarios',
-            //'roles'        => $this->model('Rol')->activos(),
-            'usuarios'     => $this->model('Usuario')->listadoUsuarios()
-        ]);
+            //'roles'        => $this->model('Rol')->activos(), <= No me acuerdo que era esto pero lo dejo comentado por si acaso.
+            'usuarios'     => $this->model('UsuarioModel')->listadoUsuarios($busqueda),
+        ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
     }
 
     //
@@ -35,7 +37,7 @@ class UsuarioController extends Controller
 
         $cedula = $_GET['cedula'];
 
-        $usuarioEdit = $this->model('Usuario')->buscarPorCedula($cedula);
+        $usuarioEdit = $this->model('UsuarioModel')->buscarPorCedula($cedula);
 
         if (!$usuarioEdit) {
             header('Location: /usuarios?error=Usuario_No_Encontrado');
@@ -47,7 +49,7 @@ class UsuarioController extends Controller
                 'tituloPagina' => 'Modificar Usuario',
                 'activeMenu' => 'usuarios',
                 'usuarioEdit' => $usuarioEdit
-            ]);
+            ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
         }
     }
     // Permite Actualizar un Usuario en la base de datos utilizando la cédula.
@@ -68,7 +70,7 @@ class UsuarioController extends Controller
             $cedulaOld = /*(int)*/ $_POST['cedulaOld'];
 
             // Comprueba si el usuario existe antes de intentar modificarlo.
-            $usuarioActual = $this->model('Usuario')->buscarPorCedula($cedulaOld);
+            $usuarioActual = $this->model('UsuarioModel')->buscarPorCedula($cedulaOld);
 
             /*if (!$usuarioActual){
                 die("No existe: ". $cedulaOld); <-- Es para probar si busca correctamente la cedula.
@@ -94,7 +96,7 @@ class UsuarioController extends Controller
                 $usuarioObj->setPasswUsuario($usuarioActual['passw_Usuario']);
             }
 
-            $comprobacion = $this->model('Usuario')->modificarUsuario($usuarioObj, $cedulaOld);
+            $comprobacion = $this->model('UsuarioModel')->modificarUsuario($usuarioObj, $cedulaOld);
 
             // Comprueba si se modificó correctamente y redirige a la página de usuarios con un mensaje de éxito o error.
             if ($comprobacion) {
