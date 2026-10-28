@@ -24,4 +24,3 @@ $router->get('/usuarios', [UsuarioController::class, 'index']);
 $router->get('/usuarios/editar', [UsuarioController::class, 'modificarUsuario']);
 $router->post('/usuarios/actualizarUsuario', [UsuarioController::class, 'actualizarUsuario']);
 ?>
-
