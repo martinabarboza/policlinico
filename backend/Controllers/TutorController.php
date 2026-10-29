@@ -6,7 +6,7 @@ class TutorController extends Controller
     {
         Auth::requireLogin();
 
-        $busqueda = $_GET['q'] ?? '';
+        $busqueda = $_GET['busqueda'] ?? $_GET['q'] ?? '';
         $errorBusqueda = '';
 
         if (!is_string($busqueda)) {

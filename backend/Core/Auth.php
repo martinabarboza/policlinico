@@ -74,7 +74,7 @@ class Auth
         $rol = self::rol();
 
         $permitido = match ($permiso) {
-            'admin.total' => $rol === 'DIRECTOR',
+            'admin.total' => $rol === 'Director',
             default       => false,
         };
 
