@@ -1,9 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-?>
-<?php
 function mostrarServicios($cartas, $cantidad)
 {
     $grupos = array_chunk($cartas, $cantidad);
@@ -12,15 +7,20 @@ function mostrarServicios($cartas, $cantidad)
         $active = $index === 0 ? 'active' : '';
 
         echo '
-        <div "carousel-item ' . $active . '">
+        <div class="carousel-item ' . $active . '">
             <div class="d-flex justify-content-center align-items-stretch gap-4 px-5">';
 
         foreach ($grupo as $carta) {
+            $titulo = htmlspecialchars((string) ($carta['titulo'] ?? 'Servicio'), ENT_QUOTES, 'UTF-8');
+            $descripcion = htmlspecialchars((string) ($carta['descripcion'] ?? ''), ENT_QUOTES, 'UTF-8');
+            $imagen = trim((string) ($carta['imagen'] ?? ''));
+            $link = trim((string) ($carta['link'] ?? ''));
+
             echo '
                 <div class="tarjeta-servicio">
-                    <img src="' . (!empty($carta['imagen']) ? htmlspecialchars($carta['imagen'] ?? '') : '#') . '"
-                        class="card-img-top"
-                        alt="' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? '') : '#') . '">
+                    ' . ($imagen !== ''
+                        ? '<img src="' . htmlspecialchars($imagen, ENT_QUOTES, 'UTF-8') . '" class="card-img-top" alt="' . $titulo . '">'
+                        : '<div class="tarjeta-servicio__imagen-vacia" aria-hidden="true"><i class="bi bi-heart-pulse"></i></div>') . '
 
                     <div class="card-body">
                         <span class="categoria-servicio">
@@ -28,16 +28,16 @@ function mostrarServicios($cartas, $cantidad)
                         </span>
 
                         <h5 class="card-title">
-                            ' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? '') : '#') . '
+                            ' . $titulo . '
                         </h5>
 
                         <p class="card-text">
-                            ' . (!empty($carta['descripcion']) ? htmlspecialchars($carta['descripcion'] ?? '') : '#') . '
+                            ' . $descripcion . '
                         </p>
 
-                        <a href="' . (!empty($carta['link']) ? htmlspecialchars($carta['link'] ?? '') : '#') . '"
+                        <a href="' . htmlspecialchars($link !== '' ? $link : '/login', ENT_QUOTES, 'UTF-8') . '"
                             class="btn btn-primary">
-                            Mas información sobre <u>' . (!empty($carta['titulo']) ? htmlspecialchars($carta['titulo'] ?? '') : '#') . '</u>
+                            Más información
                             <i class="bi bi-arrow-right ms-2"></i>
                         </a>
                     </div>
@@ -109,7 +109,7 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/pacientes" class="tarjeta-acceso">
+                    <a href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-acceso">
 
                         <!-- Número del acceso -->
                         <div class="tarjeta-acceso__numero">
@@ -120,15 +120,15 @@ function mostrarServicios($cartas, $cantidad)
                         <div class="tarjeta-acceso__contenido">
 
                             <span class="tarjeta-acceso__categoria">
-                                Gestión
+                                Dashboard
                             </span>
 
                             <h3>
-                                Pacientes
+                                Agenda diaria
                             </h3>
 
                             <p>
-                                Registrar, buscar y consultar pacientes.
+                                Consultar la agenda por fecha, pacientes en espera y hospitalizaciones activas.
                             </p>
 
                         </div>
@@ -148,7 +148,7 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/turnos" class="tarjeta-acceso">
+                    <a href="<?= htmlspecialchars(url('consultas-diarias'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-acceso">
 
                         <div class="tarjeta-acceso__numero">
                             02
@@ -157,15 +157,15 @@ function mostrarServicios($cartas, $cantidad)
                         <div class="tarjeta-acceso__contenido">
 
                             <span class="tarjeta-acceso__categoria">
-                                Agenda
+                                Consultas
                             </span>
 
                             <h3>
-                                Turnos
+                                Consultas del día
                             </h3>
 
                             <p>
-                                Gestionar consultas y horarios.
+                                Ver todas las consultas registradas para hoy y acceder a su detalle.
                             </p>
 
                         </div>
@@ -184,7 +184,7 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/historias-clinicas" class="tarjeta-acceso">
+                    <a href="<?= htmlspecialchars(url('consultas-incompletas'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-acceso">
 
                         <div class="tarjeta-acceso__numero">
                             03
@@ -193,15 +193,15 @@ function mostrarServicios($cartas, $cantidad)
                         <div class="tarjeta-acceso__contenido">
 
                             <span class="tarjeta-acceso__categoria">
-                                Registros
+                                Seguimiento
                             </span>
 
                             <h3>
-                                Historias clínicas
+                                Consultas incompletas
                             </h3>
 
                             <p>
-                                Consultar y administrar historias clínicas.
+                                Revisar consultas pendientes o en curso y continuar su seguimiento.
                             </p>
 
                         </div>
@@ -220,7 +220,7 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/profesionales" class="tarjeta-acceso">
+                    <a href="<?= htmlspecialchars(url('proximas-consultas'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-acceso">
 
                         <div class="tarjeta-acceso__numero">
                             04
@@ -229,15 +229,15 @@ function mostrarServicios($cartas, $cantidad)
                         <div class="tarjeta-acceso__contenido">
 
                             <span class="tarjeta-acceso__categoria">
-                                Personal
+                                Agenda
                             </span>
 
                             <h3>
-                                Profesionales
+                                Próximas consultas
                             </h3>
 
                             <p>
-                                Gestionar médicos y especialistas.
+                                Consultar las próximas consultas aún no finalizadas ni canceladas.
                             </p>
 
                         </div>
@@ -256,7 +256,7 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/consultorios" class="tarjeta-acceso">
+                    <a href="<?= htmlspecialchars(url('centro-consultas'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-acceso">
 
                         <div class="tarjeta-acceso__numero">
                             05
@@ -265,15 +265,15 @@ function mostrarServicios($cartas, $cantidad)
                         <div class="tarjeta-acceso__contenido">
 
                             <span class="tarjeta-acceso__categoria">
-                                Organización
+                                Gestión clínica
                             </span>
 
                             <h3>
-                                Consultorios
+                                Consultorio
                             </h3>
 
                             <p>
-                                Consultar disponibilidad y asignaciones.
+                                Buscar pacientes y consultas, revisar detalles y registrar nuevas consultas.
                             </p>
 
                         </div>
@@ -292,7 +292,7 @@ function mostrarServicios($cartas, $cantidad)
                  ================================================= -->
                 <div class="col-12 col-sm-6 col-lg-4">
 
-                    <a href="/reportes" class="tarjeta-acceso">
+                    <a href="<?= htmlspecialchars(url('centro-tutores'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-acceso">
 
                         <div class="tarjeta-acceso__numero">
                             06
@@ -301,15 +301,15 @@ function mostrarServicios($cartas, $cantidad)
                         <div class="tarjeta-acceso__contenido">
 
                             <span class="tarjeta-acceso__categoria">
-                                Información
+                                Gestión
                             </span>
 
                             <h3>
-                                Reportes
+                                Tutores
                             </h3>
 
                             <p>
-                                Consultar estadísticas e información clínica.
+                                Buscar y registrar tutores con sus datos de contacto.
                             </p>
 
                         </div>
@@ -342,111 +342,68 @@ function mostrarServicios($cartas, $cantidad)
                 </li>
             </ul>
         </div>
-        <!--CELULAR 1CARTA-->
-        <div class="d-block d-md-none p-sm-1">
-            <div class="d-flex justify-content-center w-100">
-                <div id="carouselMobile"
-                    class="carousel slide w-100"
-                    data-bs-ride="carousel"
-                    data-bs-interval="5000">
-
+        <?php if (empty($servicios)): ?>
+            <div class="servicios-vacios mx-auto" role="status">
+                <span class="servicios-vacios__icono"><i class="bi bi-heart-pulse"></i></span>
+                <h3>Estamos preparando esta información</h3>
+                <p class="mb-0">Los servicios estarán disponibles próximamente. Mientras tanto, podés ingresar al sistema para más información.</p>
+            </div>
+        <?php else: ?>
+            <!--CELULAR 1CARTA-->
+            <div class="d-block d-md-none p-sm-1">
+                <div id="carouselMobile" class="carousel slide w-100" data-bs-ride="carousel" data-bs-interval="5000">
                     <div class="carousel-inner interior-movil">
-                        <?php
-                        $InicioController = new InicioController();
-                        $cartas = $InicioController->obtenerServicios();
-                        mostrarServicios($cartas, 1);
-                        ?>
+                        <?php mostrarServicios($servicios, 1); ?>
                     </div>
-
-                    <button class="carousel-control-prev"
-                        type="button"
-                        data-bs-target="#carouselMobile"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                        <span class="visually-hidden">Anterior</span>
-                    </button>
-
-                    <button class="carousel-control-next"
-                        type="button"
-                        data-bs-target="#carouselMobile"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                        <span class="visually-hidden">Siguiente</span>
-                    </button>
-
+                    <?php if (count($servicios) > 1): ?>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselMobile" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselMobile" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
-        </div>
-        <!--TABLET 2CARTAS-->
-        <div class="d-none d-md-block d-lg-none p-5">
-            <div class="d-flex justify-content-center w-100">
-                <div id="carouselTablet"
-                    class="carousel slide w-100"
-                    data-bs-ride="carousel"
-                    data-bs-interval="5000">
-
+            <!--TABLET 2CARTAS-->
+            <div class="d-none d-md-block d-lg-none p-5">
+                <div id="carouselTablet" class="carousel slide w-100" data-bs-ride="carousel" data-bs-interval="5000">
                     <div class="carousel-inner interior-tablet">
-                        <?php
-                        $InicioController = new InicioController();
-                        $cartas = $InicioController->obtenerServicios();
-                        mostrarServicios($cartas, 2);
-                        ?>
+                        <?php mostrarServicios($servicios, 2); ?>
                     </div>
-
-                    <button class="carousel-control-prev"
-                        type="button"
-                        data-bs-target="#carouselTablet"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                        <span class="visually-hidden">Anterior</span>
-                    </button>
-
-                    <button class="carousel-control-next"
-                        type="button"
-                        data-bs-target="#carouselTablet"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                        <span class="visually-hidden">Siguiente</span>
-                    </button>
-
+                    <?php if (count($servicios) > 2): ?>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselTablet" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselTablet" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
-        </div>
-        <!--PC 3CARTAS-->
-        <div class="d-none d-lg-block p-5">
-            <div class="d-flex justify-content-center w-100">
-                <div id="carouselDesktop"
-                    class="carousel slide w-100"
-                    data-bs-ride="carousel"
-                    data-bs-interval="3000">
-
+            <!--PC 3CARTAS-->
+            <div class="d-none d-lg-block p-5">
+                <div id="carouselDesktop" class="carousel slide w-100" data-bs-ride="carousel" data-bs-interval="5000">
                     <div class="carousel-inner interior-escritorio">
-                        <?php
-                        $InicioController = new InicioController();
-                        $cartas = $InicioController->obtenerServicios();
-                        mostrarServicios($cartas, 3);
-                        ?>
+                        <?php mostrarServicios($servicios, 3); ?>
                     </div>
-
-                    <button class="carousel-control-prev"
-                        type="button"
-                        data-bs-target="#carouselDesktop"
-                        data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                        <span class="visually-hidden">Anterior</span>
-                    </button>
-
-                    <button class="carousel-control-next"
-                        type="button"
-                        data-bs-target="#carouselDesktop"
-                        data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                        <span class="visually-hidden">Siguiente</span>
-                    </button>
-
+                    <?php if (count($servicios) > 3): ?>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselDesktop" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselDesktop" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    <?php endif; ?>
                 </div>
             </div>
-        </div>
+        <?php endif; ?>
     </section>
     <!--HORA ATENCION-->
     <section>
