@@ -35,6 +35,16 @@ class UsuarioController extends Controller
             exit;
         }
 
+        if (!ctype_digit((string) $_GET['cedula'])) {
+            $this->view('usuarios/modificarUsuario', [
+                'tituloPagina' => 'Modificar Usuario',
+                'activeMenu' => 'usuarios',
+                'usuarioEdit' => null,
+                'error' => 'La cédula solo debe contener números.'
+            ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+            return;
+        }
+
         $cedula = $_GET['cedula'];
 
         $usuarioEdit = $this->model('UsuarioModel')->buscarPorCedula($cedula);
@@ -61,16 +71,18 @@ class UsuarioController extends Controller
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuarioObj = new UsuarioObj();
 
-            if (!isset($_POST['cedulaOld'])){
+            if (!isset($_POST['cedulaOld']) || !isset($_POST['cedula'])) {
                 header('Location: /usuarios?error=Falta_identificador');
                 exit;
             }
 
-            // Guarda la cédula antigua para encontrar al usuario en la bd.
-            $cedulaOld = /*(int)*/ $_POST['cedulaOld'];
+            $cedulaOld = /*(int)*/ $_POST['cedulaOld']; // Guarda la cédula antigua para encontrar al usuario en la bd.
+            $cedulaNueva = trim($_POST['cedula']); // Guarda la cédula nueva para actualizarla en la bd.
+            $emailNuevo = trim($_POST['email']);
 
             // Comprueba si el usuario existe antes de intentar modificarlo.
             $usuarioActual = $this->model('UsuarioModel')->buscarPorCedula($cedulaOld);
+
 
             /*if (!$usuarioActual){
                 die("No existe: ". $cedulaOld); <-- Es para probar si busca correctamente la cedula.
@@ -82,11 +94,41 @@ class UsuarioController extends Controller
                 exit;
             }
 
-            $usuarioObj->setCedulaUsuario($_POST['cedula']);
+            if (!ctype_digit($cedulaNueva)) {
+                $this->view('usuarios/modificarUsuario', [
+                    'tituloPagina' => 'Modificar Usuario',
+                    'activeMenu' => 'usuarios',
+                    'usuarioEdit' => $usuarioActual,
+                    'error' => 'La cédula solo debe contener números'
+                ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+                return;
+            }
+            
+            if (strlen($cedulaNueva) > 8) {
+                $this->view('usuarios/modificarUsuario', [
+                    'tituloPagina' => 'Modificar Usuario',
+                    'activeMenu' => 'usuarios',
+                    'usuarioEdit' => $usuarioActual,
+                    'error' => 'La cédula solo debe contener 8 caracteres'
+                ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+                return;
+            }
+
+            if (!filter_var($emailNuevo, FILTER_VALIDATE_EMAIL)) {
+                $this->view('usuarios/modificarUsuario', [
+                    'tituloPagina' => 'Modificar Usuario',
+                    'activeMenu' => 'usuarios',
+                    'usuarioEdit' => $usuarioActual,
+                    'error' => 'Debe ingresar una dirección Email valida'
+                ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+                return;
+            }
+
+            $usuarioObj->setCedulaUsuario($cedulaNueva);
             $usuarioObj->setNombreUsuario($_POST['nombre']);
             $usuarioObj->setApellidoUsuario($_POST['apellido']);
             $usuarioObj->setRolUsuario($_POST['rol']);
-            $usuarioObj->setEmailUsuario($_POST['email']);
+            $usuarioObj->setEmailUsuario($emailNuevo);
 
             // Mantiene la contraseña actual si el campo está vacío.
             if (!empty($_POST['passw'])) {

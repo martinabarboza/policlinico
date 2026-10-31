@@ -78,7 +78,7 @@ class UsuarioModel extends Model
         password_hash($passw, PASSWORD_DEFAULT);
         $stmt = $this->db->prepare(
             'INSERT INTO USUARIO (cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario, email_Usuario, passw_Usuario, lastlogin_Usuario, dateupdate_Usuario)
-            VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW()'
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())'
         );
 
         $stmt->bind_param('ssssss', $cedula, $nombre, $apellido, $rol, $email, $passw);
