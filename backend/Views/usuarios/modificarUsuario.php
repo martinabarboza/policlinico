@@ -1,9 +1,9 @@
 <?php
 $usuarioEdit = $usuarioEdit ?? [];
 $rolesUsuario = [
-    'DIRECTOR' => 'Director',
-    'ESTUDIANTE' => 'Estudiante',
-    'PROFESOR' => 'Profesor'
+    'Director' => 'Director',
+    'Estudiante' => 'Estudiante',
+    'Profesor' => 'Profesor'
 ];
 ?>
 
@@ -32,12 +32,15 @@ $rolesUsuario = [
         </div>
 
         <div class="card-body p-4">
+            <?php if (isset($error) && !empty($error)) {
+                echo '<div class="alert alert-danger" role="alert">' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</div>';
+            } ?>
             <form action="/usuarios/actualizarUsuario" method="POST" class="row g-4">
                 <input type="hidden" name="cedulaOld" value="<?php echo htmlspecialchars($usuarioEdit['cedula_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="col-12 col-md-6">
                     <label for="cedula" class="form-label">Cédula</label>
-                    <input class="form-control" type="text" id="cedula" name="cedula" value="<?php echo htmlspecialchars($usuarioEdit['cedula_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <input class="form-control" type="text" id="cedula" name="cedula" inputmode="numeric" pattern="[0-9]{8}" value="<?php echo htmlspecialchars($usuarioEdit['cedula_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
 
                 <div class="col-12 col-md-6">
