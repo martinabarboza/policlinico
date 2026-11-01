@@ -7,6 +7,10 @@ services:
 
     container_name: policlinico-app
 
+    networks:
+      - default
+      - proxy
+
     ports:
       - "8080:80"
 
@@ -65,3 +69,7 @@ services:
 
 volumes:
   policlinico_db_data:
+
+networks:
+  proxy:
+    external: true
