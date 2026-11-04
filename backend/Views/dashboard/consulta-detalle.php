@@ -46,11 +46,25 @@ $renderSeccion = static function (string $titulo, array $registros) use ($render
                 <p class="text-muted mb-1">Detalle clínico</p>
                 <h1 class="h3 mb-0">Consulta #<?= (int) $detalle['consulta']['id'] ?></h1>
             </div>
-            <a class="btn btn-outline-primary" href="/centro-consultas?paciente=<?= (int) $detalle['consulta']['id_paciente'] ?>">
-                Volver a consultas del paciente
-            </a>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-outline-success"
+                   href="/centro-consultas/historia-clinica?paciente=<?= (int) $detalle['consulta']['id_paciente'] ?>">
+                    Descargar historia PDF
+                </a>
+                <?php if (in_array(strtolower(trim((string) ($detalle['consulta']['Estado'] ?? ''))), ['pendiente', 'en curso'], true)): ?>
+                    <a class="btn btn-primary" href="/centro-consultas/editar?id=<?= (int) $detalle['consulta']['id'] ?>">
+                        <?= strtolower(trim((string) ($detalle['consulta']['Estado'] ?? ''))) === 'pendiente' ? 'Editar consulta' : 'Continuar edición' ?>
+                    </a>
+                <?php endif; ?>
+                <a class="btn btn-outline-primary" href="/centro-consultas?paciente=<?= (int) $detalle['consulta']['id_paciente'] ?>">
+                    Volver a consultas del paciente
+                </a>
+            </div>
         </header>
 
+        <?php if ($mensajeExito !== null): ?>
+            <div class="alert alert-success" role="status"><?= $esc($mensajeExito) ?></div>
+        <?php endif; ?>
         <?php if ($mensajeEstado !== null): ?>
             <div class="alert alert-success" role="status"><?= $esc($mensajeEstado) ?></div>
         <?php endif; ?>

@@ -8,13 +8,29 @@
                 <p class="text-muted">Coincidencias para “<?= htmlspecialchars($busqueda, ENT_QUOTES, 'UTF-8') ?>”.</p>
                 <div class="table-responsive">
                     <table class="table align-middle mb-0">
-                        <thead><tr><th>Paciente</th><th>Chip</th><th>Tutor</th></tr></thead>
+                        <thead><tr><th>Paciente</th><th>Chip</th><th>Tutor</th><th>Acciones</th></tr></thead>
                         <tbody>
                             <?php foreach ($pacientes as $paciente): ?>
                                 <tr>
                                     <td><?= htmlspecialchars($paciente['nombre'], ENT_QUOTES, 'UTF-8') ?></td>
                                     <td><?= htmlspecialchars($paciente['chip'] ?: 'Sin chip', ENT_QUOTES, 'UTF-8') ?></td>
                                     <td><?= htmlspecialchars($paciente['tutor'], ENT_QUOTES, 'UTF-8') ?></td>
+                                    <td class="text-nowrap">
+                                        <?php if (in_array(strtoupper(trim(Auth::rol() ?? '')), ['ESTUDIANTE', 'PROFESOR', 'DIRECTOR'], true)): ?>
+                                            <a class="btn btn-sm btn-outline-primary"
+                                               href="/pacientes/editar?id=<?= (int) $paciente['id'] ?>">
+                                                Editar paciente
+                                            </a>
+                                        <?php endif; ?>
+                                        <a class="btn btn-sm btn-outline-secondary"
+                                           href="/centro-tutores?editar=<?= (int) $paciente['tutor_id'] ?>">
+                                            Editar tutor
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-success"
+                                           href="/centro-consultas/historia-clinica?paciente=<?= (int) $paciente['id'] ?>">
+                                            Descargar historia PDF
+                                        </a>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

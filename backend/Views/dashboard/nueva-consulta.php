@@ -40,6 +40,11 @@ if (!is_array($paraclinicosAnteriores) || !$paraclinicosAnteriores) {
     $paraclinicosAnteriores = [[]];
 }
 $pacientesFiltrados = $pacientes;
+$consultaEdicionId = filter_var($consultaEdicionId ?? null, FILTER_VALIDATE_INT);
+$modoEdicion = $consultaEdicionId !== false && $consultaEdicionId !== null && $consultaEdicionId > 0;
+$estadoConsultaEdicion = strtolower(trim((string) ($estadoConsultaEdicion ?? '')));
+$consultaPendiente = $modoEdicion && $estadoConsultaEdicion === 'pendiente';
+$reseniasExistentes = is_array($reseniasExistentes ?? null) ? $reseniasExistentes : [];
 
 $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
 ?>
@@ -47,13 +52,30 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
 <main class="consulta-page">
     <header class="page-header">
         <div class="page-heading">
-            <span class="eyebrow">CONSULTORIO / NUEVA CONSULTA</span>
-            <h1>Registrar consulta</h1>
-            <p>Registro clínico y evaluación del paciente.</p>
+            <span class="eyebrow">CONSULTORIO / <?= $modoEdicion ? 'EDITAR CONSULTA' : 'NUEVA CONSULTA' ?></span>
+            <h1><?= $modoEdicion ? ($consultaPendiente ? 'Editar consulta pendiente' : 'Continuar consulta clínica') : 'Nueva consulta clínica' ?></h1>
+            <p><?= $modoEdicion
+                ? ($consultaPendiente
+                    ? 'Corregí o completá los datos. Al guardar, la consulta seguirá pendiente.'
+                    : 'Editá el borrador guardado y continuá con la evaluación.')
+                : 'Registro clínico del paciente, organizado por etapas.' ?></p>
         </div>
-        <a class="btn btn-secondary" href="/centro-consultas">
-            Volver al consultorio
-        </a>
+        <div class="page-actions">
+            <a class="btn btn-secondary"
+               href="<?= $modoEdicion ? '/centro-consultas?consulta=' . (int) $consultaEdicionId : '/centro-consultas' ?>"
+               data-cancel-consulta>Cancelar</a>
+            <button class="btn btn-save" type="submit" form="formConsulta" name="accion" value="guardar_avance">
+                <?= $consultaPendiente ? 'Guardar cambios' : 'Guardar avance' ?>
+            </button>
+            <?php if (!$modoEdicion): ?>
+                <button class="btn btn-pending" type="submit" form="formConsulta" name="accion" value="guardar_pendiente">
+                    Guardar como pendiente
+                </button>
+            <?php endif; ?>
+            <button class="btn btn-finish" type="submit" form="formConsulta" name="accion" value="finalizar">
+                Finalizar consulta
+            </button>
+        </div>
     </header>
 
     <?php if ($errorFormulario !== null): ?>
@@ -75,6 +97,9 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
             </div>
         </div>
 
+        <?php if ($modoEdicion): ?>
+            <span class="species-current"><?= e($especieSeleccionada) ?></span>
+        <?php else: ?>
         <form method="GET" action="/centro-consultas/nueva" class="species-form">
 
             <div class="field">
@@ -91,6 +116,7 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
 
             <button class="btn btn-primary" type="submit">Seleccionar especie</button>
         </form>
+        <?php endif; ?>
 
         <p class="species-note">
             Especie seleccionada:
@@ -107,7 +133,47 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
         <!-- Conserva la elección de la vista; el servidor debe validar contra la BD. -->
         <input type="hidden" name="especie" value="<?= e($especieSeleccionada) ?>">
         <input type="hidden" name="csrf_token" value="<?= e($csrfToken) ?>">
+        <?php if ($modoEdicion): ?>
+            <input type="hidden" name="consulta_id" value="<?= (int) $consultaEdicionId ?>">
+        <?php endif; ?>
+        <input type="hidden"
+               id="consulta-tab-activa"
+               name="active_tab"
+               value="<?= e($valorAnterior('active_tab', 'generales')) ?>">
 
+        <nav class="consulta-tabs" role="tablist" aria-label="Etapas de la consulta">
+            <?php
+            $pestanasConsulta = [
+                'generales' => 'Datos generales',
+                'anamnesis' => 'Anamnesis',
+                'examen' => 'Examen físico',
+                'diagnosticos' => 'Diagnósticos',
+                'tratamiento' => 'Tratamiento',
+                'finalizacion' => 'Finalización',
+            ];
+            ?>
+            <?php foreach ($pestanasConsulta as $indice => $tituloPestana): ?>
+                <button class="consulta-tab<?= $indice === 'generales' ? ' is-active' : '' ?>"
+                        id="tab-<?= e($indice) ?>"
+                        type="button"
+                        role="tab"
+                        aria-controls="panel-<?= e($indice) ?>"
+                        aria-selected="<?= $indice === 'generales' ? 'true' : 'false' ?>"
+                        tabindex="<?= $indice === 'generales' ? '0' : '-1' ?>"
+                        data-consulta-tab="<?= e($indice) ?>">
+                    <span class="consulta-tab__number"><?= array_search($indice, array_keys($pestanasConsulta), true) + 1 ?></span>
+                    <?= e($tituloPestana) ?>
+                </button>
+            <?php endforeach; ?>
+        </nav>
+
+        <div class="consulta-workspace">
+            <div class="consulta-tab-panels">
+                <section class="consulta-tab-panel is-active"
+                         id="panel-generales"
+                         role="tabpanel"
+                         aria-labelledby="tab-generales"
+                         data-consulta-panel="generales">
         <section class="form-card">
             <div class="section-heading">
                 <div class="section-icon">02</div>
@@ -213,6 +279,9 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
                         <option value="">Seleccionar paciente</option>
                         <?php foreach ($pacientesFiltrados as $p): ?>
                             <option value="<?= e($p['id_Paciente'] ?? '') ?>"
+                                data-nombre="<?= e($p['nombre_Paciente'] ?? 'Paciente sin nombre') ?>"
+                                data-tutor="<?= e($p['nombre_Tutor'] ?? 'Tutor no registrado') ?>"
+                                data-chip="<?= e($p['numchip_Paciente'] ?? '') ?>"
                                 <?= $valorAnterior('id_Paciente') === (string) ($p['id_Paciente'] ?? '') ? 'selected' : '' ?>>
                                 <?= e($p['nombre_Paciente'] ?? 'Paciente sin nombre') ?>
                                 <?php if (!empty($p['numchip_Paciente'])): ?>
@@ -242,8 +311,8 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
                 </div>
 
                 <div class="field">
-                    <label for="tipo">Tipo de consulta *</label>
-                    <select id="tipo" name="tipo_Consulta" required>
+                    <label for="tipo">Tipo de consulta <span data-final-required hidden>*</span></label>
+                    <select id="tipo" name="tipo_Consulta">
                         <option value="">Seleccionar tipo</option>
                         <?php
                         $tipos = [
@@ -256,6 +325,14 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
                             ? 'Consulta equina'
                             : 'Consulta general';
                         ?>
+                        <?php if (
+                            $valorAnterior('tipo_Consulta', $tipoSugerido) !== ''
+                            && !in_array($valorAnterior('tipo_Consulta', $tipoSugerido), $tipos, true)
+                        ): ?>
+                            <option value="<?= e($valorAnterior('tipo_Consulta')) ?>" selected>
+                                <?= e($valorAnterior('tipo_Consulta')) ?>
+                            </option>
+                        <?php endif; ?>
                         <?php foreach ($tipos as $tipo): ?>
                             <option value="<?= e($tipo) ?>"
                                 <?= $valorAnterior('tipo_Consulta', $tipoSugerido) === $tipo ? 'selected' : '' ?>>
@@ -266,16 +343,22 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
                 </div>
 
                 <div class="field field-full">
-                    <label for="motivo">Motivo de consulta *</label>
+                    <label for="motivo">Motivo de consulta <span data-final-required hidden>*</span></label>
                     <textarea id="motivo"
                               name="motivo_Consulta"
                               rows="3"
-                              placeholder="Describí el motivo de la consulta..."
-                              required><?= e($valorAnterior('motivo_Consulta')) ?></textarea>
+                              placeholder="Describí el motivo de la consulta..."><?= e($valorAnterior('motivo_Consulta')) ?></textarea>
                 </div>
             </div>
         </section>
 
+                </section>
+                <section class="consulta-tab-panel"
+                         id="panel-anamnesis"
+                         role="tabpanel"
+                         aria-labelledby="tab-anamnesis"
+                         data-consulta-panel="anamnesis"
+                         hidden>
         <section class="form-card">
             <div class="section-heading">
                 <div class="section-icon">04</div>
@@ -318,6 +401,13 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
             </div>
         </section>
 
+                </section>
+                <section class="consulta-tab-panel"
+                         id="panel-examen"
+                         role="tabpanel"
+                         aria-labelledby="tab-examen"
+                         data-consulta-panel="examen"
+                         hidden>
         <section class="form-card">
             <div class="section-heading">
                 <div class="section-icon">05</div>
@@ -491,16 +581,23 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
             </section>
         <?php endif; ?>
 
+                </section>
+                <section class="consulta-tab-panel"
+                         id="panel-diagnosticos"
+                         role="tabpanel"
+                         aria-labelledby="tab-diagnosticos"
+                         data-consulta-panel="diagnosticos"
+                         hidden>
         <section class="form-card">
             <div class="section-heading">
                 <div class="section-icon">07</div>
                 <div>
-                    <h2>Diagnóstico, paraclínicos y tratamiento</h2>
-                    <p>Completá los hallazgos y las indicaciones asociadas al caso.</p>
+                    <h2>Diagnósticos</h2>
+                    <p>Registrá el diagnóstico provisorio o definitivo de la consulta.</p>
                 </div>
             </div>
 
-            <h3 class="subsection-title">Diagnóstico</h3>
+            <h3 class="subsection-title">Evaluación diagnóstica</h3>
             <div class="form-grid">
                 <div class="field">
                     <label for="diagnostico_provisorio">Provisorio</label>
@@ -511,8 +608,16 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
                     <textarea id="diagnostico_definitivo" name="diagnostico_definitivo" rows="3"><?= e($valorAnterior('diagnostico_definitivo')) ?></textarea>
                 </div>
             </div>
+        </section>
 
-            <h3 class="subsection-title">Paraclínicos</h3>
+        <section class="form-card">
+            <div class="section-heading">
+                <div class="section-icon">08</div>
+                <div>
+                    <h2>Paraclínicos</h2>
+                    <p>Adjuntá estudios y resultados disponibles para esta consulta.</p>
+                </div>
+            </div>
             <div class="paraclinicos-lista" id="paraclinicos-lista">
                 <?php foreach (array_values($paraclinicosAnteriores) as $indice => $paraclinico): ?>
                     <?php
@@ -521,6 +626,9 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
                     $resultadoParaclinico = is_string($paraclinico['resultado'] ?? null) ? $paraclinico['resultado'] : '';
                     ?>
                     <div class="paraclinico-item" data-paraclinico-item>
+                        <input type="hidden"
+                               name="paraclinicos[<?= (int) $indice ?>][id]"
+                               value="<?= e(is_string($paraclinico['id'] ?? null) ? $paraclinico['id'] : '') ?>">
                         <div class="form-grid">
                             <div class="field">
                                 <label for="paraclinico-tipo-<?= (int) $indice ?>">Estudio o análisis</label>
@@ -543,6 +651,12 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
                                        name="paraclinicos[<?= (int) $indice ?>][archivo]"
                                        type="file"
                                        accept="application/pdf,image/jpeg,image/png,image/webp">
+                                <?php if (!empty($paraclinico['id']) && !empty($paraclinico['tiene_archivo'])): ?>
+                                    <a class="field-warning"
+                                       href="/centro-consultas/paraclinico?id=<?= (int) $paraclinico['id'] ?>"
+                                       target="_blank"
+                                       rel="noopener">Ver archivo actual (se conservará si no adjuntás uno nuevo).</a>
+                                <?php endif; ?>
                                 <small class="field-warning">Un PDF o imagen JPG, PNG o WebP de hasta 5 MB.</small>
                             </div>
                         </div>
@@ -552,7 +666,23 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
             </div>
             <button class="btn btn-secondary mt-2" type="button" id="agregar-paraclinico">+ Agregar otro paraclínico</button>
             <small class="field-warning" id="paraclinico-maximo" hidden>Se alcanzó el máximo de 20 paraclínicos.</small>
+        </section>
 
+                </section>
+                <section class="consulta-tab-panel"
+                         id="panel-tratamiento"
+                         role="tabpanel"
+                         aria-labelledby="tab-tratamiento"
+                         data-consulta-panel="tratamiento"
+                         hidden>
+        <section class="form-card">
+            <div class="section-heading">
+                <div class="section-icon">09</div>
+                <div>
+                    <h2>Tratamiento</h2>
+                    <p>Indicaciones y plan terapéutico para el paciente.</p>
+                </div>
+            </div>
             <h3 class="subsection-title">Tratamiento</h3>
             <div class="field">
                 <label for="tratamiento">Indicaciones y tratamiento</label>
@@ -560,12 +690,19 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
             </div>
         </section>
 
+                </section>
+                <section class="consulta-tab-panel"
+                         id="panel-finalizacion"
+                         role="tabpanel"
+                         aria-labelledby="tab-finalizacion"
+                         data-consulta-panel="finalizacion"
+                         hidden>
         <section class="form-card">
             <div class="section-heading">
-                <div class="section-icon">08</div>
+                <div class="section-icon">10</div>
                 <div>
-                    <h2>Pronóstico y reseña</h2>
-                    <p>Elegí las categorías aplicables y adjuntá la reseña gráfica si fue marcada.</p>
+                    <h2>Pronóstico y cierre</h2>
+                    <p>Revisá los datos finales y completá la reseña gráfica si corresponde.</p>
                 </div>
             </div>
 
@@ -597,16 +734,34 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
                        type="file"
                        accept="image/jpeg,image/png,image/webp">
                 <small class="field-warning">Imagen JPG, PNG o WebP de hasta 5 MB. El archivo se guarda en forma privada y solo usuarios autenticados pueden abrirlo.</small>
+                <?php foreach ($reseniasExistentes as $resenia): ?>
+                    <a class="field-warning"
+                       href="/centro-consultas/resenia?id=<?= (int) ($resenia['id'] ?? 0) ?>"
+                       target="_blank"
+                       rel="noopener">Ver reseña gráfica guardada</a>
+                <?php endforeach; ?>
             </div>
         </section>
 
+                </section>
+            </div>
+            <aside class="patient-summary" aria-live="polite">
+                <span class="patient-summary__eyebrow">RESUMEN DEL PACIENTE</span>
+                <div class="patient-summary__avatar" aria-hidden="true">+</div>
+                <strong id="paciente-resumen">Seleccioná un paciente</strong>
+                <span id="tutor-resumen">El resumen aparecerá aquí.</span>
+            </aside>
+        </div>
+
         <footer class="form-actions">
-            <a class="btn btn-secondary" href="/centro-consultas">
-                Cancelar
-            </a>
-            <button class="btn btn-primary" type="submit">
-                Registrar consulta
-            </button>
+            <button class="btn btn-secondary" type="button" data-tab-previous>Anterior</button>
+            <span class="form-actions__hint" data-step-label>Etapa 1 de 6</span>
+            <button class="btn btn-primary" type="button" data-tab-next>Siguiente etapa</button>
+            <button class="btn btn-save" type="submit" name="accion" value="guardar_avance"><?= $consultaPendiente ? 'Guardar cambios' : 'Guardar avance' ?></button>
+            <?php if (!$modoEdicion): ?>
+                <button class="btn btn-pending" type="submit" name="accion" value="guardar_pendiente">Guardar como pendiente</button>
+            <?php endif; ?>
+            <button class="btn btn-finish" type="submit" name="accion" value="finalizar">Finalizar consulta</button>
         </footer>
     </form>
 </main>

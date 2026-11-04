@@ -1,4 +1,4 @@
-/* PetCraft - vista de nueva consulta. No requiere JavaScript. */
+/* PetCraft - formulario clínico de nueva consulta. */
 .consulta-page {
     --green: #087653;
     --green-dark: #066345;
@@ -443,5 +443,399 @@
 
     .form-actions .btn {
         width: 100%;
+    }
+}
+
+.consulta-page {
+    background:
+        radial-gradient(ellipse at 92% 8%, rgb(18 107 255 / 5%), transparent 30%),
+        var(--background);
+}
+
+.consulta-page .page-header {
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.consulta-page .page-heading h1 {
+    color: #172c49;
+    font-size: clamp(24px, 2.2vw, 30px);
+    letter-spacing: -.5px;
+}
+
+.page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 2px;
+}
+
+.page-actions .btn,
+.form-actions .btn {
+    min-height: 38px;
+    padding: 8px 13px;
+}
+
+.consulta-page .species-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 24px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    border-radius: 9px;
+}
+
+.species-card .section-heading {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.species-card .section-icon {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+}
+
+.species-card .section-heading h2 {
+    font-size: 15px;
+}
+
+.species-card .section-heading p {
+    font-size: 12px;
+}
+
+.species-form {
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.species-form .field {
+    max-width: 220px;
+}
+
+.species-form .field label {
+    display: none;
+}
+
+.species-form .field select {
+    min-height: 38px;
+    padding: 7px 10px;
+}
+
+.species-form .btn {
+    min-height: 38px;
+    padding: 8px 12px;
+}
+
+.species-note {
+    display: none;
+}
+
+.species-current {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 7px 12px;
+    color: #35526e;
+    background: #f3f7fa;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.consulta-tabs {
+    display: flex;
+    gap: 5px;
+    padding: 7px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgb(18 44 73 / 3%);
+    scrollbar-width: thin;
+}
+
+.consulta-tab {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 12px;
+    color: #425975;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color .16s ease, background .16s ease, border-color .16s ease;
+}
+
+.consulta-tab:hover {
+    color: #0758dc;
+    background: #f2f7ff;
+}
+
+.consulta-tab.is-active {
+    color: #fff;
+    background: var(--blue);
+    box-shadow: 0 3px 8px rgb(18 107 255 / 19%);
+}
+
+.consulta-tab__number {
+    display: grid;
+    place-items: center;
+    width: 21px;
+    height: 21px;
+    color: #62758d;
+    background: #edf2f7;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.consulta-tab.is-active .consulta-tab__number {
+    color: var(--blue);
+    background: #fff;
+}
+
+.consulta-tab:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid rgb(18 107 255 / 30%);
+    outline-offset: 2px;
+}
+
+.consulta-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    align-items: start;
+    gap: 16px;
+}
+
+.consulta-tab-panels {
+    min-width: 0;
+}
+
+.consulta-tab-panel[hidden] {
+    display: none;
+}
+
+.consulta-page .consulta-tab-panel > .form-card {
+    margin-bottom: 0;
+    border-color: #e2e9ee;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgb(18 44 73 / 4%);
+    animation: consulta-panel-in .2s ease-out both;
+}
+
+.consulta-tab-panel > .form-card + .form-card {
+    margin-top: 14px;
+}
+
+.patient-summary {
+    position: sticky;
+    top: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 160px;
+    padding: 20px;
+    background: linear-gradient(150deg, #fff 5%, #f5faf8 100%);
+    border: 1px solid #dfece7;
+    border-radius: 10px;
+    box-shadow: 0 5px 16px rgb(18 73 54 / 5%);
+}
+
+.patient-summary__eyebrow {
+    color: #668174;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.patient-summary__avatar {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    margin: 17px 0 12px;
+    color: var(--green);
+    background: #e2f2eb;
+    border-radius: 12px;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.patient-summary strong {
+    color: #203951;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.patient-summary > span:last-child {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.consulta-page .form-actions {
+    align-items: center;
+    justify-content: flex-end;
+    gap: 9px;
+    padding: 14px 0 24px;
+}
+
+.form-actions__hint {
+    margin-right: auto;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.btn-save {
+    color: #087653;
+    background: #fff;
+    border-color: #15916b;
+}
+
+.btn-save:hover {
+    color: #fff;
+    background: #087653;
+}
+
+.btn-pending {
+    color: #805600;
+    background: #fffaf0;
+    border-color: #d7a640;
+}
+
+.btn-pending:hover {
+    color: #5f4000;
+    background: #fff0c7;
+    border-color: #bd8a20;
+}
+
+.btn-finish {
+    color: #fff;
+    background: #087653;
+    border-color: #087653;
+}
+
+.btn-finish:hover {
+    background: #066345;
+    border-color: #066345;
+}
+
+.btn:disabled {
+    opacity: .48;
+    cursor: not-allowed;
+}
+
+@keyframes consulta-panel-in {
+    from {
+        opacity: .75;
+        transform: translateY(3px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 1050px) {
+    .consulta-workspace {
+        grid-template-columns: minmax(0, 1fr) 220px;
+    }
+
+    .consulta-tab {
+        padding-inline: 9px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 760px) {
+    .consulta-page .page-header {
+        flex-direction: column;
+    }
+
+    .page-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .consulta-workspace {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .patient-summary {
+        position: static;
+        grid-row: 1;
+        min-height: 0;
+        padding: 14px 16px;
+    }
+
+    .patient-summary__avatar {
+        display: none;
+    }
+
+    .patient-summary__eyebrow {
+        margin-bottom: 6px;
+    }
+
+    .consulta-page .form-actions {
+        justify-content: stretch;
+        flex-wrap: wrap;
+    }
+
+    .form-actions__hint {
+        flex: 1 0 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .species-card .section-heading {
+        flex: 1 0 100%;
+    }
+
+    .species-form {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .species-form .field {
+        max-width: none;
+    }
+
+    .species-form .btn {
+        white-space: nowrap;
+    }
+
+    .consulta-tabs {
+        gap: 3px;
+        padding: 5px;
+    }
+
+    .consulta-tab {
+        gap: 6px;
+        min-height: 38px;
+        padding: 7px 9px;
+    }
+
+    .consulta-tab__number {
+        width: 19px;
+        height: 19px;
+    }
+
+    .page-actions .btn {
+        flex: 1 1 auto;
     }
 }

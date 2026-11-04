@@ -38,6 +38,41 @@ class Centro_ConsultasController extends Controller
         );
     }
 
+    public function editar(): void
+    {
+        Auth::requireLogin();
+        if (!$this->puedeCrearConsultas()) {
+            http_response_code(403);
+            echo 'No tenés permisos para editar consultas.';
+            return;
+        }
+
+        $consultaId = $_GET['id'] ?? '';
+        if (!is_string($consultaId) || !ctype_digit($consultaId) || (int) $consultaId < 1) {
+            http_response_code(400);
+            echo 'El identificador de la consulta no es válido.';
+            return;
+        }
+
+        $consultaModel = $this->model('ConsultaModel');
+        $consultaEdicion = $consultaModel->obtenerDatosEdicion((int) $consultaId);
+        if ($consultaEdicion === null) {
+            http_response_code(404);
+            echo 'La consulta no existe, está finalizada o no se puede editar.';
+            return;
+        }
+
+        $this->mostrarFormularioNuevaConsulta(
+            $consultaEdicion['especie'],
+            null,
+            $consultaEdicion['valores'],
+            null,
+            (int) $consultaEdicion['id'],
+            $consultaEdicion['resenias'],
+            $consultaEdicion['estado']
+        );
+    }
+
     public function guardar(): void
     {
         Auth::requireLogin();
@@ -59,6 +94,59 @@ class Centro_ConsultasController extends Controller
             http_response_code(403);
             $this->mostrarFormularioNuevaConsulta($especie, 'El formulario venció. Revisá los datos y volvé a enviarlo.', $_POST);
             return;
+        }
+
+        $accion = $_POST['accion'] ?? '';
+        if (!is_string($accion) || !in_array($accion, ['guardar_pendiente', 'guardar_avance', 'finalizar'], true)) {
+            http_response_code(422);
+            $this->mostrarFormularioNuevaConsulta($especie, 'La acción seleccionada no es válida.', $_POST);
+            return;
+        }
+        $esFinalizacion = $accion === 'finalizar';
+        $guardarComoPendiente = $accion === 'guardar_pendiente';
+
+        $consultaIdEdicion = $_POST['consulta_id'] ?? '';
+        if (
+            !is_string($consultaIdEdicion)
+            || ($consultaIdEdicion !== '' && (!ctype_digit($consultaIdEdicion) || (int) $consultaIdEdicion < 1))
+        ) {
+            http_response_code(422);
+            $this->mostrarFormularioNuevaConsulta($especie, 'El identificador de la consulta no es válido.', $_POST);
+            return;
+        }
+        $consultaIdEdicion = $consultaIdEdicion === '' ? null : (int) $consultaIdEdicion;
+        if ($guardarComoPendiente && $consultaIdEdicion !== null) {
+            http_response_code(422);
+            $this->mostrarFormularioNuevaConsulta(
+                $especie,
+                'La acción “Guardar como pendiente” solo está disponible al crear una consulta.',
+                $_POST
+            );
+            return;
+        }
+
+        $tipoConsultaExistente = null;
+        if ($consultaIdEdicion !== null) {
+            $consultaEditable = $this->model('ConsultaModel')->obtenerConsultaEditable($consultaIdEdicion);
+            if ($consultaEditable === null) {
+                http_response_code(409);
+                $this->mostrarFormularioNuevaConsulta(
+                    $especie,
+                    'La consulta ya no está pendiente o en curso y no se puede editar.',
+                    $_POST
+                );
+                return;
+            }
+            $tipoConsultaExistente = $consultaEditable['tipo'];
+        }
+        $estadoConsultaGuardar = 'En curso';
+        if ($esFinalizacion) {
+            $estadoConsultaGuardar = 'Finalizada';
+        } elseif (
+            $guardarComoPendiente
+            || ($consultaIdEdicion !== null && strtolower(trim($consultaEditable['estado'])) === 'pendiente')
+        ) {
+            $estadoConsultaGuardar = 'Pendiente';
         }
 
         $paciente = $_POST['id_Paciente'] ?? '';
@@ -86,13 +174,21 @@ class Centro_ConsultasController extends Controller
             || ($profesor !== '' && (!ctype_digit($profesor) || (int) $profesor < 1))
             || !is_string($fechaHora)
             || !is_string($tipo)
-            || !in_array($tipo, ['Consulta general', 'Control', 'Consulta equina', 'Hospitalización'], true)
+            || (
+                $tipo !== ''
+                && !in_array($tipo, ['Consulta general', 'Control', 'Consulta equina', 'Hospitalización'], true)
+                && $tipo !== $tipoConsultaExistente
+            )
+            || ($esFinalizacion && $tipo === '')
             || !is_string($motivo)
-            || trim($motivo) === ''
+            || ($esFinalizacion && trim($motivo) === '')
             || strlen(trim($motivo)) > 65535
         ) {
             http_response_code(422);
-            $this->mostrarFormularioNuevaConsulta($especie, 'Completá los datos obligatorios con valores válidos.', $_POST);
+            $mensajeError = $esFinalizacion
+                ? 'Para finalizar, completá los datos obligatorios con valores válidos.'
+                : 'Seleccioná un paciente e ingresá una fecha y hora válidas para guardar el avance.';
+            $this->mostrarFormularioNuevaConsulta($especie, $mensajeError, $_POST);
             return;
         }
 
@@ -135,8 +231,8 @@ class Centro_ConsultasController extends Controller
         ];
         $datos = [
             'fecha_hora_Consulta' => $fechaValidada->format('Y-m-d H:i:s'),
-            'tipo_Consulta' => $tipo,
-            'motivo_Consulta' => trim($motivo),
+            'tipo_Consulta' => $tipo === '' ? null : $tipo,
+            'motivo_Consulta' => trim($motivo) === '' ? null : trim($motivo),
         ];
 
         foreach ($nombresCampos as $nombreCampo) {
@@ -222,7 +318,14 @@ class Centro_ConsultasController extends Controller
             }
 
             if (trim($tipoParaclinico) !== '') {
+                $idParaclinico = $paraclinico['id'] ?? '';
+                if (!is_string($idParaclinico) || ($idParaclinico !== '' && !ctype_digit($idParaclinico))) {
+                    http_response_code(422);
+                    $this->mostrarFormularioNuevaConsulta($especie, 'Uno de los paraclínicos enviados no es válido.', $_POST);
+                    return;
+                }
                 $paraclinicos[] = [
+                    'id' => $idParaclinico,
                     'tipo' => trim($tipoParaclinico),
                     'resultado' => trim($resultadoParaclinico),
                     'indice_archivo' => $indice,
@@ -297,7 +400,9 @@ class Centro_ConsultasController extends Controller
                 (int) $paciente,
                 $especie,
                 array_map('intval', $estudiantes),
-                $profesor === '' ? null : (int) $profesor
+                $profesor === '' ? null : (int) $profesor,
+                $estadoConsultaGuardar,
+                $consultaIdEdicion
             );
         } catch (InvalidArgumentException $error) {
             $this->eliminarArchivoResenia($archivoResenia);
@@ -321,6 +426,17 @@ class Centro_ConsultasController extends Controller
             return;
         }
 
+        if ($consultaIdEdicion !== null) {
+            $_SESSION['flash_success'] = $esFinalizacion
+                ? 'La consulta se actualizó y finalizó correctamente.'
+                : 'Los cambios de la consulta se guardaron correctamente.';
+        } elseif ($esFinalizacion) {
+            $_SESSION['flash_success'] = 'La consulta se finalizó correctamente.';
+        } elseif ($guardarComoPendiente) {
+            $_SESSION['flash_success'] = 'La consulta se guardó como pendiente.';
+        } else {
+            $_SESSION['flash_success'] = 'El avance se guardó correctamente y la consulta quedó En curso.';
+        }
         header('Location: ' . url('centro-consultas') . '?consulta=' . $consultaId);
         exit;
     }
@@ -665,9 +781,28 @@ class Centro_ConsultasController extends Controller
         string $especie,
         ?string $error = null,
         array $oldInput = [],
-        ?string $mensajePaciente = null
+        ?string $mensajePaciente = null,
+        ?int $consultaEdicionId = null,
+        array $reseniasExistentes = [],
+        ?string $estadoConsultaEdicion = null
     ): void {
         $consultaModel = $this->model('ConsultaModel');
+        if (
+            $consultaEdicionId === null
+            && is_string($oldInput['consulta_id'] ?? null)
+            && ctype_digit($oldInput['consulta_id'])
+            && (int) $oldInput['consulta_id'] > 0
+        ) {
+            $consultaEdicionId = (int) $oldInput['consulta_id'];
+        }
+        if ($consultaEdicionId !== null && !$reseniasExistentes) {
+            $datosEdicion = $consultaModel->obtenerDatosEdicion($consultaEdicionId);
+            $reseniasExistentes = $datosEdicion['resenias'] ?? [];
+            $estadoConsultaEdicion = $datosEdicion['estado'] ?? $estadoConsultaEdicion;
+        } elseif ($consultaEdicionId !== null && $estadoConsultaEdicion === null) {
+            $datosEdicion = $consultaModel->obtenerDatosEdicion($consultaEdicionId);
+            $estadoConsultaEdicion = $datosEdicion['estado'] ?? null;
+        }
         $this->view(
             'dashboard/nueva-consulta',
             [
@@ -679,6 +814,9 @@ class Centro_ConsultasController extends Controller
                 'errorFormulario' => $error,
                 'mensajePaciente' => $mensajePaciente,
                 'oldInput' => $oldInput,
+                'consultaEdicionId' => $consultaEdicionId,
+                'estadoConsultaEdicion' => $estadoConsultaEdicion,
+                'reseniasExistentes' => $reseniasExistentes,
             ],
             'app',
             ['app-layout.css', 'nueva-consulta.css'],
@@ -691,6 +829,179 @@ class Centro_ConsultasController extends Controller
      * Lee `?busqueda=` de la URL y muestra coincidencias de pacientes.
      * Si falta el término, deja el centro listo para continuar el desarrollo.
      */
+    public function descargarHistoriaClinica(): void
+    {
+        Auth::requireLogin();
+
+        $pacienteId = $_GET['paciente'] ?? null;
+        if (!is_string($pacienteId) || !ctype_digit($pacienteId) || (int) $pacienteId < 1) {
+            http_response_code(400);
+            echo 'El identificador del paciente no es válido.';
+            return;
+        }
+
+        if (!function_exists('iconv')) {
+            error_log('No se puede generar la historia clínica PDF: la extensión iconv no está disponible.');
+            http_response_code(500);
+            echo 'No se pudo generar la historia clínica porque falta una extensión requerida del servidor.';
+            return;
+        }
+
+        try {
+            $historial = $this->model('ConsultaModel')->obtenerHistorialClinicoPaciente((int) $pacienteId);
+        } catch (mysqli_sql_exception $error) {
+            error_log('No se pudo consultar la historia clínica del paciente: ' . $error->getMessage());
+            http_response_code(500);
+            echo 'No se pudo generar la historia clínica. Intentá nuevamente más tarde.';
+            return;
+        }
+
+        if ($historial === null) {
+            http_response_code(404);
+            echo 'No se encontró el paciente solicitado.';
+            return;
+        }
+
+        require_once ROOT_PATH . '/backend/libs/fpdf/fpdf.php';
+
+        $pdf = new class extends FPDF {
+            public function Header(): void
+            {
+                $this->SetFont('Arial', 'B', 10);
+                $this->SetTextColor(54, 74, 81);
+                $this->Cell(0, 7, 'POLICLINICO VETERINARIO  |  HISTORIA CLINICA', 0, 1, 'R');
+                $this->SetDrawColor(31, 117, 128);
+                $this->SetLineWidth(0.5);
+                $this->Line(16, 17, 194, 17);
+                $this->Ln(5);
+            }
+
+            public function Footer(): void
+            {
+                $this->SetY(-14);
+                $this->SetDrawColor(210, 220, 220);
+                $this->Line(16, $this->GetY(), 194, $this->GetY());
+                $this->SetY(-12);
+                $this->SetFont('Arial', '', 8);
+                $this->SetTextColor(100, 110, 110);
+                $this->Cell(0, 8, 'Documento generado el ' . date('d/m/Y H:i') . '  |  Pagina ' . $this->PageNo(), 0, 0, 'R');
+            }
+        };
+        $pdf->SetMargins(16, 24, 16);
+        $pdf->SetAutoPageBreak(true, 19);
+        $pdf->SetTitle('Historia clinica - ' . $historial['paciente']['nombre'], true);
+        $pdf->SetAuthor('Policlinico Veterinario', true);
+        $pdf->AddPage();
+
+        $textoPdf = static function ($valor): string {
+            $texto = trim((string) ($valor ?? ''));
+            if ($texto === '') {
+                return 'No registrado';
+            }
+
+            $convertido = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $texto);
+            if ($convertido === false) {
+                throw new RuntimeException('No se pudo convertir un dato de la historia clínica para el PDF.');
+            }
+
+            return $convertido;
+        };
+        $agregarSeccion = static function (string $titulo, array $lineas) use ($pdf, $textoPdf): void {
+            $pdf->SetFont('Arial', 'B', 11);
+            $pdf->SetTextColor(31, 96, 105);
+            $pdf->Cell(0, 8, $textoPdf($titulo), 0, 1, 'L');
+            $pdf->SetFont('Arial', '', 9);
+            $pdf->SetTextColor(40, 48, 50);
+            foreach ($lineas as $etiqueta => $valor) {
+                if ($valor === null || trim((string) $valor) === '') {
+                    continue;
+                }
+                $pdf->SetFont('Arial', 'B', 9);
+                $pdf->Write(5, $textoPdf((string) $etiqueta . ': '));
+                $pdf->SetFont('Arial', '', 9);
+                $pdf->MultiCell(0, 5, $textoPdf($valor));
+            }
+            $pdf->Ln(2);
+        };
+
+        $paciente = $historial['paciente'];
+        $agregarSeccion('Datos del paciente', [
+            'Nombre' => $paciente['nombre'],
+            'Especie' => $paciente['especie'],
+            'Raza' => $paciente['raza'],
+            'Sexo' => $paciente['sexo'],
+            'Fecha de nacimiento' => $paciente['fecha_nacimiento'],
+            'Edad registrada' => $paciente['edad'],
+            'Color' => $paciente['color'],
+            'Microchip' => $paciente['chip'],
+        ]);
+        $agregarSeccion('Datos del tutor', [
+            'Nombre' => $paciente['tutor'],
+            'Documento' => $paciente['documento_tutor'],
+            'Teléfono' => $paciente['telefono_tutor'],
+            'Correo' => $paciente['email_tutor'],
+            'Dirección' => $paciente['direccion_tutor'],
+        ]);
+
+        $seccionesConsulta = [
+            'participantes' => 'Profesionales participantes',
+            'anamnesis' => 'Anamnesis',
+            'examenes_generales' => 'Examen general',
+            'examenes_particulares' => 'Exámenes particulares',
+            'examenes_equinos' => 'Evaluación equina',
+            'diagnosticos' => 'Diagnósticos',
+            'tratamientos' => 'Tratamientos',
+            'paraclinicos' => 'Estudios paraclínicos',
+            'pronosticos' => 'Pronósticos',
+            'hospitalizaciones' => 'Hospitalización',
+            'resenias' => 'Archivos de reseña asociados',
+        ];
+
+        if ($historial['consultas'] === []) {
+            $pdf->SetFont('Arial', 'I', 10);
+            $pdf->MultiCell(0, 6, $textoPdf('El paciente aún no tiene consultas registradas.'));
+        }
+
+        foreach ($historial['consultas'] as $detalle) {
+            $consulta = $detalle['consulta'];
+            $fecha = strtotime((string) ($consulta['Fecha y hora'] ?? ''));
+            $titulo = 'Consulta #' . (int) $consulta['id'];
+            if ($fecha !== false) {
+                $titulo .= ' - ' . date('d/m/Y H:i', $fecha);
+            }
+            $agregarSeccion($titulo, [
+                'Tipo' => $consulta['Tipo de consulta'],
+                'Estado' => $consulta['Estado'],
+                'Motivo' => $consulta['Motivo'],
+                'Resultado final' => $consulta['Resultado final'],
+                'Próximo control' => $consulta['Próximo control'],
+                'Fecha de finalización' => $consulta['Fecha de finalización'],
+            ]);
+
+            foreach ($seccionesConsulta as $clave => $etiqueta) {
+                $registros = $detalle[$clave] ?? [];
+                $lineas = [];
+                foreach ($registros as $indice => $registro) {
+                    foreach ($registro as $campo => $valor) {
+                        if ($campo === 'id' || $valor === null || trim((string) $valor) === '') {
+                            continue;
+                        }
+                        $nombreCampo = count($registros) > 1
+                            ? 'Registro ' . ($indice + 1) . ' - ' . $campo
+                            : (string) $campo;
+                        $lineas[$nombreCampo] = $valor;
+                    }
+                }
+                if ($lineas !== []) {
+                    $agregarSeccion($etiqueta, $lineas);
+                }
+            }
+        }
+
+        $nombreArchivo = 'historia-clinica-paciente-' . (int) $paciente['id'] . '.pdf';
+        $pdf->Output('D', $nombreArchivo);
+    }
+
     public function index(): void
     {
         Auth::requireLogin();
@@ -704,18 +1015,18 @@ class Centro_ConsultasController extends Controller
             $consultaId = $_GET['consulta'];
             if (!is_string($consultaId) || !ctype_digit($consultaId) || (int) $consultaId < 1) {
                 http_response_code(400);
-                $this->mostrarDetalleConsulta(null, 'El identificador de la consulta no es válido.', $mensajeEstado, $errorEstado);
+                $this->mostrarDetalleConsulta(null, 'El identificador de la consulta no es válido.', $mensajeEstado, $errorEstado, $mensajeExito);
                 return;
             }
 
             $detalle = $this->model('ConsultaModel')->obtenerDetalle((int) $consultaId);
             if ($detalle === null) {
                 http_response_code(404);
-                $this->mostrarDetalleConsulta(null, 'No se encontró la consulta solicitada.', $mensajeEstado, $errorEstado);
+                $this->mostrarDetalleConsulta(null, 'No se encontró la consulta solicitada.', $mensajeEstado, $errorEstado, $mensajeExito);
                 return;
             }
 
-            $this->mostrarDetalleConsulta($detalle, null, $mensajeEstado, $errorEstado);
+            $this->mostrarDetalleConsulta($detalle, null, $mensajeEstado, $errorEstado, $mensajeExito);
             return;
         }
 
@@ -833,7 +1144,8 @@ class Centro_ConsultasController extends Controller
         ?array $detalle,
         ?string $errorDetalle = null,
         ?string $mensajeEstado = null,
-        ?string $errorEstado = null
+        ?string $errorEstado = null,
+        ?string $mensajeExito = null
     ): void
     {
         $this->view(
@@ -844,6 +1156,7 @@ class Centro_ConsultasController extends Controller
                 'csrfToken' => Csrf::token(),
                 'mensajeEstado' => $mensajeEstado,
                 'errorEstado' => $errorEstado,
+                'mensajeExito' => $mensajeExito,
             ],
             'app',
             ['app-layout.css', 'centro-consulta.css'],

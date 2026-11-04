@@ -9,6 +9,11 @@ class ConsultaModel extends Model
      */
     public function listarPacientesPorEspecie(string $especie): array
     {
+        $especiesBase = ['Perro' => 'Canino', 'Gato' => 'Felino', 'Equino' => 'Equino'];
+        if (!isset($especiesBase[$especie])) {
+            throw new InvalidArgumentException('La especie seleccionada no es válida.');
+        }
+        $especieBase = $especiesBase[$especie];
         $stmt = $this->db->prepare(
             "SELECT
                 p.id_Paciente,
@@ -23,13 +28,233 @@ class ConsultaModel extends Model
              WHERE e.nombre_Especie = ?
              ORDER BY p.nombre_Paciente ASC"
         );
-        $stmt->bind_param('s', $especie);
+        $stmt->bind_param('s', $especieBase);
         $stmt->execute();
 
         $pacientes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
 
         return $pacientes;
+    }
+
+    /**
+     * Carga el borrador clínico de una consulta pendiente o en curso.
+     */
+    public function obtenerDatosEdicion(int $consultaId): ?array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT
+                c.id_Consulta,
+                c.id_Paciente,
+                c.tipo_Consulta,
+                c.fecha_hora_Consulta,
+                c.motivo_Consulta,
+                c.estado_proceso_Consulta,
+                e.nombre_Especie
+             FROM CONSULTA c
+             INNER JOIN PACIENTE p ON p.id_Paciente = c.id_Paciente
+             INNER JOIN RAZA r ON r.id_Raza = p.id_Raza
+             INNER JOIN ESPECIE e ON e.id_Especie = r.id_Especie
+             WHERE c.id_Consulta = ?
+               AND LOWER(TRIM(c.estado_proceso_Consulta)) IN ('pendiente', 'en curso')
+             LIMIT 1"
+        );
+        $stmt->bind_param('i', $consultaId);
+        $stmt->execute();
+        $consulta = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if ($consulta === null) {
+            return null;
+        }
+
+        $campos = [
+            'sanitaria_Anamnesis',
+            'ambiental_Anamnesis',
+            'remota_fisiologica_Anamnesis',
+            'remota_patologica_Anamnesis',
+            'proxima_fisiologica_Anamnesis',
+            'proxima_patologica_Anamnesis',
+            'peso_ExamenG',
+            'CC_ExamenG',
+            'TR_ExamenG',
+            'FC_ExamenG',
+            'FR_ExamenG',
+            'TLLC_ExamenG',
+            'sensorio_ExamenG',
+            'facies_ExamenG',
+            'piel_subcutaneo_ExamenG',
+            'mucosas_ExamenG',
+            'grandes_funciones_ExamenG',
+            'actitudes_anomalas_ExamenG',
+            'hidratacion_ExamenG',
+            'ganglios_linfaticos_ExamenG',
+            'aparentes_ExamenG',
+            'temperatura_cascos_ExamenEq',
+            'pulso_digital_ExamenEq',
+            'senos_ExamenEq',
+            'csd_ExamenEq',
+            'cid_ExamenEq',
+            'csi_ExamenEq',
+            'cii_ExamenEq',
+        ];
+        $valores = [
+            'id_Paciente' => (string) $consulta['id_Paciente'],
+            'tipo_Consulta' => (string) ($consulta['tipo_Consulta'] ?? ''),
+            'fecha_hora_Consulta' => date('Y-m-d\TH:i', strtotime($consulta['fecha_hora_Consulta'])),
+            'motivo_Consulta' => (string) ($consulta['motivo_Consulta'] ?? ''),
+        ];
+        foreach ($campos as $campo) {
+            $valores[$campo] = '';
+        }
+        $valores['diagnostico_provisorio'] = '';
+        $valores['diagnostico_definitivo'] = '';
+        $valores['tratamiento'] = '';
+        $valores['estudiantes'] = [];
+        $valores['id_Profesor'] = '';
+        $valores['pronosticos'] = [];
+        $valores['pronosticos_legacy'] = [];
+        $valores['paraclinicos'] = [];
+
+        $anamnesis = $this->obtenerFilasDetalle(
+            "SELECT sanitaria_Anamnesis, ambiental_Anamnesis,
+                    remota_fisiologica_Anamnesis, remota_patologica_Anamnesis,
+                    proxima_fisiologica_Anamnesis, proxima_patologica_Anamnesis
+             FROM ANAMNESIS WHERE id_Consulta = ? ORDER BY id_Anamnesis LIMIT 1",
+            $consultaId
+        );
+        if ($anamnesis) {
+            foreach (array_slice($campos, 0, 6) as $campo) {
+                $valores[$campo] = (string) ($anamnesis[0][$campo] ?? '');
+            }
+        }
+
+        $examen = $this->obtenerFilasDetalle(
+            "SELECT eg.peso_ExamenG, eg.CC_ExamenG, eg.TR_ExamenG, eg.FC_ExamenG,
+                    eg.FR_ExamenG, eg.TLLC_ExamenG, eg.sensorio_ExamenG, eg.facies_ExamenG,
+                    eg.piel_subcutaneo_ExamenG, eg.mucosas_ExamenG, eg.grandes_funciones_ExamenG,
+                    eg.actitudes_anomalas_ExamenG, eg.hidratacion_ExamenG,
+                    eg.ganglios_linfaticos_ExamenG, eg.aparentes_ExamenG,
+                    eq.temperatura_cascos_ExamenEq, eq.pulso_digital_ExamenEq,
+                    eq.senos_ExamenEq, eq.csd_ExamenEq, eq.cid_ExamenEq,
+                    eq.csi_ExamenEq, eq.cii_ExamenEq
+             FROM EXAMEN_GENERAL eg
+             LEFT JOIN EXAMEN_EQUINO eq ON eq.id_ExamenG = eg.id_ExamenG
+             WHERE eg.id_Consulta = ? ORDER BY eg.id_ExamenG LIMIT 1",
+            $consultaId
+        );
+        if ($examen) {
+            foreach (array_slice($campos, 6) as $campo) {
+                $valores[$campo] = (string) ($examen[0][$campo] ?? '');
+            }
+        }
+
+        foreach ($this->obtenerFilasDetalle(
+            "SELECT uc.id_Usuario, LOWER(TRIM(u.rol_Usuario)) AS rol
+             FROM USUARIO_CONSULTA uc
+             INNER JOIN USUARIO u ON u.id_Usuario = uc.id_Usuario
+             WHERE uc.id_Consulta = ?",
+            $consultaId
+        ) as $participante) {
+            if ($participante['rol'] === 'estudiante') {
+                $valores['estudiantes'][] = (string) $participante['id_Usuario'];
+            } elseif ($participante['rol'] === 'profesor') {
+                $valores['id_Profesor'] = (string) $participante['id_Usuario'];
+            }
+        }
+
+        foreach ($this->obtenerFilasDetalle(
+            'SELECT tipo_Diagnostico, descripcion_Diagnostico
+             FROM DIAGNOSTICO WHERE id_Consulta = ? ORDER BY id_Diagnostico',
+            $consultaId
+        ) as $diagnostico) {
+            $tipo = strtolower(trim((string) $diagnostico['tipo_Diagnostico']));
+            if (in_array($tipo, ['provisorio', 'presuntivo'], true)) {
+                $valores['diagnostico_provisorio'] = (string) $diagnostico['descripcion_Diagnostico'];
+            } elseif ($tipo === 'definitivo') {
+                $valores['diagnostico_definitivo'] = (string) $diagnostico['descripcion_Diagnostico'];
+            }
+        }
+
+        $tratamientos = $this->obtenerFilasDetalle(
+            'SELECT descripcion_Tratamiento FROM TRATAMIENTO WHERE id_Consulta = ? ORDER BY id_Tratamiento',
+            $consultaId
+        );
+        $valores['tratamiento'] = implode("\n", array_map(
+            static fn(array $tratamiento): string => (string) $tratamiento['descripcion_Tratamiento'],
+            $tratamientos
+        ));
+
+        foreach ($this->obtenerFilasDetalle(
+            'SELECT tipo_Pronostico FROM PRONOSTICO WHERE id_Consulta = ? ORDER BY id_Pronostico',
+            $consultaId
+        ) as $pronostico) {
+            $tipo = (string) $pronostico['tipo_Pronostico'];
+            if (in_array($tipo, ['Vital', 'Reproductivo', 'Deportivo', 'Reservado', 'Malo'], true)) {
+                $valores['pronosticos'][] = $tipo;
+            } else {
+                $valores['pronosticos_legacy'][] = $tipo;
+            }
+        }
+
+        foreach ($this->obtenerFilasDetalle(
+            'SELECT id_Paraclinico, tipo_Paraclinico, resultado_Paraclinico,
+                    archivoURL_Paraclinico
+             FROM PARACLINICO WHERE id_Consulta = ? ORDER BY id_Paraclinico',
+            $consultaId
+        ) as $paraclinico) {
+            $valores['paraclinicos'][] = [
+                'id' => (string) $paraclinico['id_Paraclinico'],
+                'tipo' => (string) $paraclinico['tipo_Paraclinico'],
+                'resultado' => (string) ($paraclinico['resultado_Paraclinico'] ?? ''),
+                'tiene_archivo' => $paraclinico['archivoURL_Paraclinico'] !== null,
+            ];
+        }
+        if (!$valores['paraclinicos']) {
+            $valores['paraclinicos'] = [[]];
+        }
+
+        $resenias = $this->obtenerFilasDetalle(
+            "SELECT r.id_Reseña AS id
+             FROM `RESEÑA` r
+             INNER JOIN EXAMEN_GENERAL eg ON eg.id_ExamenG = r.id_ExamenG
+             WHERE eg.id_Consulta = ? ORDER BY r.id_Reseña",
+            $consultaId
+        );
+
+        return [
+            'id' => (int) $consulta['id_Consulta'],
+            'especie' => [
+                'Canino' => 'Perro',
+                'Felino' => 'Gato',
+                'Equino' => 'Equino',
+            ][$consulta['nombre_Especie']] ?? (string) $consulta['nombre_Especie'],
+            'estado' => (string) $consulta['estado_proceso_Consulta'],
+            'valores' => $valores,
+            'resenias' => $resenias,
+        ];
+    }
+
+    public function obtenerConsultaEditable(int $consultaId): ?array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT tipo_Consulta, estado_proceso_Consulta
+             FROM CONSULTA
+             WHERE id_Consulta = ?
+               AND LOWER(TRIM(estado_proceso_Consulta)) IN ('pendiente', 'en curso')
+             LIMIT 1"
+        );
+        $stmt->bind_param('i', $consultaId);
+        $stmt->execute();
+        $consulta = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $consulta === null
+            ? null
+            : [
+                'tipo' => is_string($consulta['tipo_Consulta'] ?? null) ? $consulta['tipo_Consulta'] : null,
+                'estado' => (string) $consulta['estado_proceso_Consulta'],
+            ];
     }
 
     /**
@@ -44,8 +269,14 @@ class ConsultaModel extends Model
         int $pacienteId,
         string $especie,
         array $estudianteIds = [],
-        ?int $profesorId = null
+        ?int $profesorId = null,
+        string $estado = 'Pendiente',
+        ?int $consultaIdEdicion = null
     ): int {
+        if (!in_array($estado, ['Pendiente', 'En curso', 'Finalizada'], true)) {
+            throw new InvalidArgumentException('El estado inicial de la consulta no es válido.');
+        }
+
         $this->db->begin_transaction();
 
         try {
@@ -65,7 +296,9 @@ class ConsultaModel extends Model
                  WHERE p.id_Paciente = ? AND e.nombre_Especie = ?
                  LIMIT 1"
             );
-            $stmt->bind_param('is', $pacienteId, $especie);
+            $especiesBase = ['Perro' => 'Canino', 'Gato' => 'Felino', 'Equino' => 'Equino'];
+            $especieBase = $especiesBase[$especie] ?? '';
+            $stmt->bind_param('is', $pacienteId, $especieBase);
             $stmt->execute();
             $pacienteExiste = $stmt->get_result()->fetch_assoc() !== null;
             $stmt->close();
@@ -74,13 +307,101 @@ class ConsultaModel extends Model
                 throw new InvalidArgumentException('El paciente no existe o no corresponde a la especie seleccionada.');
             }
 
-            $consultaId = $this->ejecutarInsert(
-                "INSERT INTO CONSULTA
-                    (id_Paciente, tipo_Consulta, fecha_hora_Consulta, estado_proceso_Consulta, motivo_Consulta)
-                 VALUES (?, ?, ?, 'Pendiente', ?)",
-                'isss',
-                [$pacienteId, $datos['tipo_Consulta'], $datos['fecha_hora_Consulta'], $datos['motivo_Consulta']]
-            );
+            $examenGeneralId = null;
+            $archivosParaclinicosExistentes = [];
+            $pronosticosLegacy = [];
+            if ($consultaIdEdicion !== null) {
+                $stmt = $this->db->prepare(
+                    "SELECT id_Consulta
+                     FROM CONSULTA
+                     WHERE id_Consulta = ?
+                       AND LOWER(TRIM(estado_proceso_Consulta)) IN ('pendiente', 'en curso')
+                     FOR UPDATE"
+                );
+                $stmt->bind_param('i', $consultaIdEdicion);
+                $stmt->execute();
+                $consultaEditable = $stmt->get_result()->fetch_assoc() !== null;
+                $stmt->close();
+                if (!$consultaEditable) {
+                    throw new InvalidArgumentException('Solo se pueden editar consultas pendientes o en curso.');
+                }
+
+                $consultaId = $consultaIdEdicion;
+                $stmt = $this->db->prepare(
+                    'SELECT id_Paraclinico, archivoURL_Paraclinico
+                     FROM PARACLINICO WHERE id_Consulta = ?'
+                );
+                $stmt->bind_param('i', $consultaId);
+                $stmt->execute();
+                foreach ($stmt->get_result()->fetch_all(MYSQLI_ASSOC) as $archivo) {
+                    $archivosParaclinicosExistentes[(int) $archivo['id_Paraclinico']] =
+                        $archivo['archivoURL_Paraclinico'];
+                }
+                $stmt->close();
+
+                $stmt = $this->db->prepare(
+                    'SELECT id_ExamenG FROM EXAMEN_GENERAL
+                     WHERE id_Consulta = ? ORDER BY id_ExamenG LIMIT 1'
+                );
+                $stmt->bind_param('i', $consultaId);
+                $stmt->execute();
+                $examenExistente = $stmt->get_result()->fetch_assoc();
+                $stmt->close();
+                if ($examenExistente !== null) {
+                    $examenGeneralId = (int) $examenExistente['id_ExamenG'];
+                    $this->ejecutarDelete(
+                        'DELETE FROM EXAMEN_EQUINO WHERE id_ExamenG = ?',
+                        $examenGeneralId
+                    );
+                }
+
+                $pronosticosLegacy = $this->obtenerFilasDetalle(
+                    "SELECT tipo_Pronostico FROM PRONOSTICO
+                     WHERE id_Consulta = ?
+                       AND tipo_Pronostico NOT IN ('Vital', 'Reproductivo', 'Deportivo', 'Reservado', 'Malo')",
+                    $consultaId
+                );
+                $pronosticosLegacy = array_column($pronosticosLegacy, 'tipo_Pronostico');
+
+                $this->ejecutarUpdate(
+                    "UPDATE CONSULTA
+                     SET id_Paciente = ?, tipo_Consulta = ?, fecha_hora_Consulta = ?,
+                         estado_proceso_Consulta = ?, fecha_fin_Consulta = ?, motivo_Consulta = ?
+                     WHERE id_Consulta = ?",
+                    'isssssi',
+                    [
+                        $pacienteId,
+                        $datos['tipo_Consulta'],
+                        $datos['fecha_hora_Consulta'],
+                        $estado,
+                        $estado === 'Finalizada' ? date('Y-m-d') : null,
+                        $datos['motivo_Consulta'],
+                        $consultaId,
+                    ]
+                );
+                $this->ejecutarDelete('DELETE FROM USUARIO_CONSULTA WHERE id_Consulta = ?', $consultaId);
+                $this->ejecutarDelete('DELETE FROM ANAMNESIS WHERE id_Consulta = ?', $consultaId);
+                $this->ejecutarDelete('DELETE FROM DIAGNOSTICO WHERE id_Consulta = ?', $consultaId);
+                $this->ejecutarDelete('DELETE FROM TRATAMIENTO WHERE id_Consulta = ?', $consultaId);
+                $this->ejecutarDelete('DELETE FROM PRONOSTICO WHERE id_Consulta = ?', $consultaId);
+                $this->ejecutarDelete('DELETE FROM PARACLINICO WHERE id_Consulta = ?', $consultaId);
+            } else {
+                $consultaId = $this->ejecutarInsert(
+                    "INSERT INTO CONSULTA
+                        (id_Paciente, tipo_Consulta, fecha_hora_Consulta, estado_proceso_Consulta,
+                         fecha_fin_Consulta, motivo_Consulta)
+                     VALUES (?, ?, ?, ?, ?, ?)",
+                    'isssss',
+                    [
+                        $pacienteId,
+                        $datos['tipo_Consulta'],
+                        $datos['fecha_hora_Consulta'],
+                        $estado,
+                        $estado === 'Finalizada' ? date('Y-m-d') : null,
+                        $datos['motivo_Consulta'],
+                    ]
+                );
+            }
 
             foreach ($estudianteIds as $estudianteId) {
                 $this->ejecutarInsert(
@@ -149,18 +470,36 @@ class ConsultaModel extends Model
             $examenEquino = $this->obtenerCamposOpcionales($datos, $camposExamenEquino);
             $hayExamenEquino = $especie === 'Equino' && $this->hayDatos($examenEquino);
 
-            if ($this->hayDatos($examenGeneral) || $hayExamenEquino) {
-                $examenGeneralId = $this->ejecutarInsert(
-                    "INSERT INTO EXAMEN_GENERAL
-                        (id_Consulta, peso_ExamenG, CC_ExamenG, TR_ExamenG, FC_ExamenG,
-                         FR_ExamenG, TLLC_ExamenG, sensorio_ExamenG, facies_ExamenG,
-                         piel_subcutaneo_ExamenG, mucosas_ExamenG, grandes_funciones_ExamenG,
-                         actitudes_anomalas_ExamenG, hidratacion_ExamenG,
-                         ganglios_linfaticos_ExamenG, aparentes_ExamenG)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    'i' . str_repeat('s', count($examenGeneral)),
-                    array_merge([$consultaId], $examenGeneral)
-                );
+            if (
+                $this->hayDatos($examenGeneral)
+                || $hayExamenEquino
+                || ($consultaIdEdicion !== null && $examenGeneralId !== null)
+            ) {
+                if ($consultaIdEdicion !== null && $examenGeneralId !== null) {
+                    $this->ejecutarUpdate(
+                        "UPDATE EXAMEN_GENERAL
+                         SET peso_ExamenG = ?, CC_ExamenG = ?, TR_ExamenG = ?, FC_ExamenG = ?,
+                             FR_ExamenG = ?, TLLC_ExamenG = ?, sensorio_ExamenG = ?, facies_ExamenG = ?,
+                             piel_subcutaneo_ExamenG = ?, mucosas_ExamenG = ?, grandes_funciones_ExamenG = ?,
+                             actitudes_anomalas_ExamenG = ?, hidratacion_ExamenG = ?,
+                             ganglios_linfaticos_ExamenG = ?, aparentes_ExamenG = ?
+                         WHERE id_ExamenG = ?",
+                        str_repeat('s', count($examenGeneral)) . 'i',
+                        array_merge($examenGeneral, [$examenGeneralId])
+                    );
+                } else {
+                    $examenGeneralId = $this->ejecutarInsert(
+                        "INSERT INTO EXAMEN_GENERAL
+                            (id_Consulta, peso_ExamenG, CC_ExamenG, TR_ExamenG, FC_ExamenG,
+                             FR_ExamenG, TLLC_ExamenG, sensorio_ExamenG, facies_ExamenG,
+                             piel_subcutaneo_ExamenG, mucosas_ExamenG, grandes_funciones_ExamenG,
+                             actitudes_anomalas_ExamenG, hidratacion_ExamenG,
+                             ganglios_linfaticos_ExamenG, aparentes_ExamenG)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        'i' . str_repeat('s', count($examenGeneral)),
+                        array_merge([$consultaId], $examenGeneral)
+                    );
+                }
 
                 if ($hayExamenEquino) {
                     $this->ejecutarInsert(
@@ -198,6 +537,16 @@ class ConsultaModel extends Model
             }
 
             foreach ($datos['paraclinicos'] ?? [] as $paraclinico) {
+                $paraclinicoId = filter_var($paraclinico['id'] ?? null, FILTER_VALIDATE_INT);
+                if ($paraclinicoId !== false && $paraclinicoId !== null && $paraclinicoId > 0) {
+                    if (!array_key_exists($paraclinicoId, $archivosParaclinicosExistentes)) {
+                        throw new InvalidArgumentException('Uno de los paraclínicos seleccionados no pertenece a esta consulta.');
+                    }
+                } else {
+                    $paraclinicoId = null;
+                }
+                $archivoParaclinico = $paraclinico['archivo']
+                    ?? ($paraclinicoId === null ? null : $archivosParaclinicosExistentes[$paraclinicoId]);
                 $this->ejecutarInsert(
                     'INSERT INTO PARACLINICO
                         (id_Consulta, tipo_Paraclinico, resultado_Paraclinico, archivoURL_Paraclinico)
@@ -207,12 +556,19 @@ class ConsultaModel extends Model
                         $consultaId,
                         $paraclinico['tipo'],
                         $paraclinico['resultado'] ?: null,
-                        $paraclinico['archivo'] ?? null,
+                        $archivoParaclinico,
                     ]
                 );
             }
 
             foreach ($datos['pronosticos'] ?? [] as $pronostico) {
+                $this->ejecutarInsert(
+                    'INSERT INTO PRONOSTICO (id_Consulta, tipo_Pronostico) VALUES (?, ?)',
+                    'is',
+                    [$consultaId, $pronostico]
+                );
+            }
+            foreach ($pronosticosLegacy as $pronostico) {
                 $this->ejecutarInsert(
                     'INSERT INTO PRONOSTICO (id_Consulta, tipo_Pronostico) VALUES (?, ?)',
                     'is',
@@ -296,9 +652,13 @@ class ConsultaModel extends Model
         }
 
         $stmt = $this->db->prepare(
-            'UPDATE CONSULTA SET estado_proceso_Consulta = ? WHERE id_Consulta = ?'
+            "UPDATE CONSULTA
+             SET estado_proceso_Consulta = ?,
+                 fecha_fin_Consulta = CASE WHEN ? = 'Finalizada' THEN CURDATE() ELSE NULL END
+             WHERE id_Consulta = ?"
         );
-        $stmt->bind_param('si', $estado, $consultaId);
+        $estadoFecha = $estado;
+        $stmt->bind_param('ssi', $estado, $estadoFecha, $consultaId);
         $stmt->execute();
         $consultaExiste = $stmt->affected_rows > 0;
         $stmt->close();
@@ -332,6 +692,26 @@ class ConsultaModel extends Model
         return $id;
     }
 
+    private function ejecutarUpdate(string $sql, string $tipos, array $valores): void
+    {
+        $stmt = $this->db->prepare($sql);
+        $parametros = [$tipos];
+        foreach ($valores as $indice => &$valor) {
+            $parametros[] = &$valor;
+        }
+        call_user_func_array([$stmt, 'bind_param'], $parametros);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    private function ejecutarDelete(string $sql, int $id): void
+    {
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $stmt->close();
+    }
+
     /** @return list<?string> */
     private function obtenerCamposOpcionales(array $datos, array $campos): array
     {
@@ -353,8 +733,70 @@ class ConsultaModel extends Model
     }
 
     /**
-     * Obtiene la consulta y todos sus registros relacionados para la vista de detalle.
+     * Obtiene los datos del paciente y todas sus consultas con sus registros clínicos.
      */
+    public function obtenerHistorialClinicoPaciente(int $pacienteId): ?array
+    {
+        $stmt = $this->db->prepare(
+            "SELECT
+                p.id_Paciente AS id,
+                p.nombre_Paciente AS nombre,
+                p.numchip_Paciente AS chip,
+                p.fecha_nac_Paciente AS fecha_nacimiento,
+                p.edad_Paciente AS edad,
+                p.sexo_Paciente AS sexo,
+                p.color_Paciente AS color,
+                r.nombre_Raza AS raza,
+                e.nombre_Especie AS especie,
+                t.nombre_Tutor AS tutor,
+                t.documento_Tutor AS documento_tutor,
+                t.telefono_Tutor AS telefono_tutor,
+                t.email_Tutor AS email_tutor,
+                t.direccion_Tutor AS direccion_tutor
+             FROM PACIENTE p
+             INNER JOIN TUTOR t ON t.id_Tutor = p.id_Tutor
+             LEFT JOIN RAZA r ON r.id_Raza = p.id_Raza
+             LEFT JOIN ESPECIE e ON e.id_Especie = r.id_Especie
+             WHERE p.id_Paciente = ?
+             LIMIT 1"
+        );
+        $stmt->bind_param('i', $pacienteId);
+        $stmt->execute();
+        $paciente = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        if ($paciente === null) {
+            return null;
+        }
+
+        $stmt = $this->db->prepare(
+            'SELECT id_Consulta
+             FROM CONSULTA
+             WHERE id_Paciente = ?
+             ORDER BY fecha_hora_Consulta ASC, id_Consulta ASC'
+        );
+        $stmt->bind_param('i', $pacienteId);
+        $stmt->execute();
+        $consultaIds = array_map(
+            static fn(array $fila): int => (int) $fila['id_Consulta'],
+            $stmt->get_result()->fetch_all(MYSQLI_ASSOC)
+        );
+        $stmt->close();
+
+        $consultas = [];
+        foreach ($consultaIds as $consultaId) {
+            $detalle = $this->obtenerDetalle($consultaId);
+            if ($detalle !== null) {
+                $consultas[] = $detalle;
+            }
+        }
+
+        return [
+            'paciente' => $paciente,
+            'consultas' => $consultas,
+        ];
+    }
+
+    /** Obtiene la consulta y todos sus registros relacionados para la vista de detalle. */
     public function obtenerDetalle(int $consultaId): ?array
     {
         $stmt = $this->db->prepare(

@@ -6,6 +6,9 @@ $flash = $_SESSION['flash_tutor_creado'] ?? '';
 unset($_SESSION['flash_tutor_creado']);
 
 $datos = is_array($datos ?? null) ? $datos : [];
+$tutorEditando = is_array($tutorEditando ?? null) ? $tutorEditando : null;
+$editando = $tutorEditando !== null && !empty($tutorEditando['id_Tutor']);
+$urlFormulario = $editando ? ($actualizarUrl ?? '') : ($guardarUrl ?? '');
 ?>
 
 <div class="container-fluid tutores-page py-4">
@@ -86,15 +89,25 @@ $datos = is_array($datos ?? null) ? $datos : [];
     <!-- Alta de tutor -->
     <section class="card shadow-sm mb-4">
         <div class="card-body">
-            <h2 class="h5 mb-3">Registrar tutor</h2>
+            <h2 class="h5 mb-3"><?= $editando ? 'Editar tutor' : 'Registrar tutor' ?></h2>
+            <?php if ($editando): ?>
+                <p class="text-secondary">
+                    Los cambios se reflejan en todos los pacientes asociados a este tutor.
+                </p>
+            <?php endif; ?>
 
             <form method="post"
-                  action="<?= $escape($guardarUrl ?? '') ?>"
+                  action="<?= $escape($urlFormulario) ?>"
                   class="row g-3">
 
                 <input type="hidden"
                        name="csrf_token"
                        value="<?= $escape($csrfToken ?? '') ?>">
+                <?php if ($editando): ?>
+                    <input type="hidden"
+                           name="tutor_id"
+                           value="<?= (int) ($tutorEditando['id_Tutor'] ?? 0) ?>">
+                <?php endif; ?>
 
                 <div class="col-12 col-md-4">
                     <label for="documento_Tutor" class="form-label">
@@ -107,7 +120,7 @@ $datos = is_array($datos ?? null) ? $datos : [];
                         name="documento_Tutor"
                         maxlength="20"
                         required
-                        value="<?= $escape($datos['documento_Tutor'] ?? '') ?>"
+                        value="<?= $escape($datos['documento_Tutor'] ?? $tutorEditando['documento_Tutor'] ?? '') ?>"
                     >
                 </div>
 
@@ -122,7 +135,7 @@ $datos = is_array($datos ?? null) ? $datos : [];
                         name="nombre_Tutor"
                         maxlength="150"
                         required
-                        value="<?= $escape($datos['nombre_Tutor'] ?? '') ?>"
+                        value="<?= $escape($datos['nombre_Tutor'] ?? $tutorEditando['nombre_Tutor'] ?? '') ?>"
                     >
                 </div>
 
@@ -136,7 +149,7 @@ $datos = is_array($datos ?? null) ? $datos : [];
                         id="telefono_Tutor"
                         name="telefono_Tutor"
                         maxlength="50"
-                        value="<?= $escape($datos['telefono_Tutor'] ?? '') ?>"
+                        value="<?= $escape($datos['telefono_Tutor'] ?? $tutorEditando['telefono_Tutor'] ?? '') ?>"
                     >
                 </div>
 
@@ -151,7 +164,7 @@ $datos = is_array($datos ?? null) ? $datos : [];
                         name="email_Tutor"
                         type="email"
                         maxlength="150"
-                        value="<?= $escape($datos['email_Tutor'] ?? '') ?>"
+                        value="<?= $escape($datos['email_Tutor'] ?? $tutorEditando['email_Tutor'] ?? '') ?>"
                     >
                 </div>
 
@@ -165,7 +178,7 @@ $datos = is_array($datos ?? null) ? $datos : [];
                         id="direccion_Tutor"
                         name="direccion_Tutor"
                         maxlength="255"
-                        value="<?= $escape($datos['direccion_Tutor'] ?? '') ?>"
+                        value="<?= $escape($datos['direccion_Tutor'] ?? $tutorEditando['direccion_Tutor'] ?? '') ?>"
                     >
                 </div>
 
@@ -179,13 +192,18 @@ $datos = is_array($datos ?? null) ? $datos : [];
                         id="notas_Tutor"
                         name="notas_Tutor"
                         rows="2"
-                    ><?= $escape($datos['notas_Tutor'] ?? '') ?></textarea>
+                    ><?= $escape($datos['notas_Tutor'] ?? $tutorEditando['notas_Tutor'] ?? '') ?></textarea>
                 </div>
 
-                <div class="col-12">
+                <div class="col-12 d-flex gap-2">
                     <button class="btn btn-primary" type="submit">
-                        Guardar tutor
+                        <?= $editando ? 'Guardar cambios' : 'Guardar tutor' ?>
                     </button>
+                    <?php if ($editando): ?>
+                        <a class="btn btn-outline-secondary" href="<?= $escape($buscarUrl ?? '') ?>">
+                            Cancelar edición
+                        </a>
+                    <?php endif; ?>
                 </div>
             </form>
         </div>
@@ -219,6 +237,7 @@ $datos = is_array($datos ?? null) ? $datos : [];
                                 <th>Teléfono</th>
                                 <th>Email</th>
                                 <th class="text-end">Pacientes</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
 
@@ -239,6 +258,18 @@ $datos = is_array($datos ?? null) ? $datos : [];
                                     </td>
                                     <td class="text-end">
                                         <?= (int) ($tutor['cantidad_pacientes'] ?? 0) ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        $parametrosEdicion = ['editar' => (int) ($tutor['id'] ?? 0)];
+                                        if (($busqueda ?? '') !== '') {
+                                            $parametrosEdicion['q'] = $busqueda;
+                                        }
+                                        ?>
+                                        <a class="btn btn-sm btn-outline-primary"
+                                           href="<?= $escape(($buscarUrl ?? '') . '?' . http_build_query($parametrosEdicion)) ?>">
+                                            Editar
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

@@ -2,6 +2,23 @@
 
 class TutorModel extends Model
 {
+    public function obtener(int $tutorId): ?array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT id_Tutor, documento_Tutor, nombre_Tutor, telefono_Tutor,
+                    direccion_Tutor, email_Tutor, notas_Tutor
+             FROM TUTOR
+             WHERE id_Tutor = ?
+             LIMIT 1'
+        );
+        $stmt->bind_param('i', $tutorId);
+        $stmt->execute();
+        $tutor = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $tutor ?: null;
+    }
+
     /**
      * Busca por nombre, documento o teléfono.
      *
@@ -138,6 +155,68 @@ class TutorModel extends Model
         $stmt->close();
 
         return $id;
+    }
+
+    /** @param array<string, mixed> $datos */
+    public function actualizar(int $tutorId, array $datos): void
+    {
+        if ($this->obtener($tutorId) === null) {
+            throw new InvalidArgumentException('No se encontró el tutor que querés editar.');
+        }
+
+        $documento = $this->valor($datos, 'documento_Tutor');
+        $nombre = $this->valor($datos, 'nombre_Tutor');
+        $telefono = $this->valor($datos, 'telefono_Tutor');
+        $direccion = $this->valor($datos, 'direccion_Tutor');
+        $email = $this->valor($datos, 'email_Tutor');
+        $notas = $this->valor($datos, 'notas_Tutor');
+
+        if ($documento === null || $nombre === null) {
+            throw new InvalidArgumentException('El documento y el nombre son obligatorios.');
+        }
+        if (
+            strlen($documento) > 20
+            || strlen($nombre) > 150
+            || ($telefono !== null && strlen($telefono) > 50)
+            || ($direccion !== null && strlen($direccion) > 255)
+            || ($email !== null && strlen($email) > 150)
+            || ($notas !== null && strlen($notas) > 65535)
+        ) {
+            throw new InvalidArgumentException('Uno de los campos supera la longitud permitida.');
+        }
+        if ($email !== null && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+            throw new InvalidArgumentException('Ingresá un correo electrónico válido.');
+        }
+
+        $stmt = $this->db->prepare(
+            'SELECT id_Tutor FROM TUTOR WHERE documento_Tutor = ? AND id_Tutor <> ? LIMIT 1'
+        );
+        $stmt->bind_param('si', $documento, $tutorId);
+        $stmt->execute();
+        $duplicado = $stmt->get_result()->fetch_assoc() !== null;
+        $stmt->close();
+        if ($duplicado) {
+            throw new InvalidArgumentException('Ya existe otro tutor registrado con ese documento.');
+        }
+
+        $stmt = $this->db->prepare(
+            'UPDATE TUTOR
+             SET documento_Tutor = ?, nombre_Tutor = ?, telefono_Tutor = ?,
+                 direccion_Tutor = ?, email_Tutor = ?, notas_Tutor = ?
+             WHERE id_Tutor = ?'
+        );
+        $stmt->bind_param(
+            'ssssssi',
+            $documento,
+            $nombre,
+            $telefono,
+            $direccion,
+            $email,
+            $notas,
+            $tutorId
+        );
+        $stmt->execute();
+        $stmt->close();
     }
 
     private function valor(array $datos, string $campo): ?string
