@@ -6,7 +6,7 @@
         //
 
         private int $id_Usuario;
-        private int $cedula_Usuario;
+        private string $cedula_Usuario;
         private string $nombre_Usuario;
         private string $apellido_Usuario;
         private string $rol_Usuario;

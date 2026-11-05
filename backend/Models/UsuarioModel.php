@@ -89,7 +89,7 @@ class UsuarioModel extends Model
     //
     // Función para modificar usuarios tomando en cuenta un objeto usuario almacenado en $usuarioObj.
     //
-    public function modificarUsuario($usuarioObj, $cedulaOld)
+    public function modificarUsuario(UsuarioObj $usuarioObj, string $cedulaOld)
     {
         $stmt = $this->db->prepare(
             'UPDATE USUARIO 
