@@ -16,16 +16,20 @@ services:
 
     environment:
       STORAGE_GID: ${STORAGE_GID:-1000}
+      TZ: "America/Montevideo"
 
     volumes:
       - .:/var/www/html
       - ./docker/apache.conf:/etc/apache2/sites-available/000-default.conf
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
 
     depends_on:
       - db
 
     command: >
-      sh -c "docker-php-ext-install mysqli pdo pdo_mysql &&
+      sh -c "echo 'date.timezone = \"America/Montevideo\"' > /usr/local/etc/php/conf.d/timezone.ini &&
+             docker-php-ext-install mysqli pdo pdo_mysql &&
              mkdir -p /var/www/html/storage/resenas /var/www/html/storage/paraclinicos &&
              chown -R www-data:$$STORAGE_GID /var/www/html/storage/resenas /var/www/html/storage/paraclinicos &&
              chmod 2770 /var/www/html/storage/resenas /var/www/html/storage/paraclinicos &&

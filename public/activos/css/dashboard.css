@@ -60,6 +60,45 @@
     color: #adb5bd;
 }
 
+.tarjeta-inicio--consultas .tarjeta-inicio__icono {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+}
+
+.tarjeta-inicio--consultas .tarjeta-inicio__contenido {
+    min-width: 0;
+}
+
+.consultas-resumen {
+    width: 100%;
+    gap: .25rem;
+}
+
+.consultas-resumen__item {
+    flex: 1 1 0;
+    min-width: 0;
+    align-items: center;
+}
+
+.consultas-resumen__item small {
+    font-size: .72rem;
+    line-height: 1.15;
+}
+
+@media (max-width: 800px) {
+    .tarjeta-inicio--consultas {
+        flex-direction: column;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    .tarjeta-inicio--consultas .tarjeta-inicio__contenido {
+        align-items: center;
+        width: 100%;
+    }
+}
+
 /*** Paneles de agenda y pacientes en espera ***/
 .panel-inicio {
     height: 100%;

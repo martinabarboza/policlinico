@@ -22,57 +22,71 @@
 
 <!-- Empieza Contenido -->
 
-<!-- Botones Principales -->
-<!-- Accesos a funciones de registro y consulta disponibles en el sistema. -->
-<div class="container-fluid pt-4 px-4 d-flex flex-wrap gap-3">
-    <?php if (in_array(strtoupper(trim(Auth::rol() ?? '')), ['ESTUDIANTE', 'PROFESOR', 'DIRECTOR'], true)): ?>
-    <a href="<?= htmlspecialchars(url('pacientes/crear'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio">
-        <span class="tarjeta-inicio__icono tarjeta-inicio__icono--principal">
-            <i class="fa fa-plus-circle"></i>
-        </span>
-        <span class="tarjeta-inicio__contenido">
-            <span class="tarjeta-inicio__titulo">Nueva ficha</span>
-            <span class="tarjeta-inicio__valor">Crear registro</span>
-        </span>
-        <i class="fa fa-chevron-right tarjeta-inicio__flecha"></i>
-    </a>
-    <?php endif; ?>
-
-    <!-- Cuenta y enlaza todas las consultas de hoy, independientemente del estado. -->
-    <a href="<?= htmlspecialchars(url('consultas-diarias'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio">
-        <span class="tarjeta-inicio__icono tarjeta-inicio__icono--exito">
-            <i class="fa fa-calendar-day" aria-hidden="true"></i>
-        </span>
-        <span class="tarjeta-inicio__contenido">
-            <span class="tarjeta-inicio__titulo">Consultas diarias</span>
-            <span class="tarjeta-inicio__valor"><?= $cantidadConsultasDiarias ?></span>
-        </span>
-        <i class="fa fa-chevron-right tarjeta-inicio__flecha" aria-hidden="true"></i>
-    </a>
-
-    <!-- Cuenta y enlaza consultas de cualquier fecha en estado Pendiente o En curso. -->
-    <a href="<?= htmlspecialchars(url('consultas-incompletas'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio">
-        <span class="tarjeta-inicio__icono tarjeta-inicio__icono--peligro">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-        </span>
-        <span class="tarjeta-inicio__contenido">
-            <span class="tarjeta-inicio__titulo">Consultas incompletas</span>
-            <span class="tarjeta-inicio__valor"><?= $cantidadConsultasIncompletas ?></span>
-        </span>
-        <i class="fa fa-chevron-right tarjeta-inicio__flecha" aria-hidden="true"></i>
-    </a>
-
-    <!-- Próximas consultas -->
-    <a href="<?= htmlspecialchars(url('proximas-consultas'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio">
-        <span class="tarjeta-inicio__icono tarjeta-inicio__icono--aviso">
-            <i class="fa fa-clock" aria-hidden="true"></i>
-        </span>
-        <span class="tarjeta-inicio__contenido">
-            <span class="tarjeta-inicio__titulo">Próximas consultas</span>
-            <span class="tarjeta-inicio__valor">Ver agenda futura</span>
-        </span>
-        <i class="fa fa-chevron-right tarjeta-inicio__flecha" aria-hidden="true"></i>
-    </a>
+<!-- Accesos principales -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-3">
+        <div class="col-12 col-md-3">
+            <a href="<?= htmlspecialchars(url('centro-tutores'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio h-100" style="width: 100%;">
+                <span class="tarjeta-inicio__icono tarjeta-inicio__icono--principal">
+                    <i class="fa fa-user-plus" aria-hidden="true"></i>
+                </span>
+                <span class="tarjeta-inicio__contenido">
+                    <span class="tarjeta-inicio__titulo">Nuevo Tutor</span>
+                    <span class="tarjeta-inicio__valor">Registrar tutor</span>
+                </span>
+            </a>
+        </div>
+        <div class="col-12 col-md-3">
+            <a href="<?= htmlspecialchars(url('pacientes/crear'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio h-100" style="width: 100%;">
+                <span class="tarjeta-inicio__icono tarjeta-inicio__icono--principal">
+                    <i class="fa fa-paw" aria-hidden="true"></i>
+                </span>
+                <span class="tarjeta-inicio__contenido">
+                    <span class="tarjeta-inicio__titulo">Nuevo Paciente</span>
+                    <span class="tarjeta-inicio__valor">Registrar paciente</span>
+                </span>
+            </a>
+        </div>
+        <div class="col-12 col-md-3">
+            <a href="<?= htmlspecialchars(url('centro-consultas/nueva'), ENT_QUOTES, 'UTF-8') ?>" class="tarjeta-inicio h-100" style="width: 100%;">
+                <span class="tarjeta-inicio__icono tarjeta-inicio__icono--principal">
+                    <i class="fa fa-notes-medical" aria-hidden="true"></i>
+                </span>
+                <span class="tarjeta-inicio__contenido">
+                    <span class="tarjeta-inicio__titulo">Nueva Consulta</span>
+                    <span class="tarjeta-inicio__valor">Iniciar consulta</span>
+                </span>
+            </a>
+        </div>
+    </div>
+    <div class="row g-3 mt-0">
+        <div class="col-12 col-md-auto">
+            <section class="tarjeta-inicio tarjeta-inicio--consultas h-100" style="width: 300px; max-width: 100%;" aria-label="Consultas">
+                <span class="tarjeta-inicio__icono tarjeta-inicio__icono--principal">
+                    <i class="fa fa-calendar-check" aria-hidden="true"></i>
+                </span>
+                <span class="tarjeta-inicio__contenido">
+                    <span class="tarjeta-inicio__titulo">Consultas</span>
+                    <div class="consultas-resumen d-flex justify-content-around text-center">
+                        <a class="consultas-resumen__item d-flex flex-column text-decoration-none" href="<?= htmlspecialchars(url('consultas-diarias'), ENT_QUOTES, 'UTF-8') ?>">
+                            <span class="fw-bold"><?= (int) $cantidadConsultasDiarias ?></span>
+                            <small class="text-muted">Hoy</small>
+                        </a>
+                        <a class="consultas-resumen__item d-flex flex-column text-decoration-none" href="<?= htmlspecialchars(url('consultas-incompletas'), ENT_QUOTES, 'UTF-8') ?>">
+                            <span class="fw-bold<?= $cantidadConsultasIncompletas > 0 ? ' text-warning-emphasis' : '' ?>">
+                                <?= (int) $cantidadConsultasIncompletas ?>
+                            </span>
+                            <small class="text-muted">Incompletas</small>
+                        </a>
+                        <a class="consultas-resumen__item d-flex flex-column text-decoration-none" href="<?= htmlspecialchars(url('proximas-consultas'), ENT_QUOTES, 'UTF-8') ?>">
+                            <span class="fw-bold"><i class="bi bi-chevron-right" aria-hidden="true"></i></span>
+                            <small class="text-muted">Próximas</small>
+                        </a>
+                    </div>
+                </span>
+            </section>
+        </div>
+    </div>
 </div>
 <!-- Termina Botones Principales -->
 
@@ -198,6 +212,7 @@
 
 
 <!-- Empieza Hospitalizados -->
+<?php if (in_array(strtoupper(trim(Auth::rol() ?? '')), ['DIRECTOR', 'PROFESOR'], true)): ?>
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
@@ -216,12 +231,11 @@
                         <th scope="col">Motivo</th>
                         <th scope="col">Responsable</th>
                         <th scope="col">Estado</th>
-                        <th scope="col">Acción</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if ($pacientesHospitalizados): ?>
-                        <?php foreach ($pacientesHospitalizados as $pacienteHospitalizado): ?>
+                        <?php foreach (array_slice($pacientesHospitalizados, 0, 5) as $pacienteHospitalizado): ?>
                             <tr>
                                 <td>
                                     <time datetime="<?= htmlspecialchars($pacienteHospitalizado['fecha_ingreso'], ENT_QUOTES, 'UTF-8') ?>">
@@ -233,20 +247,23 @@
                                 <td><?= htmlspecialchars($pacienteHospitalizado['motivo'] ?: 'Sin motivo registrado', ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><?= htmlspecialchars($pacienteHospitalizado['responsable'], ENT_QUOTES, 'UTF-8') ?></td>
                                 <td><span class="badge bg-warning text-dark p-2"><?= htmlspecialchars($pacienteHospitalizado['estado'], ENT_QUOTES, 'UTF-8') ?></span></td>
-                                <td><a class="btn btn-sm btn-primary" href="hospitalizacion">Ver módulo</a></td>
                             </tr>
                         <?php endforeach; ?>
 
                     <?php else: ?>
                         <tr>
-                            <td colspan="7" class="text-center py-4 text-muted">No hay pacientes hospitalizados actualmente.</td>
+                            <td colspan="6" class="text-center py-4 text-muted">No hay pacientes hospitalizados actualmente.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
         </div>
+        <div class="text-end mt-3">
+            <a href="<?= htmlspecialchars(url('hospitalizacion'), ENT_QUOTES, 'UTF-8') ?>">Ver todos</a>
+        </div>
     </div>
 </div>
+<?php endif; ?>
 <!-- Termina Pacientes Hospitalizados -->
 
 <!-- Fin Contenido -->

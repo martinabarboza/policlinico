@@ -62,6 +62,7 @@ class DashboardController extends Controller
 
         $cantidadConsultasDiarias = $modeloDashboard->contarConsultasDelDia(new DateTimeImmutable('today'));
         $cantidadConsultasIncompletas = $modeloDashboard->contarConsultasIncompletas();
+        $cantidadConsultasProximas = $modeloDashboard->contarProximasConsultas();
 
         $pacientesHospitalizados = $modeloDashboard->obtenerPacientesHospitalizados();
         foreach ($pacientesHospitalizados as $indice => $paciente) {
@@ -77,6 +78,7 @@ class DashboardController extends Controller
                 'pacientesHospitalizados' => $pacientesHospitalizados,
                 'cantidadConsultasDiarias' => $cantidadConsultasDiarias,
                 'cantidadConsultasIncompletas' => $cantidadConsultasIncompletas,
+                'cantidadConsultasProximas' => $cantidadConsultasProximas,
                 'fechaDelDashboard' => $fechaActual->format('d/m/Y'),
                 'fechaSeleccionada' => $fechaActual->format('Y-m-d'),
                 'errorFecha' => $errorFecha,

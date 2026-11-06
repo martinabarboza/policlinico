@@ -170,6 +170,26 @@ class DashboardModel extends Model
         return $consultas;
     }
 
+    /** Cuenta consultas futuras con el mismo criterio del listado de próximas consultas. */
+    public function contarProximasConsultas(): int
+    {
+        $stmt = $this->db->prepare(
+            "SELECT COUNT(*) AS cantidad
+             FROM CONSULTA c
+             INNER JOIN PACIENTE p ON p.id_Paciente = c.id_Paciente
+             INNER JOIN TUTOR t ON t.id_Tutor = p.id_Tutor
+             WHERE c.fecha_hora_Consulta >= NOW()
+               AND COALESCE(LOWER(TRIM(c.estado_proceso_Consulta)), '') NOT IN
+                   ('finalizada', 'cancelada', 'cancelado')"
+        );
+        $stmt->execute();
+
+        $cantidad = (int) $stmt->get_result()->fetch_assoc()['cantidad'];
+        $stmt->close();
+
+        return $cantidad;
+    }
+
     /**
      * Busca hospitalizaciones sin egreso y con estado `Activa` (ignora mayúsculas y espacios).
      * Al dar el alta, completar `fecha_egreso_Hospitalizacion`; así deja de aparecer
