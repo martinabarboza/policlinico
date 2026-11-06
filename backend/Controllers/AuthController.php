@@ -48,7 +48,7 @@ class AuthController extends Controller
             return;
         }
 
-        $usuario = $usuarioModel->buscarPorCedula((int) $cedula);
+        $usuario = $usuarioModel->buscarPorCedula($cedula);
 
         if (!$usuario || !password_verify($password, $usuario['passw_Usuario'])) {
             $this->fallarLogin('Documento o contraseña incorrectos.', $cedula);

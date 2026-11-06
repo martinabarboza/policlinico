@@ -39,7 +39,7 @@ $rolesUsuario = [
                 <input type="hidden" name="cedulaOld" value="<?php echo htmlspecialchars($usuarioEdit['cedula_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 
                 <div class="col-12 col-md-6">
-                    <label for="cedula" class="form-label">Cédula</label>
+                    <label for="cedula" class="form-label">Cédula (Sin puntos ni guiones)</label>
                     <input class="form-control" type="text" id="cedula" name="cedula" inputmode="numeric" pattern="[0-9]{8}" value="<?php echo htmlspecialchars($usuarioEdit['cedula_Usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
                 </div>
 

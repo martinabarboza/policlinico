@@ -7,8 +7,14 @@ class UsuarioModel extends Model
     // Busca un usuario por su cedula. Devuelve el registro completo
     //(incluye passw_usuario hasheada) o null si no existe.
     //
-    public function buscarPorCedula(int $cedula): ?array
+    public function buscarPorCedula(string $cedula): ?array
     {
+        $cedula = trim($cedula);
+
+        if ($cedula === '' || !preg_match('/^\d{8}$/', $cedula)) {
+            return null;
+        }
+
         $stmt = $this->db->prepare(
             'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario,
                     rol_Usuario, email_Usuario, passw_Usuario
@@ -73,23 +79,25 @@ class UsuarioModel extends Model
     //
     // Agrega un Nuevo Usuario a la Base de Datos
     //
-    public function crearUsuarioNuevo(int $cedula, string $nombre, string $apellido, string $rol, string $email, string $passw)
+    public function crearUsuarioNuevo(string $cedula, string $nombre, string $apellido, string $rol, string $email, string $passw): bool
     {
-        password_hash($passw, PASSWORD_DEFAULT);
+        $resultado =[];
         $stmt = $this->db->prepare(
             'INSERT INTO USUARIO (cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario, email_Usuario, passw_Usuario, lastlogin_Usuario, dateupdate_Usuario)
             VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())'
         );
 
         $stmt->bind_param('ssssss', $cedula, $nombre, $apellido, $rol, $email, $passw);
-        $stmt->execute();
+        $resultado = $stmt->execute();
         $stmt->close();
+        return $resultado;
     }
 
     //
-    // Función para modificar usuarios tomando en cuenta un objeto usuario almacenado en $usuarioObj.
+    // Función para modificar usuarios tomando en cuenta un objeto 
+    // usuario almacenado en $usuarioObj y la cedula del usuario a modificar.
     //
-    public function modificarUsuario(UsuarioObj $usuarioObj, string $cedulaOld)
+    public function modificarUsuario(UsuarioObj $usuarioObj, string $cedulaOld): bool
     {
         $stmt = $this->db->prepare(
             'UPDATE USUARIO 

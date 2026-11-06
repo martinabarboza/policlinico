@@ -104,9 +104,8 @@ foreach ($usuarios as $usuario) {
                                 <?php
 
                                 //
-                                // Determina la clase de la etiqueta según el rol del usuario
+                                // Determina la clase de etiqueta según el rol del usuario
                                 //
-
                                 $rol = strtoupper((string) ($usuario['rol_Usuario'] ?? ''));
                                 $badgeClass = 'usuarios-role--director';
                                 if ($rol === 'ESTUDIANTE') {

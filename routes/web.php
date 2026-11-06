@@ -31,4 +31,6 @@ $router->get('/hospitalizacion', [HospitalizacionController::class, 'index']);
 $router->get('/usuarios', [UsuarioController::class, 'index']);
 $router->get('/usuarios/editar', [UsuarioController::class, 'modificarUsuario']);
 $router->post('/usuarios/actualizarUsuario', [UsuarioController::class, 'actualizarUsuario']);
+$router->get('/usuarios/crear', [UsuarioController::class, 'crearUsuario']);
+$router->post('/usuarios/crear', [UsuarioController::class, 'crearUsuario']);
 ?>

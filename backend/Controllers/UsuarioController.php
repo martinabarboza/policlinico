@@ -26,6 +26,27 @@ class UsuarioController extends Controller
     // Llama a la vista de modificar usuario, utilizando la cédula del usuario.
     //
 
+    private function returnPorError($form, $usuarioVerificacion, string $mensajeError): void
+    {
+        if ($form === 'modificar') {
+        $this->view('usuarios/modificarUsuario', [
+            'tituloPagina' => 'Modificar Usuario',
+            'activeMenu' => 'usuarios',
+            'usuarioEdit' => $usuarioVerificacion,
+            'error' => $mensajeError
+        ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+        }
+        if ($form === 'crear') {
+            $this->view('usuarios/crearUsuario', [
+            'tituloPagina' => 'Crear Nuevo Usuario',
+            'activeMenu' => 'usuarios',
+            'usuarioEdit' => $usuarioVerificacion,
+            'error' => $mensajeError
+        ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+        }
+        return;
+    }
+
     public function modificarUsuario(): void {
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
@@ -35,17 +56,13 @@ class UsuarioController extends Controller
             exit;
         }
 
-        if (!ctype_digit((string) $_GET['cedula'])) {
-            $this->view('usuarios/modificarUsuario', [
-                'tituloPagina' => 'Modificar Usuario',
-                'activeMenu' => 'usuarios',
-                'usuarioEdit' => null,
-                'error' => 'La cédula solo debe contener números.'
-            ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+        $cedula = trim((string) $_GET['cedula']);
+
+        // Valida que la cedula tenga exactamente 8 números enteros
+        if (!preg_match('/^\d{8}$/', $cedula)) {
+            $this->returnPorError('modificar', null, 'La cédula debe contener exactamente 8 números.');
             return;
         }
-
-        $cedula = $_GET['cedula'];
 
         $usuarioEdit = $this->model('UsuarioModel')->buscarPorCedula($cedula);
 
@@ -78,7 +95,7 @@ class UsuarioController extends Controller
 
             $cedulaOld = /*(int)*/ $_POST['cedulaOld']; // Guarda la cédula antigua para encontrar al usuario en la bd.
             $cedulaNueva = trim($_POST['cedula']); // Guarda la cédula nueva para actualizarla en la bd.
-            $emailNuevo = trim($_POST['email']);
+            $emailNuevo = trim($_POST['email']); // Guarda el email nuevo para actualizarlo en la bd.
 
             // Comprueba si el usuario existe antes de intentar modificarlo.
             $usuarioActual = $this->model('UsuarioModel')->buscarPorCedula($cedulaOld);
@@ -94,36 +111,16 @@ class UsuarioController extends Controller
                 exit;
             }
 
-            if (!ctype_digit($cedulaNueva)) {
-                $this->view('usuarios/modificarUsuario', [
-                    'tituloPagina' => 'Modificar Usuario',
-                    'activeMenu' => 'usuarios',
-                    'usuarioEdit' => $usuarioActual,
-                    'error' => 'La cédula solo debe contener números'
-                ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+            // Validaciones de cédula y correo electrónico.
+            if (!preg_match('/^\d{8}$/', $cedulaNueva)) {
+                $this->returnPorError('modificar', $usuarioActual, 'La cédula debe contener exactamente 8 números');
+                return;
+            }
+            if (!filter_var($emailNuevo, FILTER_VALIDATE_EMAIL)) {
+                $this->returnPorError('modificar', $usuarioActual, 'El correo electrónico no es válido');
                 return;
             }
             
-            if (strlen($cedulaNueva) > 8) {
-                $this->view('usuarios/modificarUsuario', [
-                    'tituloPagina' => 'Modificar Usuario',
-                    'activeMenu' => 'usuarios',
-                    'usuarioEdit' => $usuarioActual,
-                    'error' => 'La cédula solo debe contener 8 caracteres'
-                ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
-                return;
-            }
-
-            if (!filter_var($emailNuevo, FILTER_VALIDATE_EMAIL)) {
-                $this->view('usuarios/modificarUsuario', [
-                    'tituloPagina' => 'Modificar Usuario',
-                    'activeMenu' => 'usuarios',
-                    'usuarioEdit' => $usuarioActual,
-                    'error' => 'Debe ingresar una dirección Email valida'
-                ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
-                return;
-            }
-
             $usuarioObj->setCedulaUsuario($cedulaNueva);
             $usuarioObj->setNombreUsuario($_POST['nombre']);
             $usuarioObj->setApellidoUsuario($_POST['apellido']);
@@ -145,10 +142,71 @@ class UsuarioController extends Controller
                 header('Location: /usuarios?success=Usuario_Modificado_Correctamente');
                 exit;
             }
-            else {
+            else 
+            {
                 header('Location: /usuarios?error=Error_al_Modificar_Usuario');
                 exit;
             }
         }
+    }
+
+    //
+    // Crea un nuevo usuario en la base de datos.
+    //
+    public function crearUsuario(): void {
+        Auth::requireLogin();
+        Auth::requirePermiso('admin.total');
+
+        
+        
+        // Valida que la solicitud sea POST y que todos los campos requeridos estén presentes.
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+           if (!isset($_POST['cedula'], $_POST['nombre'], $_POST['apellido'], $_POST['rol'], $_POST['email'], $_POST['passw'])) {
+                $this->returnPorError('crear', null, 'Por favor, completa todos los campos requeridos.');
+                return;
+            }
+            
+            // Valida y procesa los datos del formulario.
+            $cedula = trim($_POST['cedula']);
+            $nombre = trim($_POST['nombre']);
+            $apellido = trim($_POST['apellido']);
+            $rol = trim($_POST['rol']);
+            $email = trim($_POST['email']);
+            $passw = password_hash($_POST['passw'], PASSWORD_DEFAULT);
+
+            // Validaciones de cédula y correo electrónico.
+            if (!preg_match('/^\d{8}$/', $cedula)) {
+                $this->returnPorError('crear', null, 'La cédula debe contener exactamente 8 números.');
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->returnPorError('crear', null, 'El correo electrónico no es válido.');
+            }
+            
+            $usuarioExistente = $this->model('UsuarioModel')->buscarPorCedula($cedula);
+            if ($usuarioExistente) {
+                $this->returnPorError('crear', null, 'Ya existe un usuario con esa cédula.');
+            }
+
+            // Crea una instancia del modelo de usuario y llama al método para crear un nuevo usuario.
+            $usuarioNuevo = $this->model('UsuarioModel');
+            $comprobacion = $usuarioNuevo->crearUsuarioNuevo($cedula, $nombre, $apellido, $rol, $email, $passw);
+
+            // Comprueba si se crea correctamente el usuario y redirige a la pagina de usuarios con un mensaje de éxito o error.
+            if ($comprobacion) {
+                header('Location: /usuarios?success=Usuario_Creado_Correctamente');
+                exit;
+            } 
+            else 
+            {
+                $this->returnPorError('crear', null, 'Fallo al Crear Usuario');
+            }
+        } 
+        else { 
+            // Si  no es POST, muestra el formulario de creación de usuario.
+        $this->view('usuarios/crearUsuario', [
+            'tituloPagina' => 'Crear Nuevo Usuario',
+            'activeMenu' => 'usuarios'
+            ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']
+        );}
     }
 }
