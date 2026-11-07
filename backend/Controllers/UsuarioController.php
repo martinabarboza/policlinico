@@ -7,8 +7,7 @@ class UsuarioController extends Controller
     // Index llama a la vista del titulo de la página, mediante usuario y gestion de roles.
     //
 
-    public function index(): void
-    {
+    public function index(): void {
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
 
@@ -23,11 +22,11 @@ class UsuarioController extends Controller
     }
 
     //
-    // Llama a la vista de modificar usuario, utilizando la cédula del usuario.
+    // Retorna en a la vista correspondiente basandose en el formulario en el que esté, una comprobación
+    // Devolviendo un mensaje de error
+    // 
     //
-
-    private function returnPorError($form, $usuarioVerificacion, string $mensajeError): void
-    {
+    private function returnPorError(string $form, $usuarioVerificacion, string $mensajeError): void {
         if ($form === 'modificar') {
         $this->view('usuarios/modificarUsuario', [
             'tituloPagina' => 'Modificar Usuario',
@@ -44,9 +43,20 @@ class UsuarioController extends Controller
             'error' => $mensajeError
         ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
         }
+        if ($form === 'lista') {
+            $this->view('usuarios/index', [
+            'tituloPagina' => 'Crear Nuevo Usuario',
+            'activeMenu' => 'usuarios',
+            'usuarioEdit' => $usuarioVerificacion,
+            'error' => $mensajeError
+        ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+        }
         return;
     }
 
+    //
+    // Llama a la vista de modificar usuario, utilizando la cédula del usuario.
+    //
     public function modificarUsuario(): void {
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
@@ -156,8 +166,6 @@ class UsuarioController extends Controller
     public function crearUsuario(): void {
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
-
-        
         
         // Valida que la solicitud sea POST y que todos los campos requeridos estén presentes.
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -182,6 +190,7 @@ class UsuarioController extends Controller
                 $this->returnPorError('crear', null, 'El correo electrónico no es válido.');
             }
             
+            // Comprueba si ya existe un usuario con esa cedula antes de crearlo.
             $usuarioExistente = $this->model('UsuarioModel')->buscarPorCedula($cedula);
             if ($usuarioExistente) {
                 $this->returnPorError('crear', null, 'Ya existe un usuario con esa cédula.');
@@ -208,5 +217,41 @@ class UsuarioController extends Controller
             'activeMenu' => 'usuarios'
             ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']
         );}
+    }
+
+    public function cambiarEstadoUsuario() {
+        auth::requireLogin();
+        auth::requirePermiso('admin.total');
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            if (!isset($_POST['cedula'])) {
+                $this->returnPorError('lista', null, 'Error en la Cédula');
+            }
+            if (!isset($_POST['estado'])) {
+                $this->returnPorError('lista', null, 'Error en el Estado');
+            }
+
+            $cedula = trim($_POST['cedula']);
+            $estado = trim($_POST['estado']);
+
+            $verifyExistencia = $this->model('usuarioModel')->buscarPorCedula($cedula);
+            if ($verifyExistencia) 
+            {
+                $this->returnPorError('crear', null, 'Ya existe un usuario con esa cédula.');
+            }
+
+            $cambiarEstado = $this->model('UsuarioModel');
+            $comprobacion = $cambiarEstado->cambiarStatusUsuario($cedula, $estado);
+
+            if ($comprobacion) {
+                header('Location: /usuarios?success=Estado_del_Usuario_Cambiado');
+                exit;
+            } 
+            else 
+            {
+                $this->returnPorError('index', null, 'Fallo al cambiar estado');
+            }
+        } 
     }
 }

@@ -16,6 +16,9 @@ $rolesUsuario = [
 <body>
     <div>
         <h1>Crear Usuario</h1><br>
+         <?php if (isset($error) && !empty($error)) {
+            echo '<div class="alert alert-danger" role="alert">' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</div>';
+        } ?>
         <form action="/usuarios/crear" method="POST">
             <label for="Cedula">Cédula:</label>
             <input type="text" id="Cedula" name="cedula" required><br>
@@ -37,9 +40,6 @@ $rolesUsuario = [
             <button type="submit">Crear Usuario</button>
             <button href=/usuarios>Cancelar</button>
         </form>
-        <?php if (isset($error) && !empty($error)) {
-            echo '<div class="alert alert-danger" role="alert">' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</div>';
-        } ?>
     </div>
 </body>
 </html>
