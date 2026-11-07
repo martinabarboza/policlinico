@@ -80,9 +80,8 @@ class UsuarioModel extends Model
     //
     // Agrega un Nuevo Usuario a la Base de Datos
     //
-    public function crearUsuarioNuevo(string $cedula, string $nombre, string $apellido, string $rol, string $email, string $passw): bool
-    {
-        $resultado =[];
+    public function crearUsuarioNuevo(string $cedula, string $nombre, string $apellido, string $rol, string $email, string $passw): bool {
+        $resultado = [];
         $stmt = $this->db->prepare(
             'INSERT INTO USUARIO (cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario, email_Usuario, passw_Usuario, lastlogin_Usuario, dateupdate_Usuario)
             VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())'
@@ -98,8 +97,7 @@ class UsuarioModel extends Model
     // Función para modificar usuarios tomando en cuenta un objeto 
     // usuario almacenado en $usuarioObj y la cedula del usuario a modificar.
     //
-    public function modificarUsuario(UsuarioObj $usuarioObj, string $cedulaOld): bool
-    {
+    public function modificarUsuario(UsuarioObj $usuarioObj, string $cedulaOld): bool {
         $stmt = $this->db->prepare(
             'UPDATE USUARIO 
             SET cedula_Usuario = ?, nombre_Usuario = ?, apellido_Usuario = ?, rol_Usuario = ?, email_Usuario = ?, passw_Usuario = ?, dateupdate_Usuario = NOW()
@@ -115,6 +113,19 @@ class UsuarioModel extends Model
         $cedulaOldTrim = trim($cedulaOld);
 
         $stmt->bind_param('sssssss', $cedula, $nombre, $apellido, $rol, $email, $passw, $cedulaOldTrim);
+        $resultado = $stmt->execute();
+        $stmt->close();
+        return $resultado;
+    }
+
+    public function cambiarStatusUsuario(string $cedula, string $estado) {
+        $stmt = $this->db->prepare(
+            'UPDATE USUARIO
+            SET estado_Usuario = ?
+            WHERE cedula_Usuario = ?'
+        );
+
+        $stmt->bind_param('ss', $estado, $cedula);
         $resultado = $stmt->execute();
         $stmt->close();
         return $resultado;

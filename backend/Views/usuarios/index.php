@@ -90,6 +90,13 @@ foreach ($usuarios as $usuario) {
                 <table class="table table-hover align-middle mb-0">
                     <thead>
                         <tr>
+                            <td>
+                                <a class="btn btn-sm btn-outline-primary" href="/usuarios/crear">
+                                    <i class="fa-solid fa-pen-to-square me-1"></i>Agregar Nuevo Usuario
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Cédula</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
