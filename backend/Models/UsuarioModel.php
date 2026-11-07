@@ -66,8 +66,9 @@ class UsuarioModel extends Model
                 FROM USUARIO
                 WHERE cedula_Usuario LIKE ?
                 OR nombre_Usuario LIKE ?
-                OR apellido_Usuario LIKE ?');
-            $stmt->bind_param('sss', $busqueda, $busqueda, $busqueda);
+                OR apellido_Usuario LIKE ?
+                OR CONCAT_WS(\' \', nombre_Usuario, apellido_Usuario) LIKE ?');
+            $stmt->bind_param('ssss', $busqueda, $busqueda, $busqueda, $busqueda);
         }
         $stmt->execute();
         $resultado = $stmt->get_result();

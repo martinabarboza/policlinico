@@ -49,16 +49,21 @@ $reseniasExistentes = is_array($reseniasExistentes ?? null) ? $reseniasExistente
 $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
 ?>
 
-<main class="consulta-page">
-    <header class="page-header">
-        <div class="page-heading">
-            <span class="eyebrow">CONSULTORIO / <?= $modoEdicion ? 'EDITAR CONSULTA' : 'NUEVA CONSULTA' ?></span>
-            <h1><?= $modoEdicion ? ($consultaPendiente ? 'Editar consulta pendiente' : 'Continuar consulta clínica') : 'Nueva consulta clínica' ?></h1>
-            <p><?= $modoEdicion
+<main class="consulta-page usuarios-page">
+    <header class="usuarios-header">
+        <div class="usuarios-header__title">
+            <div class="usuarios-header__icon">
+                <i class="fa-solid fa-notes-medical" aria-hidden="true"></i>
+            </div>
+            <div>
+                <p class="usuarios-header__eyebrow">Consultorio / Registro clínico</p>
+                <h1 class="h3 mb-1"><?= $modoEdicion ? ($consultaPendiente ? 'Editar consulta pendiente' : 'Continuar consulta clínica') : 'Nueva consulta clínica' ?></h1>
+                <p class="text-secondary small mb-0"><?= $modoEdicion
                 ? ($consultaPendiente
                     ? 'Corregí o completá los datos. Al guardar, la consulta seguirá pendiente.'
                     : 'Editá el borrador guardado y continuá con la evaluación.')
                 : 'Registro clínico del paciente, organizado por etapas.' ?></p>
+            </div>
         </div>
         <div class="page-actions">
             <a class="btn btn-secondary"

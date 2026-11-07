@@ -13,15 +13,15 @@
         <form class="d-none d-md-flex ms-4 align-items-center gap-2 form-navbar-busqueda" action="/buscar-centro" method="get">
             <label class="visually-hidden" for="tipo-busqueda-navbar">Buscar en</label>
             <select class="form-select border-0" id="tipo-busqueda-navbar" name="tipoBusqueda" aria-label="Tipo de búsqueda">
-                <option value="paciente" selected>Paciente</option>
-                <option value="tutor">Tutor</option>
+                <option value="paciente" data-placeholder="Nombre o chip del paciente..." selected>Paciente</option>
+                <option value="tutor" data-placeholder="Nombre, documento o teléfono del tutor...">Tutor</option>
             </select>
             <label class="visually-hidden" for="texto-busqueda-navbar">Texto a buscar</label>
             <input class="form-control border-0"
                 id="texto-busqueda-navbar"
                 type="search"
                 name="busqueda"
-                placeholder="Nombre, chip, documento o teléfono..."
+                placeholder="Nombre o chip del paciente..."
                 minlength="1"
                 maxlength="100"
                 required>
@@ -31,29 +31,6 @@
         </form>
 
         <div class="navbar-nav align-items-center ms-auto">
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <i class="fa fa-envelope me-lg-2"></i>
-                    <span class="d-none d-lg-inline-flex">Mensajes</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <!--
-                    <a href="#" class="dropdown-item">
-                        <div class="d-flex align-items-center">
-                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                <i class="bi bi-person-fill"></i>
-                            </div>
-                            <div class="ms-2">
-                                <h6 class="fw-normal mb-0">Sofía te ha mandado un mensaje</h6>
-                                <small>hace 15 minutos</small>
-                            </div>
-                        </div>
-                    </a>
-                    -->
-                    <hr class="dropdown-divider">
-                    <a href="<?= htmlspecialchars(url('centro-mensajes'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item text-center">Ver todos los mensajes</a>
-                </div>
-            </div>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                     <i class="fa fa-bell me-lg-2"></i>

@@ -16,18 +16,23 @@ $nombreEspecie = ['Canino' => 'Perro', 'Felino' => 'Gato', 'Equino' => 'Equino']
 $especies = is_array($especies ?? null) ? $especies : [];
 ?>
 
-<main class="paciente-page">
-    <header class="paciente-header">
-        <div>
-            <p class="paciente-eyebrow">POLICLÍNICO / PACIENTES</p>
-            <h1><?= $editando ? 'Editar paciente' : 'Registrar paciente' ?></h1>
-            <p class="paciente-subtitle">
+<main class="paciente-page usuarios-page">
+    <header class="usuarios-header">
+        <div class="usuarios-header__title">
+            <div class="usuarios-header__icon">
+                <i class="fa-solid fa-paw" aria-hidden="true"></i>
+            </div>
+            <div>
+                <p class="usuarios-header__eyebrow">Pacientes</p>
+                <h1 class="h3 mb-1"><?= $editando ? 'Editar paciente' : 'Registrar paciente' ?></h1>
+                <p class="text-secondary small mb-0">
                 <?= $editando
                     ? 'Actualizá los datos de ' . $e($datos['nombre_Paciente'] ?? 'este paciente') . '.'
                     : 'Ingresá los datos del paciente y de su tutor.' ?>
-            </p>
+                </p>
+            </div>
         </div>
-        <a class="pc-btn pc-btn--secondary" href="<?= $e($volverUrl) ?>">Volver</a>
+        <a class="pc-btn pc-btn--secondary" href="<?= $e($volverUrl) ?>" data-back-history>Volver</a>
     </header>
 
     <?php if ($error !== ''): ?>
@@ -161,7 +166,7 @@ $especies = is_array($especies ?? null) ? $especies : [];
 
         <div class="pc-form-note"><strong>Importante:</strong> los campos marcados con * son obligatorios. <?= $editando ? 'Los cambios del tutor son compartidos por sus pacientes.' : 'La raza se elige del catálogo de la base de datos.' ?></div>
         <footer class="pc-actions">
-            <a class="pc-btn pc-btn--secondary" href="<?= $e($volverUrl) ?>">Cancelar</a>
+            <a class="pc-btn pc-btn--secondary" href="<?= $e($volverUrl) ?>" data-back-history>Cancelar</a>
             <button class="pc-btn pc-btn--primary" type="submit"><?= $editando ? 'Guardar cambios' : 'Registrar paciente' ?></button>
         </footer>
     </form>

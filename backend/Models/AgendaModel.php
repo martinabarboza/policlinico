@@ -12,7 +12,7 @@ class AgendaModel extends Model
      *     paciente: string,
      *     tutor: string,
      *     especie: string,
-     *     veterinario: string
+     *     usuarios: string
      * }>
      */
     public function listar(DateTimeImmutable $desde, DateTimeImmutable $hasta): array
@@ -32,26 +32,15 @@ class AgendaModel extends Model
                 COALESCE(
                     (
                         SELECT GROUP_CONCAT(
-                            DISTINCT TRIM(CONCAT_WS(' ', uv.nombre_Usuario, uv.apellido_Usuario))
-                            ORDER BY uv.nombre_Usuario SEPARATOR ', '
+                            DISTINCT TRIM(CONCAT_WS(' ', ua.nombre_Usuario, ua.apellido_Usuario))
+                            ORDER BY ua.nombre_Usuario SEPARATOR ', '
                         )
-                        FROM USUARIO_CONSULTA ucv
-                        INNER JOIN USUARIO uv ON uv.id_Usuario = ucv.id_Usuario
-                        WHERE ucv.id_Consulta = c.id_Consulta
-                          AND LOWER(TRIM(uv.rol_Usuario)) = 'profesor'
+                        FROM USUARIO_CONSULTA uca
+                        INNER JOIN USUARIO ua ON ua.id_Usuario = uca.id_Usuario
+                        WHERE uca.id_Consulta = c.id_Consulta
                     ),
-                    'Sin asignar'
-                ) AS veterinario,
-                COALESCE(
-                    (
-                        SELECT MIN(ucv.id_Usuario)
-                        FROM USUARIO_CONSULTA ucv
-                        INNER JOIN USUARIO uv ON uv.id_Usuario = ucv.id_Usuario
-                        WHERE ucv.id_Consulta = c.id_Consulta
-                          AND LOWER(TRIM(uv.rol_Usuario)) = 'profesor'
-                    ),
-                    0
-                ) AS veterinario_id
+                    'Sin usuarios asociados'
+                ) AS usuarios
              FROM CONSULTA c
              INNER JOIN PACIENTE p ON p.id_Paciente = c.id_Paciente
              INNER JOIN TUTOR t ON t.id_Tutor = p.id_Tutor
@@ -68,58 +57,20 @@ class AgendaModel extends Model
         return $turnos;
     }
 
-    /** @return list<array{id_Paciente: int, nombre_Paciente: string, especie: string, tutor: string}> */
-    public function listarPacientes(): array
-    {
-        $stmt = $this->db->prepare(
-            "SELECT p.id_Paciente, p.nombre_Paciente, e.nombre_Especie AS especie,
-                    t.nombre_Tutor AS tutor
-             FROM PACIENTE p
-             INNER JOIN TUTOR t ON t.id_Tutor = p.id_Tutor
-             LEFT JOIN RAZA r ON r.id_Raza = p.id_Raza
-             LEFT JOIN ESPECIE e ON e.id_Especie = r.id_Especie
-             ORDER BY e.nombre_Especie, p.nombre_Paciente"
-        );
-        $stmt->execute();
-        $pacientes = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        $stmt->close();
-
-        return $pacientes;
-    }
-
-    /** @return list<array{id_Usuario: int, nombre: string}> */
-    public function listarVeterinarios(): array
-    {
-        $stmt = $this->db->prepare(
-            "SELECT id_Usuario,
-                    TRIM(CONCAT_WS(' ', nombre_Usuario, apellido_Usuario)) AS nombre
-             FROM USUARIO
-             WHERE LOWER(TRIM(rol_Usuario)) = 'profesor'
-               AND LOWER(TRIM(estado_Usuario)) = 'activo'
-             ORDER BY nombre_Usuario, apellido_Usuario"
-        );
-        $stmt->execute();
-        $veterinarios = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        $stmt->close();
-
-        return $veterinarios;
-    }
-
     public function crearTurno(
         int $pacienteId,
-        int $veterinarioId,
+        int $usuarioId,
         string $fechaHora,
         string $tipo,
         string $motivo
     ): int {
-        $this->validarDatosTurno($pacienteId, $veterinarioId, $fechaHora, $tipo, $motivo);
+        $this->validarDatosTurno($pacienteId, $usuarioId, $fechaHora, $tipo, $motivo);
         $fechaHora = $this->validarFechaHoraFutura($fechaHora);
         $this->db->begin_transaction();
 
         try {
             $this->validarPaciente($pacienteId);
-            $this->bloquearVeterinario($veterinarioId);
-            $this->validarChoqueHorario($veterinarioId, $fechaHora);
+            $this->validarUsuario($usuarioId);
             $stmt = $this->db->prepare(
                 "INSERT INTO CONSULTA
                     (id_Paciente, tipo_Consulta, fecha_hora_Consulta,
@@ -134,7 +85,7 @@ class AgendaModel extends Model
             $stmt = $this->db->prepare(
                 'INSERT INTO USUARIO_CONSULTA (id_Usuario, id_Consulta) VALUES (?, ?)'
             );
-            $stmt->bind_param('ii', $veterinarioId, $consultaId);
+            $stmt->bind_param('ii', $usuarioId, $consultaId);
             $stmt->execute();
             $stmt->close();
             $this->db->commit();
@@ -146,7 +97,7 @@ class AgendaModel extends Model
         }
     }
 
-    public function reprogramar(int $consultaId, int $veterinarioId, string $fechaHora): void
+    public function reprogramar(int $consultaId, string $fechaHora): void
     {
         if ($consultaId < 1) {
             throw new InvalidArgumentException('El turno seleccionado no es válido.');
@@ -170,30 +121,12 @@ class AgendaModel extends Model
                 throw new InvalidArgumentException('Solo se pueden reprogramar turnos pendientes.');
             }
 
-            $this->bloquearVeterinario($veterinarioId);
-            $this->validarChoqueHorario($veterinarioId, $fechaHora, $consultaId);
             $stmt = $this->db->prepare(
                 "UPDATE CONSULTA SET fecha_hora_Consulta = ?
                  WHERE id_Consulta = ?
                    AND LOWER(TRIM(estado_proceso_Consulta)) = 'pendiente'"
             );
             $stmt->bind_param('si', $fechaHora, $consultaId);
-            $stmt->execute();
-            $stmt->close();
-
-            $stmt = $this->db->prepare(
-                "DELETE uc FROM USUARIO_CONSULTA uc
-                 INNER JOIN USUARIO u ON u.id_Usuario = uc.id_Usuario
-                 WHERE uc.id_Consulta = ?
-                   AND LOWER(TRIM(u.rol_Usuario)) = 'profesor'"
-            );
-            $stmt->bind_param('i', $consultaId);
-            $stmt->execute();
-            $stmt->close();
-            $stmt = $this->db->prepare(
-                'INSERT INTO USUARIO_CONSULTA (id_Usuario, id_Consulta) VALUES (?, ?)'
-            );
-            $stmt->bind_param('ii', $veterinarioId, $consultaId);
             $stmt->execute();
             $stmt->close();
             $this->db->commit();
@@ -227,13 +160,13 @@ class AgendaModel extends Model
 
     private function validarDatosTurno(
         int $pacienteId,
-        int $veterinarioId,
+        int $usuarioId,
         string $fechaHora,
         string $tipo,
         string $motivo
     ): void {
-        if ($pacienteId < 1 || $veterinarioId < 1) {
-            throw new InvalidArgumentException('Seleccioná un paciente y un veterinario.');
+        if ($pacienteId < 1 || $usuarioId < 1) {
+            throw new InvalidArgumentException('Seleccioná un paciente y un usuario.');
         }
         if (!in_array($tipo, ['Consulta general', 'Control', 'Consulta equina', 'Hospitalización'], true)) {
             throw new InvalidArgumentException('Seleccioná un tipo de consulta válido.');
@@ -263,22 +196,17 @@ class AgendaModel extends Model
         return $fecha->format('Y-m-d H:i:s');
     }
 
-    private function bloquearVeterinario(int $veterinarioId): void
+    private function validarUsuario(int $usuarioId): void
     {
         $stmt = $this->db->prepare(
-            "SELECT id_Usuario
-             FROM USUARIO
-             WHERE id_Usuario = ?
-               AND LOWER(TRIM(rol_Usuario)) = 'profesor'
-               AND LOWER(TRIM(estado_Usuario)) = 'activo'
-             FOR UPDATE"
+            'SELECT id_Usuario FROM USUARIO WHERE id_Usuario = ? FOR UPDATE'
         );
-        $stmt->bind_param('i', $veterinarioId);
+        $stmt->bind_param('i', $usuarioId);
         $stmt->execute();
         $existe = $stmt->get_result()->fetch_assoc() !== null;
         $stmt->close();
         if (!$existe) {
-            throw new InvalidArgumentException('El veterinario seleccionado no está activo.');
+            throw new InvalidArgumentException('El usuario seleccionado no existe.');
         }
     }
 
@@ -302,30 +230,4 @@ class AgendaModel extends Model
         }
     }
 
-    private function validarChoqueHorario(
-        int $veterinarioId,
-        string $fechaHora,
-        ?int $consultaIdExcluir = null
-    ): void {
-        $consultaIdExcluir = $consultaIdExcluir ?? 0;
-        $stmt = $this->db->prepare(
-            "SELECT c.id_Consulta
-             FROM CONSULTA c
-             INNER JOIN USUARIO_CONSULTA uc ON uc.id_Consulta = c.id_Consulta
-             WHERE uc.id_Usuario = ?
-               AND (? = 0 OR c.id_Consulta <> ?)
-               AND LOWER(TRIM(c.estado_proceso_Consulta)) NOT IN ('finalizada', 'cancelada', 'cancelado')
-               AND c.fecha_hora_Consulta < DATE_ADD(?, INTERVAL 30 MINUTE)
-               AND DATE_ADD(c.fecha_hora_Consulta, INTERVAL 30 MINUTE) > ?
-             LIMIT 1"
-        );
-        $inicio = $fechaHora;
-        $stmt->bind_param('iiiss', $veterinarioId, $consultaIdExcluir, $consultaIdExcluir, $inicio, $inicio);
-        $stmt->execute();
-        $hayChoque = $stmt->get_result()->fetch_assoc() !== null;
-        $stmt->close();
-        if ($hayChoque) {
-            throw new InvalidArgumentException('Ese veterinario ya tiene una consulta que se superpone con ese horario.');
-        }
-    }
 }

@@ -43,12 +43,16 @@ class AgendaController extends Controller
         unset($_SESSION['agenda_error']);
 
         $modelo = $this->model('AgendaModel');
+        $busquedas = $this->buscarOpcionesFormulario($_GET);
+        $error ??= $busquedas['error'];
         $this->view(
             'dashboard/agenda',
             [
                 'turnos' => $modelo->listar($inicio, $fin),
-                'pacientes' => $modelo->listarPacientes(),
-                'veterinarios' => $modelo->listarVeterinarios(),
+                'pacientes' => $busquedas['pacientes'],
+                'usuarios' => $busquedas['usuarios'],
+                'busquedaPaciente' => $busquedas['busquedaPaciente'],
+                'busquedaUsuario' => $busquedas['busquedaUsuario'],
                 'fechaSeleccionada' => $fecha->format('Y-m-d'),
                 'fechaInicio' => $inicio->format('Y-m-d'),
                 'fechaFin' => $fin->modify('-1 day')->format('Y-m-d'),
@@ -69,11 +73,6 @@ class AgendaController extends Controller
     public function guardar(): void
     {
         Auth::requireLogin();
-        if (!$this->puedeGestionar()) {
-            http_response_code(403);
-            echo 'Solo profesores y directores pueden gestionar la agenda.';
-            return;
-        }
 
         $datos = $_POST;
         if (!$this->csrfValido($datos['csrf_token'] ?? null)) {
@@ -83,13 +82,13 @@ class AgendaController extends Controller
         }
 
         $paciente = $datos['id_Paciente'] ?? null;
-        $veterinario = $datos['id_Profesor'] ?? null;
+        $usuario = $datos['id_Usuario'] ?? null;
         $fechaHora = $datos['fecha_hora_Consulta'] ?? null;
         $tipo = $datos['tipo_Consulta'] ?? null;
         $motivo = $datos['motivo_Consulta'] ?? '';
         if (
             !is_string($paciente) || !ctype_digit($paciente) || (int) $paciente < 1
-            || !is_string($veterinario) || !ctype_digit($veterinario) || (int) $veterinario < 1
+            || !is_string($usuario) || !ctype_digit($usuario) || (int) $usuario < 1
             || !is_string($fechaHora) || !is_string($tipo) || !is_string($motivo)
         ) {
             http_response_code(422);
@@ -100,7 +99,7 @@ class AgendaController extends Controller
         try {
             $consultaId = $this->model('AgendaModel')->crearTurno(
                 (int) $paciente,
-                (int) $veterinario,
+                (int) $usuario,
                 $fechaHora,
                 $tipo,
                 trim($motivo)
@@ -128,12 +127,10 @@ class AgendaController extends Controller
         }
 
         $consultaId = $_POST['consulta_id'] ?? null;
-        $veterinario = $_POST['id_Profesor'] ?? null;
         $fechaHora = $_POST['fecha_hora_Consulta'] ?? null;
         if (
             !$this->csrfValido($_POST['csrf_token'] ?? null)
             || !is_string($consultaId) || !ctype_digit($consultaId) || (int) $consultaId < 1
-            || !is_string($veterinario) || !ctype_digit($veterinario) || (int) $veterinario < 1
             || !is_string($fechaHora)
         ) {
             $_SESSION['agenda_error'] = 'El formulario de reprogramación no es válido o venció.';
@@ -142,7 +139,7 @@ class AgendaController extends Controller
 
         $fechaRetorno = $_POST['return_fecha'] ?? null;
         try {
-            $this->model('AgendaModel')->reprogramar((int) $consultaId, (int) $veterinario, $fechaHora);
+            $this->model('AgendaModel')->reprogramar((int) $consultaId, $fechaHora);
             $_SESSION['agenda_mensaje'] = 'El turno se reprogramó correctamente.';
             $fechaRetorno = substr($fechaHora, 0, 10);
         } catch (InvalidArgumentException $error) {
@@ -189,12 +186,15 @@ class AgendaController extends Controller
     private function mostrarFormulario(array $datos, string $error): void
     {
         $fecha = new DateTimeImmutable('today');
+        $busquedas = $this->buscarOpcionesFormulario($datos);
         $this->view(
             'dashboard/agenda',
             [
                 'turnos' => [],
-                'pacientes' => $this->model('AgendaModel')->listarPacientes(),
-                'veterinarios' => $this->model('AgendaModel')->listarVeterinarios(),
+                'pacientes' => $busquedas['pacientes'],
+                'usuarios' => $busquedas['usuarios'],
+                'busquedaPaciente' => $busquedas['busquedaPaciente'],
+                'busquedaUsuario' => $busquedas['busquedaUsuario'],
                 'fechaSeleccionada' => $fecha->format('Y-m-d'),
                 'fechaInicio' => $fecha->format('Y-m-d'),
                 'fechaFin' => $fecha->format('Y-m-d'),
@@ -220,6 +220,44 @@ class AgendaController extends Controller
     private function puedeGestionar(): bool
     {
         return in_array(strtoupper(trim(Auth::rol() ?? '')), ['PROFESOR', 'DIRECTOR'], true);
+    }
+
+    /**
+     * Busca opciones para el formulario con los modelos existentes.
+     *
+     * @return array{pacientes: array, usuarios: array, busquedaPaciente: string, busquedaUsuario: string, error: ?string}
+     */
+    private function buscarOpcionesFormulario(array $datos): array
+    {
+        $busquedaPaciente = $datos['busquedaPaciente'] ?? '';
+        $busquedaUsuario = $datos['busquedaUsuario'] ?? '';
+        if (
+            !is_string($busquedaPaciente) || strlen($busquedaPaciente) > 100
+            || !is_string($busquedaUsuario) || strlen($busquedaUsuario) > 100
+        ) {
+            return [
+                'pacientes' => [],
+                'usuarios' => [],
+                'busquedaPaciente' => '',
+                'busquedaUsuario' => '',
+                'error' => 'Las búsquedas no pueden superar los 100 caracteres.',
+            ];
+        }
+
+        $busquedaPaciente = trim($busquedaPaciente);
+        $busquedaUsuario = trim($busquedaUsuario);
+
+        return [
+            'pacientes' => $busquedaPaciente !== ''
+                ? $this->model('PacienteModel')->buscar($busquedaPaciente)
+                : [],
+            'usuarios' => $busquedaUsuario !== ''
+                ? $this->model('UsuarioModel')->listadoUsuarios($busquedaUsuario)
+                : [],
+            'busquedaPaciente' => $busquedaPaciente,
+            'busquedaUsuario' => $busquedaUsuario,
+            'error' => null,
+        ];
     }
 
     private function redirigirFechaAgenda($fecha): void

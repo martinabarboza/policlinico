@@ -176,6 +176,18 @@
 .menu-lateral .navbar .dropdown-item {
     padding-left: 25px;
     border-radius: 0 30px 30px 0;
+    color: #174c63;
+}
+
+.menu-lateral .navbar .dropdown-menu {
+    background-color: #e4f3f5;
+}
+
+.menu-lateral .navbar .dropdown-item:hover,
+.menu-lateral .navbar .dropdown-item:focus,
+.menu-lateral .navbar .dropdown-item.active {
+    color: #123f53;
+    background-color: #cce8ec;
 }
 
 /*** Barra superior ***/

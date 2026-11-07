@@ -75,7 +75,7 @@ $claseEstado = [
     'Finalizada' => 'centro-estado--finalizada',
 ];
 ?>
-<section class="centro-consulta">
+<section class="centro-consulta usuarios-page">
     <?php if (is_string($mensajeExito) && $mensajeExito !== ''): ?>
         <div class="alert alert-success" role="status"><?= $esc($mensajeExito) ?></div>
     <?php endif; ?>
@@ -86,16 +86,24 @@ $claseEstado = [
         <div class="alert alert-danger" role="alert"><?= $esc($errorEstado) ?></div>
     <?php endif; ?>
 
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-        <div>
-            <h1 class="h3 mb-1">Centro de consulta</h1>
-            <p class="text-muted mb-0">Vista general de la actividad clínica y búsqueda de consultas.</p>
+    <div class="usuarios-header">
+        <div class="usuarios-header__title">
+            <div class="usuarios-header__icon">
+                <i class="fa-solid fa-stethoscope" aria-hidden="true"></i>
+            </div>
+            <div>
+                <p class="usuarios-header__eyebrow">Atención clínica</p>
+                <h1 class="h3 mb-0">Centro de consultas</h1>
+            </div>
         </div>
         <?php if (in_array(strtoupper(trim(Auth::rol() ?? '')), ['ESTUDIANTE', 'PROFESOR', 'DIRECTOR'], true)): ?>
-            <div class="d-flex flex-wrap gap-2">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <span class="text-secondary small me-2">Consultas y seguimiento de pacientes</span>
                 <a class="btn btn-outline-primary" href="/pacientes/crear">+ Registrar paciente</a>
                 <a class="btn btn-primary" href="/centro-consultas/nueva">+ Nueva consulta</a>
             </div>
+        <?php else: ?>
+            <div class="text-secondary small">Consultas y seguimiento de pacientes</div>
         <?php endif; ?>
     </div>
 

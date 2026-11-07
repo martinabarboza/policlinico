@@ -2,26 +2,28 @@
 $e = static fn($valor): string => htmlspecialchars((string) ($valor ?? ''), ENT_QUOTES, 'UTF-8');
 $turnos = is_array($turnos ?? null) ? $turnos : [];
 $pacientes = is_array($pacientes ?? null) ? $pacientes : [];
-$veterinarios = is_array($veterinarios ?? null) ? $veterinarios : [];
+$usuarios = is_array($usuarios ?? null) ? $usuarios : [];
 $oldInput = is_array($oldInput ?? null) ? $oldInput : [];
+$busquedaPaciente = is_string($busquedaPaciente ?? null) ? $busquedaPaciente : '';
+$busquedaUsuario = is_string($busquedaUsuario ?? null) ? $busquedaUsuario : '';
 $vistaAgenda = ($vistaAgenda ?? 'dia') === 'semana' ? 'semana' : 'dia';
 $fechaBase = new DateTimeImmutable($fechaSeleccionada ?? 'today');
 $esPendiente = static fn(array $turno): bool =>
     strtolower(trim((string) ($turno['estado'] ?? ''))) === 'pendiente';
 ?>
 
-<main class="container-fluid agenda-page py-4">
-    <header class="agenda-header">
-        <div>
-            <p class="agenda-eyebrow mb-1">POLICLÍNICO / ORGANIZACIÓN</p>
-            <h1 class="h2 mb-1">Agenda clínica</h1>
-            <p class="text-secondary mb-0">
-                Turnos de 30 minutos. No se permiten superposiciones para un mismo veterinario.
-            </p>
+<main class="container-fluid agenda-page usuarios-page py-4">
+    <header class="usuarios-header">
+        <div class="usuarios-header__title">
+            <div class="usuarios-header__icon">
+                <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+            </div>
+            <div>
+                <p class="usuarios-header__eyebrow">Organización</p>
+                <h1 class="h3 mb-0">Agenda clínica</h1>
+            </div>
         </div>
-        <?php if ($puedeGestionar): ?>
-            <a class="btn btn-primary" href="#nuevo-turno">+ Agendar turno</a>
-        <?php endif; ?>
+        <div class="text-secondary small">Turnos de 30 minutos; los participantes se completan al atender la consulta.</div>
     </header>
 
     <?php if (is_string($mensaje ?? null) && $mensaje !== ''): ?>
@@ -68,83 +70,102 @@ $esPendiente = static fn(array $turno): bool =>
         </div>
     </section>
 
-    <?php if ($puedeGestionar): ?>
-        <section class="card shadow-sm mt-4" id="nuevo-turno">
-            <div class="card-body">
-                <h2 class="h5 mb-1">Agendar consulta</h2>
-                <p class="text-secondary">El turno se crea como Pendiente y queda vinculado al historial del paciente.</p>
-                <?php if (!$pacientes || !$veterinarios): ?>
-                    <div class="alert alert-warning mb-0">
-                        Para agendar necesitás al menos un paciente y un profesor activo.
-                        <?php if (!$pacientes): ?>
-                            <a href="<?= $e(url('pacientes/crear')) ?>">Registrar paciente</a>.
-                        <?php endif; ?>
-                    </div>
-                <?php else: ?>
-                    <form method="post" action="<?= $e(url('agenda/guardar')) ?>" class="row g-3">
-                        <input type="hidden" name="csrf_token" value="<?= $e($csrfToken) ?>">
-                        <div class="col-12 col-lg-5">
-                            <label class="form-label" for="turno-paciente">Paciente *</label>
-                            <select class="form-select" id="turno-paciente" name="id_Paciente" required>
-                                <option value="">Seleccioná un paciente</option>
-                                <?php foreach ($pacientes as $paciente): ?>
-                                    <?php
-                                    $idPaciente = (string) ($paciente['id_Paciente'] ?? '');
-                                    $especie = (string) ($paciente['especie'] ?? 'Especie sin definir');
-                                    ?>
-                                    <option value="<?= $e($idPaciente) ?>"
-                                        <?= (string) ($oldInput['id_Paciente'] ?? '') === $idPaciente ? 'selected' : '' ?>>
-                                        <?= $e($paciente['nombre_Paciente'] ?? '') ?> · <?= $e($especie) ?>
-                                        · Tutor: <?= $e($paciente['tutor'] ?? '') ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-3">
-                            <label class="form-label" for="turno-veterinario">Veterinario *</label>
-                            <select class="form-select" id="turno-veterinario" name="id_Profesor" required>
-                                <option value="">Seleccioná un veterinario</option>
-                                <?php foreach ($veterinarios as $veterinario): ?>
-                                    <?php $idVeterinario = (string) ($veterinario['id_Usuario'] ?? ''); ?>
-                                    <option value="<?= $e($idVeterinario) ?>"
-                                        <?= (string) ($oldInput['id_Profesor'] ?? '') === $idVeterinario ? 'selected' : '' ?>>
-                                        <?= $e($veterinario['nombre'] ?? '') ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-4">
-                            <label class="form-label" for="turno-fecha">Fecha y hora *</label>
-                            <input class="form-control" type="datetime-local" id="turno-fecha"
-                                   name="fecha_hora_Consulta" required
-                                   value="<?= $e($oldInput['fecha_hora_Consulta'] ?? '') ?>">
-                        </div>
-                        <div class="col-12 col-md-5">
-                            <label class="form-label" for="turno-tipo">Tipo *</label>
-                            <select class="form-select" id="turno-tipo" name="tipo_Consulta" required>
-                                <option value="">Seleccioná un tipo</option>
-                                <?php foreach (['Consulta general', 'Control', 'Consulta equina', 'Hospitalización'] as $tipo): ?>
-                                    <option value="<?= $e($tipo) ?>"
-                                        <?= ($oldInput['tipo_Consulta'] ?? '') === $tipo ? 'selected' : '' ?>>
-                                        <?= $e($tipo) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="col-12 col-md-7">
-                            <label class="form-label" for="turno-motivo">Motivo *</label>
-                            <input class="form-control" type="text" id="turno-motivo" name="motivo_Consulta"
-                                   maxlength="65535" required
-                                   value="<?= $e($oldInput['motivo_Consulta'] ?? '') ?>">
-                        </div>
-                        <div class="col-12">
-                            <button class="btn btn-primary" type="submit">Guardar turno pendiente</button>
-                        </div>
-                    </form>
-                <?php endif; ?>
-            </div>
-        </section>
-    <?php endif; ?>
+    <section class="card shadow-sm mt-4">
+        <div class="card-body">
+            <h2 class="h5 mb-1">Agendar consulta</h2>
+            <p class="text-secondary">La consulta se crea como Pendiente. El usuario elegido queda asociado para iniciar el registro; luego se pueden agregar los demás participantes desde la consulta.</p>
+
+            <form method="get" action="<?= $e(url('agenda')) ?>" class="row g-3 align-items-end mb-4">
+                <input type="hidden" name="fecha" value="<?= $e($fechaSeleccionada) ?>">
+                <input type="hidden" name="vista" value="<?= $e($vistaAgenda) ?>">
+                <div class="col-12 col-lg-5">
+                    <label class="form-label" for="buscar-paciente-agenda">Buscar paciente</label>
+                    <input class="form-control" type="search" id="buscar-paciente-agenda"
+                           name="busquedaPaciente" value="<?= $e($busquedaPaciente) ?>"
+                           placeholder="Nombre o chip..." maxlength="100">
+                </div>
+                <div class="col-12 col-lg-5">
+                    <label class="form-label" for="buscar-usuario-agenda">Buscar usuario</label>
+                    <input class="form-control" type="search" id="buscar-usuario-agenda"
+                           name="busquedaUsuario" value="<?= $e($busquedaUsuario) ?>"
+                           placeholder="Nombre o documento..." maxlength="100">
+                </div>
+                <div class="col-12 col-lg-2">
+                    <button class="btn btn-outline-primary w-100" type="submit">Buscar</button>
+                </div>
+            </form>
+
+            <?php if ($busquedaPaciente !== '' && !$pacientes): ?>
+                <p class="small text-secondary">No se encontraron pacientes para esa búsqueda.</p>
+            <?php endif; ?>
+            <?php if ($busquedaUsuario !== '' && !$usuarios): ?>
+                <p class="small text-secondary">No se encontraron usuarios para esa búsqueda.</p>
+            <?php endif; ?>
+
+            <form method="post" action="<?= $e(url('agenda/guardar')) ?>" class="row g-3">
+                <input type="hidden" name="csrf_token" value="<?= $e($csrfToken) ?>">
+                <input type="hidden" name="busquedaPaciente" value="<?= $e($busquedaPaciente) ?>">
+                <input type="hidden" name="busquedaUsuario" value="<?= $e($busquedaUsuario) ?>">
+                <div class="col-12 col-lg-6">
+                    <label class="form-label" for="turno-paciente">Paciente *</label>
+                    <select class="form-select" id="turno-paciente" name="id_Paciente" required>
+                        <option value="">Buscá y seleccioná un paciente</option>
+                        <?php foreach ($pacientes as $paciente): ?>
+                            <?php $idPaciente = (string) ($paciente['id'] ?? ''); ?>
+                            <option value="<?= $e($idPaciente) ?>"
+                                <?= (string) ($oldInput['id_Paciente'] ?? '') === $idPaciente ? 'selected' : '' ?>>
+                                <?= $e($paciente['nombre'] ?? '') ?>
+                                <?php if (($paciente['chip'] ?? '') !== ''): ?> · Chip: <?= $e($paciente['chip']) ?><?php endif; ?>
+                                · Tutor: <?= $e($paciente['tutor'] ?? '') ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <label class="form-label" for="turno-usuario">Usuario que inicia la consulta *</label>
+                    <select class="form-select" id="turno-usuario" name="id_Usuario" required>
+                        <option value="">Buscá y seleccioná un usuario</option>
+                        <?php foreach ($usuarios as $usuario): ?>
+                            <?php $idUsuario = (string) ($usuario['id_Usuario'] ?? ''); ?>
+                            <option value="<?= $e($idUsuario) ?>"
+                                <?= (string) ($oldInput['id_Usuario'] ?? '') === $idUsuario ? 'selected' : '' ?>>
+                                <?= $e(trim(($usuario['nombre_Usuario'] ?? '') . ' ' . ($usuario['apellido_Usuario'] ?? ''))) ?>
+                                · <?= $e($usuario['rol_Usuario'] ?? '') ?>
+                                · Doc. <?= $e($usuario['cedula_Usuario'] ?? '') ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <label class="form-label" for="turno-fecha">Fecha y hora *</label>
+                    <input class="form-control" type="datetime-local" id="turno-fecha"
+                           name="fecha_hora_Consulta" required
+                           value="<?= $e($oldInput['fecha_hora_Consulta'] ?? '') ?>">
+                </div>
+                <div class="col-12 col-md-5">
+                    <label class="form-label" for="turno-tipo">Tipo *</label>
+                    <select class="form-select" id="turno-tipo" name="tipo_Consulta" required>
+                        <option value="">Seleccioná un tipo</option>
+                        <?php foreach (['Consulta general', 'Control', 'Consulta equina', 'Hospitalización'] as $tipo): ?>
+                            <option value="<?= $e($tipo) ?>"
+                                <?= ($oldInput['tipo_Consulta'] ?? '') === $tipo ? 'selected' : '' ?>>
+                                <?= $e($tipo) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-12 col-md-7">
+                    <label class="form-label" for="turno-motivo">Motivo *</label>
+                    <input class="form-control" type="text" id="turno-motivo" name="motivo_Consulta"
+                           maxlength="65535" required
+                           value="<?= $e($oldInput['motivo_Consulta'] ?? '') ?>">
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Guardar turno pendiente</button>
+                </div>
+            </form>
+        </div>
+    </section>
 
     <section class="card shadow-sm mt-4">
         <div class="card-body">
@@ -164,7 +185,7 @@ $esPendiente = static fn(array $turno): bool =>
                                 <th>Hora</th>
                                 <th>Paciente y tutor</th>
                                 <th>Tipo / motivo</th>
-                                <th>Veterinario</th>
+                                <th>Usuarios asociados</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -193,7 +214,7 @@ $esPendiente = static fn(array $turno): bool =>
                                         <?= $e($turno['tipo'] ?? 'Consulta') ?>
                                         <span class="d-block small text-secondary"><?= $e($turno['motivo'] ?? '') ?></span>
                                     </td>
-                                    <td><?= $e($turno['veterinario'] ?? 'Sin asignar') ?></td>
+                                    <td><?= $e($turno['usuarios'] ?? 'Sin usuarios asociados') ?></td>
                                     <td><span class="badge <?= $turnoPendiente ? 'text-bg-warning' : 'text-bg-secondary' ?>">
                                         <?= $e($turno['estado'] ?? 'Sin estado') ?>
                                     </span></td>
@@ -214,17 +235,6 @@ $esPendiente = static fn(array $turno): bool =>
                                                            id="fecha-turno-<?= (int) $turno['id'] ?>"
                                                            name="fecha_hora_Consulta" required
                                                            value="<?= $e($fechaTurno->format('Y-m-d\TH:i')) ?>">
-                                                    <label class="visually-hidden" for="veterinario-turno-<?= (int) $turno['id'] ?>">Veterinario</label>
-                                                    <select class="form-select form-select-sm" id="veterinario-turno-<?= (int) $turno['id'] ?>"
-                                                            name="id_Profesor" required>
-                                                        <option value="">Seleccioná veterinario</option>
-                                                        <?php foreach ($veterinarios as $veterinario): ?>
-                                                            <option value="<?= (int) $veterinario['id_Usuario'] ?>"
-                                                                <?= (int) ($turno['veterinario_id'] ?? 0) === (int) $veterinario['id_Usuario'] ? 'selected' : '' ?>>
-                                                                <?= $e($veterinario['nombre'] ?? '') ?>
-                                                            </option>
-                                                        <?php endforeach; ?>
-                                                    </select>
                                                     <button class="btn btn-sm btn-outline-primary" type="submit">Guardar horario</button>
                                                 </form>
                                             </details>

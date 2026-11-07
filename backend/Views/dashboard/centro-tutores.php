@@ -11,21 +11,22 @@ $editando = $tutorEditando !== null && !empty($tutorEditando['id_Tutor']);
 $urlFormulario = $editando ? ($actualizarUrl ?? '') : ($guardarUrl ?? '');
 ?>
 
-<div class="container-fluid tutores-page py-4">
+<div class="container-fluid tutores-page usuarios-page py-4">
 
-    <div class="d-flex flex-wrap justify-content-between
-                align-items-center gap-3 mb-4">
-        <div>
-            <h1 class="h3 mb-1">Tutores</h1>
-            <p class="text-secondary mb-0">
-                Directorio y registro de tutores de pacientes.
-            </p>
+    <div class="usuarios-header">
+        <div class="usuarios-header__title">
+            <div class="usuarios-header__icon">
+                <i class="fa-solid fa-users" aria-hidden="true"></i>
+            </div>
+            <div>
+                <p class="usuarios-header__eyebrow">Directorio</p>
+                <h1 class="h3 mb-0">Gestión de tutores</h1>
+            </div>
         </div>
-
-        <a class="btn btn-outline-secondary"
-           href="<?= $escape($volverUrl ?? '#') ?>">
-            Volver
-        </a>
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <span class="text-secondary small">Tutores de pacientes</span>
+            <a class="btn btn-outline-secondary" href="<?= $escape($volverUrl ?? '#') ?>" data-back-history>Volver</a>
+        </div>
     </div>
 
     <?php if ($flash !== ''): ?>

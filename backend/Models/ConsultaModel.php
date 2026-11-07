@@ -310,6 +310,7 @@ class ConsultaModel extends Model
             $examenGeneralId = null;
             $archivosParaclinicosExistentes = [];
             $pronosticosLegacy = [];
+            $participantesAdicionales = [];
             if ($consultaIdEdicion !== null) {
                 $stmt = $this->db->prepare(
                     "SELECT id_Consulta
@@ -379,6 +380,20 @@ class ConsultaModel extends Model
                         $consultaId,
                     ]
                 );
+                $participantesAdicionales = array_map(
+                    'intval',
+                    array_column(
+                        $this->obtenerFilasDetalle(
+                            "SELECT uc.id_Usuario
+                             FROM USUARIO_CONSULTA uc
+                             INNER JOIN USUARIO u ON u.id_Usuario = uc.id_Usuario
+                             WHERE uc.id_Consulta = ?
+                               AND LOWER(TRIM(u.rol_Usuario)) NOT IN ('estudiante', 'profesor')",
+                            $consultaId
+                        ),
+                        'id_Usuario'
+                    )
+                );
                 $this->ejecutarDelete('DELETE FROM USUARIO_CONSULTA WHERE id_Consulta = ?', $consultaId);
                 $this->ejecutarDelete('DELETE FROM ANAMNESIS WHERE id_Consulta = ?', $consultaId);
                 $this->ejecutarDelete('DELETE FROM DIAGNOSTICO WHERE id_Consulta = ?', $consultaId);
@@ -416,6 +431,15 @@ class ConsultaModel extends Model
                     'ii',
                     [$profesorId, $consultaId]
                 );
+            }
+            foreach ($participantesAdicionales as $participanteId) {
+                if (!in_array($participanteId, $estudianteIds, true) && $participanteId !== $profesorId) {
+                    $this->ejecutarInsert(
+                        'INSERT INTO USUARIO_CONSULTA (id_Usuario, id_Consulta) VALUES (?, ?)',
+                        'ii',
+                        [$participanteId, $consultaId]
+                    );
+                }
             }
 
             $camposAnamnesis = [

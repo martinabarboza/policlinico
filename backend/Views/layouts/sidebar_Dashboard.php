@@ -19,47 +19,37 @@
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="<?= htmlspecialchars(url('dashboard'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'dashboard')) {
-                                                    echo 'nav-item nav-link active';
-                                                } else {
-                                                    echo 'nav-item nav-link';
-                                                } ?>"><i class="fa fa-home me-2"></i>Inicio</a>
+                                                                                                        echo 'nav-item nav-link active';
+                                                                                                    } else {
+                                                                                                        echo 'nav-item nav-link';
+                                                                                                    } ?>"><i class="fa fa-home me-2"></i>Inicio</a>
                     <a href="<?= htmlspecialchars(url('centro-consultas'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-consultas')) {
-                                                            echo 'nav-item nav-link active';
-                                                        } else {
-                                                            echo 'nav-item nav-link';
-                                                        } ?>"><i class="fa fa-search me-2"></i>Consultorio</a>
+                                                                                                                echo 'nav-item nav-link active';
+                                                                                                            } else {
+                                                                                                                echo 'nav-item nav-link';
+                                                                                                            } ?>"><i class="fa fa-search me-2"></i>Consultorio</a>
                     <a href="<?= htmlspecialchars(url('centro-tutores'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-tutores')) {
-                                                        echo 'nav-item nav-link active';
-                                                    } else {
-                                                        echo 'nav-item nav-link';
-                                                    } ?>"><i class="fa fa-users me-2"></i>Tutores</a>
+                                                                                                                echo 'nav-item nav-link active';
+                                                                                                            } else {
+                                                                                                                echo 'nav-item nav-link';
+                                                                                                            } ?>"><i class="fa fa-users me-2"></i>Tutores</a>
                     <a href="<?= htmlspecialchars(url('agenda'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'agenda')) {
-                                                echo 'nav-item nav-link active';
-                                            } else {
-                                                echo 'nav-item nav-link';
-                                            } ?>"><i class="fa fa-calendar-alt me-2"></i>Agenda</a>
+                                                                                                        echo 'nav-item nav-link active';
+                                                                                                    } else {
+                                                                                                        echo 'nav-item nav-link';
+                                                                                                    } ?>"><i class="fa fa-calendar-alt me-2"></i>Agenda</a>
                     <a href="<?= htmlspecialchars(url('hospitalizacion'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'hospitalizacion')) {
-                                                            echo 'nav-item nav-link active';
-                                                        } else {
-                                                            echo 'nav-item nav-link';
-                                                        } ?>"><i class="fa fa-hospital-alt me-2"></i>Hospitalización</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-stethoscope me-2"></i>Solicitudes</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="<?= htmlspecialchars(url('solicitudes-historias'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">Solicitudes de historias</a>
-                            <a href="<?= htmlspecialchars(url('solicitudes-citas'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">Solicitudes de citas</a>
-                            <a href="<?= htmlspecialchars(url('solicitudes-examenes'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">Solicitudes de exámenes</a>
-                        </div>
-                    </div>
+                                                                                                                echo 'nav-item nav-link active';
+                                                                                                            } else {
+                                                                                                                echo 'nav-item nav-link';
+                                                                                                            } ?>"><i class="fa fa-hospital-alt me-2"></i>Hospitalización</a>
 
 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user-cog me-2"></i>Administración</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="" class="dropdown-item">Ajustes de la Veterinaria</a>
+                        <div class="dropdown-menu border-0">
+                            <a href="/servicios" class="dropdown-item">Servicios</a>
                             <a href="/usuarios" class="dropdown-item">Usuarios</a>
-                            <a href="" class="dropdown-item">Propietarios</a>
-                            <a href="" class="dropdown-item">Variables</a>
                         </div>
                     </div>
                 </div>
