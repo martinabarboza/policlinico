@@ -55,7 +55,7 @@ function mostrarServicios($cartas, $cantidad)
 <body>
     <?php include __DIR__ . '/../layouts/navbar_Landing.php'; ?>
     <!--HERO-->
-    <section class="portada p-2">
+    <section class="portada p-2" id="inicio">
         <div class=" container-fluid w-100 px-4 py-5">
             <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
                 <div class="col-12 col-lg-6">
@@ -329,7 +329,7 @@ function mostrarServicios($cartas, $cantidad)
 
     </section>
     <!--ACCESOS DIRECTOS-->
-    <section class=" pb-5">
+    <section class="pb-5" id="servicios">
         <div class="d-flex justify-content-center px-4">
             <ul class="lista-titulos-seccion list-unstyled">
                 <li>
@@ -405,77 +405,61 @@ function mostrarServicios($cartas, $cantidad)
             </div>
         <?php endif; ?>
     </section>
-    <!--HORA ATENCION-->
-    <section>
-        <div class=" container">
-            <!-- PC y TABLET -->
-            <div class="p-5 d-none d-lg-block">
-
-                <!-- Etiqueta superior (Solapada hacia abajo) -->
-                <div class="bg-primary titulo-banner-verde text-white d-sm-flex d-md-inline-block d-lg-inline-block rounded-top-3 px-3 pt-2 pb-3 ms-lg-3 ms-md-3">
-                    <h2 class="h6 fw-bold mb-0 text-center">Horario de Atención</h2>
+    <section class="landing-about" id="sobre-nosotros">
+        <div class="container">
+            <div class="landing-about__content">
+                <p class="landing-section-label">CENUR Litoral Norte · Udelar</p>
+                <h2>Sobre nosotros</h2>
+                <p class="landing-about__intro">
+                    El Policlínico Veterinario del CENUR Litoral Norte es un servicio universitario en Salto
+                    que integra la atención veterinaria con la formación práctica y el vínculo con la comunidad.
+                </p>
+                <div class="landing-about__details">
+                    <p>
+                        En el marco de las funciones universitarias de enseñanza, investigación y extensión,
+                        el trabajo del Policlínico también acerca a la comunidad actividades educativas sobre
+                        bienestar animal, tenencia responsable y prevención de zoonosis.
+                    </p>
+                    <a class="landing-section-link"
+                       href="https://www.litoralnorte.udelar.edu.uy/institucional/cenur-litoral-norte/que-es-el-cenur"
+                       target="_blank" rel="noopener noreferrer">
+                        Conocer el CENUR Litoral Norte
+                        <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+                    </a>
                 </div>
-
-                <!-- Banner Principal Verde -->
-                <div class="franja-horario bg-success p-3 text-white d-flex flex-column flex-md-row align-items-center shadow position-relative">
-
-                    <!-- Icono Reloj -->
-                    <div class="px-3">
-                        <img src="<?= ASSETS_URL ?>/svgs/reloj.svg" alt="Reloj" width="48" height="48">
-                    </div>
-
-                    <!-- Texto Informativo -->
-                    <div>
-                        <h3 class="h6 fw-bold mb-1">Horario de atención - Lunes a Viernes</h3>
-                        <p class="mb-0 small fw-medium">10:00 a 17:00 horas</p>
-                    </div>
-
-                    <!-- Sección Derecha: Botón + Perro -->
-                    <div class="ms-auto d-flex align-items-center pe-lg-5 pe-md-5 me-lg-4 me-md-4">
-                        <!-- Botón de Teléfono -->
-                        <a href="tel:098230818" class="btn btn-light text-success fw-bold rounded-3 px-3 py-2 me-3 d-flex align-items-center gap-2 shadow-sm">
-                            <i class="bi bi-telephone-fill"></i>
-                            <span>098 230 818</span>
-                        </a>
-                    </div>
-
-                    <!-- Imagen del Perro (sobresale) -->
-                    <img src="<?= ASSETS_URL ?>/imgs/golden.png" alt="Golden Retriever" class="imagen-perro position-absolute end-0 d-none d-md-inline-block">
-
-                </div>
-
             </div>
-            <!-- MOBIL -->
-            <div class="horario-movil d-lg-none">
+        </div>
+    </section>
 
-                <div class="horario-movil-titulo">
-                    <h2>Horario de Atención</h2>
+    <section class="landing-contact" id="contacto">
+        <div class="container">
+            <div class="landing-contact__card">
+                <div class="landing-contact__copy">
+                    <p class="landing-section-label">Contacto e información</p>
+                    <h2>Consultá por canales oficiales</h2>
+                    <p>
+                        Para confirmar horarios, disponibilidad, requisitos de atención o cómo coordinar una consulta,
+                        comunicate directamente con el CENUR Litoral Norte o consultá la información institucional
+                        del Policlínico.
+                    </p>
+                    <p class="landing-contact__note">
+                        Esta página es informativa y no realiza reservas de turnos.
+                    </p>
                 </div>
-
-                <div class="horario-movil-franja">
-
-                    <div class="horario-movil-reloj">
-                        <img src="<?= ASSETS_URL ?>/svgs/reloj.svg"
-                            alt="Reloj"
-                            width="48"
-                            height="48">
-                    </div>
-
-                    <div class="horario-movil-info">
-                        <h3>Horario de atención</h3>
-                        <p>Lunes a Viernes</p>
-                        <span>10:00 a 17:00 horas</span>
-                    </div>
-
-                    <div class="horario-movil-telefono">
-                        <a href="tel:098230818">
-                            <i class="bi bi-telephone-fill"></i>
-                            <span>098 230 818</span>
-                        </a>
-                    </div>
-
+                <div class="landing-contact__actions">
+                    <a class="landing-contact__button landing-contact__button--primary"
+                       href="https://www.litoralnorte.udelar.edu.uy/contactos"
+                       target="_blank" rel="noopener noreferrer">
+                        Contacto del CENUR
+                        <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+                    </a>
+                    <a class="landing-contact__button landing-contact__button--secondary"
+                       href="https://www.litoralnorte.udelar.edu.uy/"
+                       target="_blank" rel="noopener noreferrer">
+                        Sitio oficial del CENUR
+                        <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+                    </a>
                 </div>
-
             </div>
         </div>
     </section>

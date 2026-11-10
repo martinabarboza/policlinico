@@ -379,131 +379,6 @@
     flex-basis: 18rem;
 }
 
-/* Ajustes para solapar la etiqueta superior con el contenedor verde */
-.titulo-banner-verde {
-    margin-bottom: -10px;
-    margin-left: 0px !important;
-    /* Hace que la etiqueta azul quede por detrás/debajo */
-    position: relative;
-    z-index: 1;
-}
-
-/* El banner principal debe estar al frente para la sombra */
-.franja-horario {
-    z-index: 2;
-    border-radius: 0 10px 10px 10px;
-    /* Si los colores exactos difieren de Bootstrap por defecto: */
-    /* background-color: #007043 !important; */
-}
-
-/* Posicionamiento y tamaño del perro sobresalido */
-.imagen-perro {
-    height: 125%;
-    /* Hace que sea más alto que la caja verde */
-    bottom: 0;
-    /* Se alinea al fondo de la caja */
-    right: 15px !important;
-    /* Separación del borde derecho */
-    object-fit: contain;
-    pointer-events: none;
-    /* Evita interacciones accidentales */
-}
-
-.horario-movil {
-    padding: 2rem 1rem;
-}
-
-.horario-movil-titulo {
-    display: inline-block;
-    position: relative;
-    z-index: 1;
-    margin-left: 0;
-    margin-bottom: -10px;
-    padding: 0.65rem 1rem 0.75rem;
-    background-color: #004a82;
-    border-radius: 8px 8px 0 0;
-}
-
-.horario-movil-titulo h2 {
-    margin: 0;
-    font-family: 'MONTSERRAT-NEGRITA';
-    font-size: 14px;
-    color: white;
-}
-
-.horario-movil-franja {
-    position: relative;
-    z-index: 2;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 0.5rem;
-    align-items: center;
-    padding: 1.5rem 1.25rem 1.25rem;
-    background-color: #198754;
-    color: white;
-    border-radius: 0 10px 10px 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.horario-movil-reloj {
-    display: grid;
-    place-items: center;
-    margin-bottom: 0.25rem;
-}
-
-.horario-movil-info {
-    min-width: 0;
-    text-align: center;
-}
-
-.horario-movil-info h3 {
-    margin: 0;
-    font-family: 'MONTSERRAT-NEGRITA';
-    font-size: 16px;
-}
-
-.horario-movil-info p {
-    margin: 0.25rem 0 0;
-    font-family: 'INTER-NEGRITA';
-    font-size: 14px;
-}
-
-.horario-movil-info span {
-    display: block;
-    margin-top: 0.2rem;
-    font-family: 'INTER-NORMAL';
-    font-size: 14px;
-}
-
-.horario-movil-telefono {
-    width: 100%;
-    margin-top: 0.5rem;
-}
-
-.horario-movil-telefono a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    max-width: 100%;
-    padding: 0.7rem 1rem;
-    background-color: white;
-    color: #04714c;
-    border-radius: 8px;
-    font-family: 'MONTSERRAT-NEGRITA';
-    font-size: 14px;
-    text-decoration: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
-}
-
-.horario-movil-telefono a:focus-visible {
-    outline: 3px solid #004a82;
-    outline-offset: 3px;
-}
-
-
 @media (max-width: 500px) {
     .interior-movil .carousel-item > .d-flex {
         padding-right: 3rem !important;
@@ -539,28 +414,6 @@
         padding: 1.5rem 1.25rem;
     }
 
-    .horario-movil {
-        padding: 1.5rem 0.75rem;
-    }
-
-    .horario-movil-franja {
-        grid-template-columns: minmax(0, 1fr);
-        padding: 1.5rem 1rem 1rem;
-    }
-
-    .horario-movil-reloj img {
-        width: 40px;
-        height: 40px;
-    }
-
-    .horario-movil-info h3 {
-        font-size: 14px;
-    }
-
-    .horario-movil-info p,
-    .horario-movil-info span {
-        font-size: 13px;
-    }
 }
 
 @media (max-width: 992px) {
@@ -621,5 +474,172 @@
     /* Flecha */
     .tarjeta-acceso__flecha {
         font-size: 18px;
+    }
+}
+
+@font-face {
+    font-family: 'IBM-PLEX-MONO';
+    src: url('../fonts/ibm-plex-mono-v20-latin/ibm-plex-mono-v20-latin-500.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+.landing-about,
+.landing-contact {
+    scroll-margin-top: 1rem;
+}
+
+.landing-about {
+    padding: 5rem 0;
+    background-color: #f8f9fa;
+}
+
+.landing-about > .container {
+    max-width: 960px;
+}
+
+.landing-section-label {
+    margin-bottom: 0.75rem;
+    color: #04714c;
+    font-family: 'IBM-PLEX-MONO';
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.landing-about h2,
+.landing-contact h2 {
+    margin-bottom: 1.25rem;
+    color: #004a82;
+    font-family: 'MONTSERRAT-NEGRITA';
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.landing-about__intro,
+.landing-about__details > p,
+.landing-contact__copy > p {
+    color: #343a40;
+    font-family: 'INTER-NORMAL';
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+.landing-about__intro {
+    max-width: 48rem;
+    font-size: 1.15rem;
+}
+
+.landing-about__details {
+    margin-top: 1.5rem;
+    padding-left: 1.25rem;
+    border-left: 4px solid #feea00;
+}
+
+.landing-section-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #04714c;
+    font-family: 'INTER-NEGRITA';
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.landing-section-link:hover {
+    color: #004a82;
+}
+
+.landing-contact {
+    padding: 4rem 0;
+    background-color: #004a82;
+}
+
+.landing-contact__card {
+    display: flex;
+    justify-content: space-between;
+    gap: 3rem;
+    align-items: center;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    background-color: #f8f9fa;
+    border-radius: 0.75rem;
+}
+
+.landing-contact__copy {
+    max-width: 48rem;
+}
+
+.landing-contact__copy > p {
+    margin-bottom: 0.75rem;
+}
+
+.landing-contact__note {
+    padding-left: 0.85rem;
+    border-left: 3px solid #feea00;
+}
+
+.landing-contact__actions {
+    display: flex;
+    flex: 0 0 16rem;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.landing-contact__button {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.9rem 1rem;
+    border: 2px solid #04714c;
+    border-radius: 0.4rem;
+    font-family: 'INTER-NEGRITA';
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.landing-contact__button--primary {
+    color: white;
+    background-color: #04714c;
+}
+
+.landing-contact__button--primary:hover {
+    color: #04714c;
+    background-color: white;
+}
+
+.landing-contact__button--secondary {
+    color: #04714c;
+    background-color: transparent;
+}
+
+.landing-contact__button--secondary:hover {
+    color: white;
+    background-color: #04714c;
+}
+
+.landing-contact__button:focus-visible,
+.landing-section-link:focus-visible {
+    outline: 3px solid #feea00;
+    outline-offset: 3px;
+}
+
+@media (max-width: 767.98px) {
+    .landing-about {
+        padding: 3.5rem 0;
+    }
+
+    .landing-contact {
+        padding: 2.5rem 0;
+    }
+
+    .landing-contact__card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
+    }
+
+    .landing-contact__actions {
+        flex-basis: auto;
     }
 }

@@ -7,16 +7,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-3">
                 <li class="nav-item activo">
-                    <a class="nav-link active" aria-current="page" href="#">INICIO</a>
+                    <a class="nav-link active" aria-current="page" href="#inicio">INICIO</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">SERVICIOS</a>
+                    <a class="nav-link" href="#servicios">SERVICIOS</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">SOBRE NOSOTROS</a>
+                    <a class="nav-link" href="#sobre-nosotros">SOBRE NOSOTROS</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">CONTACTO</a>
+                    <a class="nav-link" href="#contacto">CONTACTO</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">

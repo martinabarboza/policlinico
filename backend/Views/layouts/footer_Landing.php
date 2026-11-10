@@ -22,16 +22,16 @@
                 <h5 class="text-uppercase texto-justificado text-light">Enlaces rapidos</h5>
                 <ul class="list-unstyled mb-0 texto-justificado d-flex flex-column gap-2">
                     <li>
-                        <a class="texto-justificado enlace-rapido" href="">Inicio</a>
+                        <a class="texto-justificado enlace-rapido" href="#inicio">Inicio</a>
                     </li>
                     <li>
-                        <a class="texto-justificado enlace-rapido" href="about_us">Sobre Nosotros</a>
+                        <a class="texto-justificado enlace-rapido" href="#sobre-nosotros">Sobre Nosotros</a>
                     </li>
                     <li>
-                        <a class="texto-justificado enlace-rapido" href="servicios">Servicios</a>
+                        <a class="texto-justificado enlace-rapido" href="#servicios">Servicios</a>
                     </li>
                     <li>
-                        <a class="texto-justificado enlace-rapido" href="contacto">Contacto</a>
+                        <a class="texto-justificado enlace-rapido" href="#contacto">Contacto</a>
                     </li>
                 </ul>
             </div>
