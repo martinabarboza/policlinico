@@ -643,9 +643,43 @@
         flex-basis: auto;
     }
 }
+/* login */
+main {
+    background: #eef1f8;
+    min-height: 100vh;
+}
 
+.barra-superior {
+    height: 6px;
+    background: linear-gradient(to right, #1f7a4d 0%, #1f7a4d 50%, #1a3fae 50%, #1a3fae 100%);
+}
 
-    /* ---- INICIO del FOOTER ---- */
+.tarjeta-inicio-sesion {
+    max-width: 480px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.logo-circular {
+    width: 72px;
+    height: 72px;
+}
+
+.marca-verde {
+    color: #1f7a4d;
+}
+
+.boton-marca {
+    background-color: #1f7a4d;
+    border-color: #1f7a4d;
+}
+
+.boton-marca:hover {
+    background-color: #17603c;
+    border-color: #17603c;
+}
+
+/* ---- FOOTER ---- */
 
 .pie-inicio {
     background-color: #04714c;
