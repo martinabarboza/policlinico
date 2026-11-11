@@ -21,6 +21,7 @@ class Auth
             'cedula' => $usuario['cedula_Usuario'],
             'email'    => $usuario['email_Usuario'],
             'rol'      => $usuario['rol_Usuario'],
+            'estado'   => $usuario['estado_Usuario'],
         ];
     }
 

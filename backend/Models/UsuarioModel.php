@@ -17,7 +17,7 @@ class UsuarioModel extends Model
 
         $stmt = $this->db->prepare(
             'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario,
-                    rol_Usuario, email_Usuario, passw_Usuario
+                    rol_Usuario, email_Usuario, passw_Usuario, estado_Usuario
              FROM USUARIO
              WHERE cedula_Usuario = ?
              LIMIT 1'
@@ -144,5 +144,9 @@ class UsuarioModel extends Model
         $resultado = $stmt->execute();
         $stmt->close();
         return $resultado;
+    }
+
+    public function borrarUsuario(){
+        
     }
 }

@@ -155,11 +155,19 @@ foreach ($usuarios as $usuario) {
                                             <a class="btn btn-sm btn-outline-primary" href="/usuarios/editar?cedula=<?php echo urlencode($usuario['cedula_Usuario']); ?>">
                                                 <i class="fa-solid fa-pen-to-square me-1"></i>Modificar
                                             </a>
-                                            <form action="/usuarios/cambiarEstado" method="POST" onsubmit="return confirm('¿Desea desactivar este usuario?');" class="d-inline">
-                                                <input type="hidden" name="cedula" value="<?php echo htmlspecialchars($usuario['cedula_Usuario']); ?>">
-                                                <input type="hidden" name="estado" value="Inactivo">
-                                                <button type="submit" class="btn btn-sm btn-outline-warning">Desactivar</button>
-                                            </form>
+                                            <?php if (!isset($_GET['checkestado']) || $_GET['checkestado'] !== '1'):?>
+                                                <form action="/usuarios/cambiarEstado" method="POST" onsubmit="return confirm('¿Desea desactivar este usuario?');" class="d-inline">
+                                                    <input type="hidden" name="cedula" value="<?php echo htmlspecialchars($usuario['cedula_Usuario']); ?>">
+                                                    <input type="hidden" name="estado" value="inactivo">
+                                                    <button type="submit" class="btn btn-sm btn-outline-warning">Desactivar</button>
+                                                </form>
+                                            <?php else: ?>
+                                                <form action="/usuarios/cambiarEstado" method="POST" onsubmit="return confirm('¿Desea activar este usuario?');" class="d-inline">
+                                                    <input type="hidden" name="cedula" value="<?php echo htmlspecialchars($usuario['cedula_Usuario']); ?>">
+                                                    <input type="hidden" name="estado" value="activo">
+                                                    <button type="submit" class="btn btn-sm btn-outline-success">Activar</button>
+                                                </form>
+                                            <?php endif ?>
                                         </div>
                                     </td>
                                 </tr>

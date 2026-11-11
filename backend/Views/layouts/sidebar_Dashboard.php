@@ -46,10 +46,17 @@
 
 
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-user-cog me-2"></i>Administración</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" <?php if (Auth::rol() !== 'Director') echo 'hidden';?>>
+                            <i class="fa fa-user-cog me-2"></i>
+                            Administración
+                        </a>
                         <div class="dropdown-menu border-0">
-                            <a href="/servicios" class="dropdown-item">Servicios</a>
-                            <a href="/usuarios" class="dropdown-item">Usuarios</a>
+                            <a href="/servicios" class="dropdown-item">
+                                Servicios
+                            </a>
+                            <a href="/usuarios" class="dropdown-item">
+                                Usuarios
+                            </a>
                         </div>
                     </div>
                 </div>

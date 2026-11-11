@@ -55,6 +55,11 @@ class AuthController extends Controller
             return;
         }
 
+        if ($usuario['estado_Usuario'] !== 'activo') {
+            $this->fallarLogin('Esta cuenta está desactivada, si cree que es un error por favor contacte con el administrador a cargo del sistema', $cedula);
+            return;
+        }
+
         Auth::login($usuario);
         $usuarioModel->actualizarUltimoLogin((int) $usuario['id_Usuario']);
 
