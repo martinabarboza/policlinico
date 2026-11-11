@@ -10,7 +10,7 @@
     gap: 1.25rem;
     padding: 1.5rem;
     border: 1px solid #dfe7df;
-    border-left: 5px solid #16734a;
+    border-left: 5px solid var(--primary);
     border-radius: 0.75rem;
     background:
         radial-gradient(circle at 90% 15%, rgba(32, 130, 86, 0.08), transparent 23rem),
@@ -19,7 +19,7 @@
 }
 
 .agenda-eyebrow {
-    color: #16734a;
+    color: var(--primary);
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.12em;
@@ -47,7 +47,7 @@
 }
 
 .agenda-reschedule summary {
-    color: #175f43;
+    color: var(--primary);
     cursor: pointer;
     font-size: 0.875rem;
     font-weight: 600;

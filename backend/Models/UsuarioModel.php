@@ -50,7 +50,7 @@ class UsuarioModel extends Model
     //
     // Lista Los Usuarios Registrados en la Base de Datos.
     //
-    public function listadoUsuarios(string $busqueda = '', bool $checkinactivos): array
+    public function listadoUsuarios(string $busqueda = '', bool $checkinactivos = false): array
     {
         $resultado = [];
         $busqueda = trim($busqueda);

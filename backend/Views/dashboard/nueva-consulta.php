@@ -279,31 +279,52 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
 
             <div class="form-grid">
                 <div class="field">
-                    <label for="id_Paciente">Paciente *</label>
-                    <select id="id_Paciente" name="id_Paciente" required>
-                        <option value="">Seleccionar paciente</option>
+                    <label for="buscar-paciente">Buscar paciente *</label>
+                    <input type="search"
+                           id="buscar-paciente"
+                           class="participante-busqueda"
+                           data-filter-list="lista-pacientes"
+                           placeholder="Buscar por nombre, tutor o chip..."
+                           autocomplete="off"
+                           aria-controls="lista-pacientes">
+                    <div class="participante-lista paciente-lista" id="lista-pacientes" role="radiogroup" aria-label="Pacientes de la especie seleccionada">
                         <?php foreach ($pacientesFiltrados as $p): ?>
-                            <option value="<?= e($p['id_Paciente'] ?? '') ?>"
-                                data-nombre="<?= e($p['nombre_Paciente'] ?? 'Paciente sin nombre') ?>"
-                                data-tutor="<?= e($p['nombre_Tutor'] ?? 'Tutor no registrado') ?>"
-                                data-chip="<?= e($p['numchip_Paciente'] ?? '') ?>"
-                                <?= $valorAnterior('id_Paciente') === (string) ($p['id_Paciente'] ?? '') ? 'selected' : '' ?>>
-                                <?= e($p['nombre_Paciente'] ?? 'Paciente sin nombre') ?>
-                                <?php if (!empty($p['numchip_Paciente'])): ?>
-                                    — <?= e($p['numchip_Paciente']) ?>
-                                <?php endif; ?>
-                                <?php if (!empty($p['nombre_Tutor'])): ?>
-                                    · Tutor: <?= e($p['nombre_Tutor']) ?>
-                                <?php endif; ?>
-                            </option>
+                            <?php
+                            $pacienteId = (string) ($p['id_Paciente'] ?? '');
+                            $nombrePaciente = $p['nombre_Paciente'] ?? 'Paciente sin nombre';
+                            $nombreTutor = $p['nombre_Tutor'] ?? 'Tutor no registrado';
+                            $chipPaciente = $p['numchip_Paciente'] ?? '';
+                            ?>
+                            <label class="participante-opcion"
+                                   data-search="<?= e($nombrePaciente . ' ' . $nombreTutor . ' ' . $chipPaciente) ?>">
+                                <input type="radio"
+                                       name="id_Paciente"
+                                       value="<?= e($pacienteId) ?>"
+                                       data-nombre="<?= e($nombrePaciente) ?>"
+                                       data-tutor="<?= e($nombreTutor) ?>"
+                                       data-chip="<?= e($chipPaciente) ?>"
+                                       <?= $valorAnterior('id_Paciente') === $pacienteId ? 'checked' : '' ?>>
+                                <span>
+                                    <strong><?= e($nombrePaciente) ?></strong>
+                                    <small>
+                                        Tutor: <?= e($nombreTutor) ?>
+                                        <?php if ($chipPaciente !== ''): ?>
+                                            · Chip: <?= e($chipPaciente) ?>
+                                        <?php endif; ?>
+                                    </small>
+                                </span>
+                                <span class="participante-opcion__estado" aria-hidden="true"></span>
+                            </label>
                         <?php endforeach; ?>
-                    </select>
                     <?php if (count($pacientesFiltrados) === 0): ?>
-                        <small class="field-warning">
+                        <p class="participante-lista__vacio">
                             No hay pacientes asociados a esta especie en los datos recibidos.
                             Revisá el catálogo de especies, las razas y la consulta del modelo.
-                        </small>
+                        </p>
                     <?php endif; ?>
+                        <p class="participante-lista__sin-resultados" hidden>No hay pacientes que coincidan con la búsqueda.</p>
+                    </div>
+                    <small class="field-warning">Elegí un paciente de la lista para asociarlo a la consulta.</small>
                 </div>
 
                 <div class="field">

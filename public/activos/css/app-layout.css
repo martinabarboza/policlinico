@@ -3,6 +3,105 @@
     --primary: #04714c;
     --secondary: #004a82;
     --dark: #191C24;
+    --bs-primary: #04714c;
+    --bs-primary-rgb: 4, 113, 76;
+    --bs-success: #04714c;
+    --bs-success-rgb: 4, 113, 76;
+    --bs-link-color: #004a82;
+    --bs-link-color-rgb: 0, 74, 130;
+    --bs-link-hover-color: #003b68;
+    --bs-link-hover-color-rgb: 0, 59, 104;
+}
+
+@font-face {
+    font-family: Inter;
+    src: url('../fonts/inter-v20-latin/inter-v20-latin-regular.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Inter;
+    src: url('../fonts/inter-v20-latin/inter-v20-latin-500.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Inter;
+    src: url('../fonts/inter-v20-latin/inter-v20-latin-600.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Inter;
+    src: url('../fonts/inter-v20-latin/inter-v20-latin-700.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Inter;
+    src: url('../fonts/inter-v20-latin/inter-v20-latin-800.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Montserrat;
+    src: url('../fonts/montserrat-v31-latin/montserrat-v31-latin-600.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Montserrat;
+    src: url('../fonts/montserrat-v31-latin/montserrat-v31-latin-700.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Montserrat;
+    src: url('../fonts/montserrat-v31-latin/montserrat-v31-latin-800.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IBM Plex Mono';
+    src: url('../fonts/ibm-plex-mono-v20-latin/ibm-plex-mono-v20-latin-regular.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+body {
+    font-family: Inter, sans-serif;
+}
+
+.contenido-principal h1,
+.contenido-principal h2,
+.contenido-principal h3,
+.contenido-principal h4,
+.contenido-principal h5,
+.contenido-principal h6 {
+    font-family: Montserrat, Inter, sans-serif;
+}
+
+.contenido-principal code,
+.contenido-principal pre,
+.contenido-principal .font-monospace {
+    font-family: 'IBM Plex Mono', monospace;
 }
 
 /*** Cargador de página ***/
@@ -447,4 +546,23 @@
 
 .usuarios-form-page .list-group-item {
     border-color: var(--usuarios-border);
+}
+
+.contenido-principal .paciente-page {
+    --pc-accent: var(--primary);
+}
+
+.contenido-principal .paciente-header h1,
+.contenido-principal .pc-section-heading h2 {
+    font-family: Montserrat, Inter, sans-serif;
+}
+
+.contenido-principal .pc-step {
+    color: var(--primary);
+    background: rgba(4, 113, 76, .1);
+}
+
+.contenido-principal .pc-form-note {
+    background: rgba(0, 74, 130, .06);
+    color: #344761;
 }

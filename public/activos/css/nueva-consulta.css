@@ -1,8 +1,8 @@
 /* PetCraft - formulario clínico de nueva consulta. */
 .consulta-page {
-    --green: #087653;
-    --green-dark: #066345;
-    --blue: #126bff;
+    --green: #04714c;
+    --green-dark: #035f45;
+    --blue: #004a82;
     --text: #172c49;
     --muted: #68798e;
     --border: #dce4e9;
@@ -126,6 +126,11 @@
     min-width: 0;
 }
 
+.paciente-lista {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
 .field-full {
     grid-column: 1 / -1;
 }
@@ -219,7 +224,7 @@
 .field textarea:focus {
     outline: none;
     border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgb(18 107 255 / 10%);
+    box-shadow: 0 0 0 3px rgb(0 74 130 / 10%);
 }
 
 .field input:read-only,
@@ -303,6 +308,14 @@
     content: "✓ Agregado";
 }
 
+.paciente-lista .participante-opcion > input {
+    border-radius: 50%;
+}
+
+.paciente-lista .participante-opcion.is-selected .participante-opcion__estado::before {
+    content: "✓ Seleccionado";
+}
+
 .participante-opcion:not(.is-selected) .participante-opcion__estado::before {
     content: "+ Agregar";
 }
@@ -357,7 +370,7 @@
 }
 
 .btn-primary:hover {
-    background: #0758dc;
+    background: #003b68;
 }
 
 .btn-secondary {
@@ -580,7 +593,7 @@
 }
 
 .consulta-tab:hover {
-    color: #0758dc;
+    color: #004a82;
     background: #f2f7ff;
 }
 
@@ -701,14 +714,14 @@
 }
 
 .btn-save {
-    color: #087653;
+    color: #04714c;
     background: #fff;
     border-color: #15916b;
 }
 
 .btn-save:hover {
     color: #fff;
-    background: #087653;
+    background: #04714c;
 }
 
 .btn-pending {
@@ -725,13 +738,13 @@
 
 .btn-finish {
     color: #fff;
-    background: #087653;
-    border-color: #087653;
+    background: #04714c;
+    border-color: #04714c;
 }
 
 .btn-finish:hover {
-    background: #066345;
-    border-color: #066345;
+    background: #035f45;
+    border-color: #035f45;
 }
 
 .btn:disabled {

@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (noResults) {
-                noResults.hidden = visibleCount > 0;
+                noResults.hidden = visibleCount > 0 || options.length === 0;
             }
         }
 
@@ -112,7 +112,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var siguiente = document.querySelector('[data-tab-next]');
     var indicadorEtapa = document.querySelector('[data-step-label]');
     var pestanaActiva = document.getElementById('consulta-tab-activa');
-    var selectorPaciente = document.getElementById('id_Paciente');
+    var busquedaPaciente = document.getElementById('buscar-paciente');
+    var listaPacientes = document.getElementById('lista-pacientes');
     var resumenPaciente = document.getElementById('paciente-resumen');
     var resumenTutor = document.getElementById('tutor-resumen');
 
@@ -185,19 +186,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
         activarPestana(indexActivo, false);
 
-        if (selectorPaciente && resumenPaciente && resumenTutor) {
+        if (busquedaPaciente && listaPacientes && resumenPaciente && resumenTutor) {
             function actualizarResumenPaciente() {
-                var opcion = selectorPaciente.options[selectorPaciente.selectedIndex];
-                var seleccionado = selectorPaciente.value !== '' && opcion;
+                var opcion = listaPacientes.querySelector('input[name="id_Paciente"]:checked');
+                var seleccionado = Boolean(opcion);
                 resumenPaciente.textContent = seleccionado
-                    ? (opcion.dataset.nombre || opcion.text.trim())
+                    ? (opcion.dataset.nombre || 'Paciente seleccionado')
                     : 'Seleccioná un paciente';
                 resumenTutor.textContent = seleccionado
                     ? (opcion.dataset.tutor || 'Tutor no registrado')
                         + (opcion.dataset.chip ? ' · Chip ' + opcion.dataset.chip : '')
                     : 'El resumen aparecerá aquí.';
             }
-            selectorPaciente.addEventListener('change', actualizarResumenPaciente);
+            listaPacientes.addEventListener('change', actualizarResumenPaciente);
             actualizarResumenPaciente();
         }
 
@@ -222,13 +223,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 formConsulta.appendChild(accionAutomatica);
             }
             var finalizando = accion === 'finalizar';
-            var paciente = document.getElementById('id_Paciente');
+            var paciente = document.querySelector('input[name="id_Paciente"]:checked');
             var fecha = document.getElementById('fecha_hora');
             var tipo = document.getElementById('tipo');
             var motivo = document.getElementById('motivo');
             var campoInvalido = null;
 
-            [paciente, fecha, tipo, motivo].forEach(function (campo) {
+            [busquedaPaciente, fecha, tipo, motivo].forEach(function (campo) {
                 if (campo) {
                     campo.setCustomValidity('');
                 }
@@ -237,9 +238,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 marca.hidden = !finalizando;
             });
 
-            if (!paciente.value) {
-                paciente.setCustomValidity('Seleccioná un paciente para guardar la consulta.');
-                campoInvalido = paciente;
+            if (!paciente) {
+                if (busquedaPaciente) {
+                    busquedaPaciente.setCustomValidity('Seleccioná un paciente de la lista para guardar la consulta.');
+                    campoInvalido = busquedaPaciente;
+                }
             } else if (!fecha.value || !fecha.checkValidity()) {
                 fecha.setCustomValidity('Ingresá una fecha y hora válidas.');
                 campoInvalido = fecha;
