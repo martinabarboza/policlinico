@@ -50,24 +50,39 @@ class UsuarioModel extends Model
     //
     // Lista Los Usuarios Registrados en la Base de Datos.
     //
-    public function listadoUsuarios(string $busqueda = ''): array 
+    public function listadoUsuarios(string $busqueda = '', bool $checkinactivos): array
     {
         $resultado = [];
         $busqueda = trim($busqueda);
-        if (empty($busqueda)) {
-             $stmt = $this->db->prepare(
+        $checkinactivos = (bool) $checkinactivos;
+
+        if (empty($busqueda) && !$checkinactivos) {
+            $stmt = $this->db->prepare(
             'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario, email_Usuario
-            FROM USUARIO'
+            FROM USUARIO
+            WHERE estado_Usuario = "activo"'
         );
+        } else if (!empty($busqueda) && !$checkinactivos) {
+            $busqueda = "%$busqueda%";
+            $stmt = $this->db->prepare(
+                'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario, email_Usuario
+                FROM USUARIO
+                WHERE ( cedula_Usuario LIKE ?
+                OR nombre_Usuario LIKE ?
+                OR apellido_Usuario LIKE ?
+                OR CONCAT_WS(\' \', nombre_Usuario, apellido_Usuario) LIKE ? )
+                AND estado_Usuario = "activo"');
+            $stmt->bind_param('ssss', $busqueda, $busqueda, $busqueda, $busqueda);
         } else {
             $busqueda = "%$busqueda%";
             $stmt = $this->db->prepare(
                 'SELECT id_Usuario, cedula_Usuario, nombre_Usuario, apellido_Usuario, rol_Usuario, email_Usuario
                 FROM USUARIO
-                WHERE cedula_Usuario LIKE ?
+                WHERE ( cedula_Usuario LIKE ?
                 OR nombre_Usuario LIKE ?
                 OR apellido_Usuario LIKE ?
-                OR CONCAT_WS(\' \', nombre_Usuario, apellido_Usuario) LIKE ?');
+                OR CONCAT_WS(\' \', nombre_Usuario, apellido_Usuario) LIKE ? )
+                AND estado_Usuario = "inactivo"');
             $stmt->bind_param('ssss', $busqueda, $busqueda, $busqueda, $busqueda);
         }
         $stmt->execute();

@@ -12,12 +12,13 @@ class UsuarioController extends Controller
         Auth::requirePermiso('admin.total');
 
         $busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
+        $checkinactivos = isset($_GET['checkestado']) ? true : false;
 
         $this->view('usuarios/index', [
             'tituloPagina' => 'Usuarios',
             'activeMenu'   => 'usuarios',
             //'roles'        => $this->model('Rol')->activos(), <= No me acuerdo que era esto pero lo dejo comentado por si acaso.
-            'usuarios'     => $this->model('UsuarioModel')->listadoUsuarios($busqueda),
+            'usuarios'     => $this->model('UsuarioModel')->listadoUsuarios($busqueda, $checkinactivos),
         ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
     }
 
@@ -235,10 +236,12 @@ class UsuarioController extends Controller
             $cedula = trim($_POST['cedula']);
             $estado = trim($_POST['estado']);
 
-            $verifyExistencia = $this->model('usuarioModel')->buscarPorCedula($cedula);
-            if ($verifyExistencia) 
+            if ($cedula)
+
+            $verifyExistencia = $this->model('UsuarioModel')->buscarPorCedula($cedula);
+            if (!$verifyExistencia) 
             {
-                $this->returnPorError('crear', null, 'Ya existe un usuario con esa cédula.');
+                $this->returnPorError('crear', null, 'No existe un usuario con esa cédula.');
             }
 
             $cambiarEstado = $this->model('UsuarioModel');

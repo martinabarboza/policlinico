@@ -9,7 +9,7 @@ $rolesConteo = [
 ];
 
 foreach ($usuarios as $usuario) {
-    $rol = $usuario['rol_Usuario'] ?? '';
+    $rol = strtoupper((string) ($usuario['rol_Usuario'] ?? ''));
     if (isset($rolesConteo[$rol])) {
         $rolesConteo[$rol]++;
     }
@@ -17,7 +17,7 @@ foreach ($usuarios as $usuario) {
 ?>
 
 <div class="usuarios-page container-fluid py-4">
-    <div class="usuarios-header">
+    <header class="usuarios-header">
         <div class="usuarios-header__title">
             <div class="usuarios-header__icon">
                 <i class="fa-solid fa-users-gear"></i>
@@ -28,7 +28,7 @@ foreach ($usuarios as $usuario) {
             </div>
         </div>
         <div class="text-secondary small mb-0">Personal activo del sistema</div>
-    </div>
+    </header>
 
     <div class="row g-3 mb-4">
         <div class="col-12 col-md-3">
@@ -57,14 +57,41 @@ foreach ($usuarios as $usuario) {
         </div>
     </div>
 
-    <div class="col-12 col-md-6 mb-4">
-        <form action="/usuarios" method="GET" class="d-flex gap-2">
-            <input type="text" name="busqueda" placeholder="Nombre, apellido o cédula" class="form-control" value="<?php echo htmlspecialchars($_GET['busqueda'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-            <button class="btn btn-outline-primary" type="submit">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </form>
-    </div>
+    <section class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form action="/usuarios" method="GET" class="row g-3 align-items-center">
+                <div class="col-12 col-lg-8">
+                    <label for="busqueda" class="visually-hidden">Buscar usuario</label>
+                    <input
+                        type="text"
+                        id="busqueda"
+                        name="busqueda"
+                        placeholder="Nombre, apellido o cédula"
+                        class="form-control"
+                        value="<?php echo htmlspecialchars($_GET['busqueda'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                    >
+                </div>
+                <div class="col-12 col-lg-3">
+                    <div class="form-check form-switch mt-2">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="checkestado"
+                            name="checkestado"
+                            value="1"
+                            <?php echo isset($_GET['checkestado']) ? 'checked' : ''; ?>
+                        >
+                        <label class="form-check-label" for="checkestado">Mostrar usuarios desactivados</label>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-1 d-grid">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
 
     <?php if (isset($_GET['success'])): ?>
         <div class="alert alert-success" role="status">Usuario actualizado exitosamente.</div>
@@ -81,21 +108,17 @@ foreach ($usuarios as $usuario) {
                     <h2 class="h5 mb-1">Usuarios registrados</h2>
                     <p class="text-secondary mb-0 small">Listado del personal con acceso al sistema.</p>
                 </div>
-                <span class="badge bg-light text-dark border"><?php echo $totalUsuarios; ?> resultado(s)</span>
+                <div class="d-flex align-items-center gap-2">
+                    <a class="btn btn-sm btn-primary" href="/usuarios/crear">
+                        <i class="fa-solid fa-pen-to-square me-1"></i>Agregar usuario
+                    </a>
+                    <span class="badge bg-light text-dark border"><?php echo $totalUsuarios; ?> resultado(s)</span>
+                </div>
             </div>
-
-            <div class>
 
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                     <thead>
-                        <tr>
-                            <td>
-                                <a class="btn btn-sm btn-outline-primary" href="/usuarios/crear">
-                                    <i class="fa-solid fa-pen-to-square me-1"></i>Agregar Nuevo Usuario
-                                </a>
-                            </td>
-                        </tr>
                         <tr>
                             <th>Cédula</th>
                             <th>Nombre</th>
@@ -109,10 +132,6 @@ foreach ($usuarios as $usuario) {
                         <?php if (!empty($usuarios)): ?>
                             <?php foreach ($usuarios as $usuario): ?>
                                 <?php
-
-                                //
-                                // Determina la clase de etiqueta según el rol del usuario
-                                //
                                 $rol = strtoupper((string) ($usuario['rol_Usuario'] ?? ''));
                                 $badgeClass = 'usuarios-role--director';
                                 if ($rol === 'ESTUDIANTE') {
@@ -132,15 +151,22 @@ foreach ($usuarios as $usuario) {
                                     </td>
                                     <td><?php echo htmlspecialchars($usuario['email_Usuario'] ?? 'Sin email'); ?></td>
                                     <td class="text-end">
-                                        <a class="btn btn-sm btn-outline-primary" href="/usuarios/editar?cedula=<?php echo urlencode($usuario['cedula_Usuario']); ?>">
-                                            <i class="fa-solid fa-pen-to-square me-1"></i>Modificar
-                                        </a>
+                                        <div class="d-flex justify-content-end gap-2 flex-wrap">
+                                            <a class="btn btn-sm btn-outline-primary" href="/usuarios/editar?cedula=<?php echo urlencode($usuario['cedula_Usuario']); ?>">
+                                                <i class="fa-solid fa-pen-to-square me-1"></i>Modificar
+                                            </a>
+                                            <form action="/usuarios/cambiarEstado" method="POST" onsubmit="return confirm('¿Desea desactivar este usuario?');" class="d-inline">
+                                                <input type="hidden" name="cedula" value="<?php echo htmlspecialchars($usuario['cedula_Usuario']); ?>">
+                                                <input type="hidden" name="estado" value="Inactivo">
+                                                <button type="submit" class="btn btn-sm btn-outline-warning">Desactivar</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="5" class="text-center text-secondary py-4">No hay usuarios registrados.</td>
+                                <td colspan="6" class="text-center text-secondary py-4">No hay usuarios registrados.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

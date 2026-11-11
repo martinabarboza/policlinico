@@ -33,4 +33,5 @@ $router->get('/usuarios/editar', [UsuarioController::class, 'modificarUsuario'])
 $router->post('/usuarios/actualizarUsuario', [UsuarioController::class, 'actualizarUsuario']);
 $router->get('/usuarios/crear', [UsuarioController::class, 'crearUsuario']);
 $router->post('/usuarios/crear', [UsuarioController::class, 'crearUsuario']);
+$router->post('/usuarios/cambiarEstado', [UsuarioController::class, 'cambiarEstadoUsuario']);
 ?>
