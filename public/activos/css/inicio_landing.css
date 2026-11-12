@@ -28,6 +28,79 @@
     color: white;
 }
 
+.como-solicitar {
+    width: 100%;
+    padding: 4rem 0;
+    background: #004a82;
+}
+
+.como-solicitar__header {
+    max-width: 46rem;
+    margin-bottom: 2rem;
+}
+
+.como-solicitar__header h2 {
+    margin-bottom: 0.75rem;
+    color: #ffffff;
+    font-family: 'MONTSERRAT-NEGRITA';
+    font-size: 2rem;
+}
+
+.como-solicitar__header > p:last-child,
+.como-solicitar__pasos p {
+    margin-bottom: 0;
+    color: #e7eef5;
+    font-family: 'INTER-NORMAL';
+    line-height: 1.65;
+}
+
+.como-solicitar__pasos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.como-solicitar__pasos li {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1.25rem;
+    border-top: 3px solid #feea00;
+}
+
+.como-solicitar__numero {
+    flex: 0 0 auto;
+    color: #feea00;
+    font-family: 'IBM-PLEX-MONO';
+    font-size: 1.1rem;
+}
+
+.como-solicitar__pasos h3 {
+    margin: 0 0 0.5rem;
+    color: #ffffff;
+    font-family: 'MONTSERRAT-NEGRITA';
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 767.98px) {
+    .como-solicitar {
+        padding: 3.25rem 0;
+    }
+
+    .como-solicitar__pasos {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.25rem;
+    }
+
+    .como-solicitar__header h2 {
+        font-size: 1.65rem;
+    }
+
+}
+
 .titulo-seccion {
     font-family: 'MONTSERRAT-NEGRITA';
     font-size: 24px;

@@ -69,6 +69,38 @@ function mostrarServicios($cartas, $cantidad)
             </div>
         </div>
     </section>
+    <section class="como-solicitar" id="como-solicitar-atencion" aria-labelledby="como-solicitar-title">
+        <div class="container">
+            <div class="como-solicitar__header">
+                <h2 id="como-solicitar-title">Un servicio universitario</h2>
+                <p>El Policlínico integra la atención veterinaria con la formación y el trabajo con la comunidad.</p>
+            </div>
+
+            <ul class="como-solicitar__pasos">
+                <li>
+                    <span class="como-solicitar__numero" aria-hidden="true">01</span>
+                    <div>
+                        <h3>Atención veterinaria</h3>
+                        <p>Un espacio universitario dedicado a la atención de pacientes veterinarios.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="como-solicitar__numero" aria-hidden="true">02</span>
+                    <div>
+                        <h3>Formación práctica</h3>
+                        <p>La actividad también acompaña la experiencia formativa de estudiantes.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="como-solicitar__numero" aria-hidden="true">03</span>
+                    <div>
+                        <h3>Vínculo con la comunidad</h3>
+                        <p>El trabajo se enmarca en las funciones universitarias de enseñanza, investigación y extensión.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
     <!--ACCESOS DIRECTOS-->
     <?php if (Auth::check()): ?>
     <section class="py-5">
@@ -332,7 +364,7 @@ function mostrarServicios($cartas, $cantidad)
     </section>
     <?php endif; ?>
     <!--ACCESOS DIRECTOS-->
-    <section class="pb-5" id="servicios">
+    <section class="pt-5 pb-5" id="servicios">
         <div class="d-flex justify-content-center px-4">
             <ul class="lista-titulos-seccion list-unstyled">
                 <li>
