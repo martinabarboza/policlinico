@@ -33,9 +33,9 @@ $valor = static fn(string $campo, string $porDefecto = ''): string =>
     <section class="card shadow-sm mt-4" aria-labelledby="formulario-servicio-title">
         <div class="card-body">
             <h2 class="h5 mb-1" id="formulario-servicio-title"><?= $editando ? 'Modificar servicio' : 'Agregar servicio' ?></h2>
-            <p class="text-secondary">El nombre y el precio son obligatorios. Las imágenes son opcionales.</p>
+            <p class="text-secondary">El nombre y el precio son obligatorios. Podés adjuntar imágenes JPG, PNG o WebP de hasta 5 MB.</p>
 
-            <form action="<?= htmlspecialchars(url('servicios/guardar'), ENT_QUOTES, 'UTF-8') ?>" method="post" class="row g-3">
+            <form action="<?= htmlspecialchars(url('servicios/guardar'), ENT_QUOTES, 'UTF-8') ?>" method="post" enctype="multipart/form-data" class="row g-3">
                 <input type="hidden" name="csrf_token" value="<?= $esc($csrfToken ?? '') ?>">
                 <input type="hidden" name="servicio_id" value="<?= $editando ? (int) $servicioEditando['id_Servicio'] : '' ?>">
 
@@ -56,12 +56,30 @@ $valor = static fn(string $campo, string $porDefecto = ''): string =>
                     <textarea class="form-control" id="descripcion_Servicio" name="descripcion_Servicio" rows="3" maxlength="65535"><?= $esc($valor('descripcion_Servicio')) ?></textarea>
                 </div>
                 <div class="col-12 col-md-6">
-                    <label for="imagenURL_Servicio" class="form-label">Ruta o URL de imagen</label>
-                    <input class="form-control" id="imagenURL_Servicio" name="imagenURL_Servicio" maxlength="255" placeholder="/activos/imgs/servicio.jpg" value="<?= $esc($valor('imagenURL_Servicio')) ?>">
+                    <label for="imagen_archivo" class="form-label">Imagen del servicio</label>
+                    <input class="form-control" id="imagen_archivo" name="imagen_archivo" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+                    <?php if ($valor('imagenURL_Servicio') !== ''): ?>
+                        <div class="servicio-media-preview mt-2">
+                            <img src="<?= $esc($valor('imagenURL_Servicio')) ?>" alt="Imagen actual del servicio">
+                            <label class="form-check-label">
+                                <input class="form-check-input me-1" type="checkbox" name="quitar_imagen" value="1" <?= ($valor('quitar_imagen') === '1') ? 'checked' : '' ?>>
+                                Quitar imagen actual
+                            </label>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="col-12 col-md-6">
-                    <label for="iconoURL_Servicio" class="form-label">Ruta o URL de icono</label>
-                    <input class="form-control" id="iconoURL_Servicio" name="iconoURL_Servicio" maxlength="255" placeholder="/activos/svgs/servicio.svg" value="<?= $esc($valor('iconoURL_Servicio')) ?>">
+                    <label for="icono_archivo" class="form-label">Icono del servicio</label>
+                    <input class="form-control" id="icono_archivo" name="icono_archivo" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+                    <?php if ($valor('iconoURL_Servicio') !== ''): ?>
+                        <div class="servicio-media-preview mt-2">
+                            <img src="<?= $esc($valor('iconoURL_Servicio')) ?>" alt="Icono actual del servicio">
+                            <label class="form-check-label">
+                                <input class="form-check-input me-1" type="checkbox" name="quitar_icono" value="1" <?= ($valor('quitar_icono') === '1') ? 'checked' : '' ?>>
+                                Quitar icono actual
+                            </label>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="col-12 d-flex flex-wrap gap-2">
                     <button class="btn btn-primary" type="submit">

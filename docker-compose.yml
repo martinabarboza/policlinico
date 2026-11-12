@@ -30,9 +30,10 @@ services:
     command: >
       sh -c "echo 'date.timezone = \"America/Montevideo\"' > /usr/local/etc/php/conf.d/timezone.ini &&
              docker-php-ext-install mysqli pdo pdo_mysql &&
-             mkdir -p /var/www/html/storage/resenas /var/www/html/storage/paraclinicos &&
-             chown -R www-data:$$STORAGE_GID /var/www/html/storage/resenas /var/www/html/storage/paraclinicos &&
+             mkdir -p /var/www/html/storage/resenas /var/www/html/storage/paraclinicos /var/www/html/public/activos/imgs/servicios &&
+             chown -R www-data:$$STORAGE_GID /var/www/html/storage/resenas /var/www/html/storage/paraclinicos /var/www/html/public/activos/imgs/servicios &&
              chmod 2770 /var/www/html/storage/resenas /var/www/html/storage/paraclinicos &&
+             chmod 2775 /var/www/html/public/activos/imgs/servicios &&
              apache2-foreground"
 
 
