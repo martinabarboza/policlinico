@@ -35,4 +35,7 @@ $router->post('/usuarios/actualizarUsuario', [UsuarioController::class, 'actuali
 $router->get('/usuarios/crear', [UsuarioController::class, 'crearUsuario']);
 $router->post('/usuarios/crear', [UsuarioController::class, 'crearUsuario']);
 $router->post('/usuarios/cambiarEstado', [UsuarioController::class, 'cambiarEstadoUsuario']);
+$router->get('/servicios', [ServicioController::class, 'index']);
+$router->post('/servicios/guardar', [ServicioController::class, 'guardar']);
+$router->post('/servicios/eliminar', [ServicioController::class, 'eliminar']);
 ?>

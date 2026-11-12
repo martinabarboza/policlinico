@@ -14,33 +14,57 @@ function mostrarServicios($cartas, $cantidad)
         foreach ($grupo as $carta) {
             $titulo = htmlspecialchars((string) ($carta['titulo'] ?? 'Servicio'), ENT_QUOTES, 'UTF-8');
             $descripcion = htmlspecialchars((string) ($carta['descripcion'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $imagen = trim((string) ($carta['imagen'] ?? ''));
-            $link = trim((string) ($carta['link'] ?? ''));
+            $imagenOriginal = trim((string) ($carta['imagen'] ?? ''));
+            $imagenConfigurada = $imagenOriginal !== '';
+            $imagen = htmlspecialchars($imagenOriginal, ENT_QUOTES, 'UTF-8');
+            $iconoOriginal = trim((string) ($carta['icono'] ?? ''));
+            $icono = htmlspecialchars($iconoOriginal, ENT_QUOTES, 'UTF-8');
+            if ($imagenConfigurada) {
+                $visualServicio = '<img src="' . $imagen . '" class="card-img-top" alt="' . $titulo . '" loading="lazy">';
+                if ($iconoOriginal !== '') {
+                    $visualServicio = '<div class="tarjeta-servicio__media">'
+                        . $visualServicio
+                        . '<img src="' . $icono . '" class="tarjeta-servicio__icono-superpuesto" alt="" aria-hidden="true">'
+                        . '</div>';
+                } else {
+                    $visualServicio = '<div class="tarjeta-servicio__media">' . $visualServicio . '</div>';
+                }
+            } elseif ($iconoOriginal !== '') {
+                $visualServicio = '<div class="tarjeta-servicio__imagen-vacia">'
+                    . '<img src="' . $icono . '" alt="Icono de ' . $titulo . '">'
+                    . '</div>';
+            } else {
+                $visualServicio = '<div class="tarjeta-servicio__imagen-vacia" aria-hidden="true">'
+                    . '<i class="bi bi-heart-pulse"></i>'
+                    . '</div>';
+            }
+            $precioRaw = $carta['precio'] ?? null;
+            $precio = is_numeric($precioRaw)
+                ? '$ ' . number_format((float) $precioRaw, 2, ',', '.')
+                : 'Consultar';
+            $duracion = trim((string) ($carta['duracion'] ?? ''));
+            $duracionVisible = $duracion !== '' ? $duracion : 'Duración a confirmar';
 
             echo '
                 <div class="tarjeta-servicio">
-                    ' . ($imagen !== ''
-                        ? '<img src="' . htmlspecialchars($imagen, ENT_QUOTES, 'UTF-8') . '" class="card-img-top" alt="' . $titulo . '">'
-                        : '<div class="tarjeta-servicio__imagen-vacia" aria-hidden="true"><i class="bi bi-heart-pulse"></i></div>') . '
+                    ' . $visualServicio . '
 
                     <div class="card-body">
-                        <span class="categoria-servicio">
-                            Servicio
-                        </span>
-
-                        <h5 class="card-title">
-                            ' . $titulo . '
-                        </h5>
-
-                        <p class="card-text">
-                            ' . $descripcion . '
-                        </p>
-
-                        <a href="' . htmlspecialchars($link !== '' ? $link : '/login', ENT_QUOTES, 'UTF-8') . '"
-                            class="btn btn-primary">
+                        <span class="categoria-servicio">Servicio veterinario</span>
+                        <h3 class="card-title">' . $titulo . '</h3>
+                        <p class="card-text">' . $descripcion . '</p>
+                        <button type="button"
+                            class="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#servicioDetalleModal"
+                            data-servicio-titulo="' . $titulo . '"
+                            data-servicio-descripcion="' . $descripcion . '"
+                            data-servicio-precio="' . htmlspecialchars($precio, ENT_QUOTES, 'UTF-8') . '"
+                            data-servicio-duracion="' . htmlspecialchars($duracionVisible, ENT_QUOTES, 'UTF-8') . '"
+                            data-servicio-imagen="' . ($imagenConfigurada ? $imagen : '') . '">
                             Más información
-                            <i class="bi bi-arrow-right ms-2"></i>
-                        </a>
+                            <i class="bi bi-arrow-right ms-2" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>';
         }
@@ -439,6 +463,37 @@ function mostrarServicios($cartas, $cantidad)
                 </div>
             </div>
         <?php endif; ?>
+
+        <div class="modal fade" id="servicioDetalleModal" tabindex="-1" aria-labelledby="servicioDetalleTitulo" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable servicio-detalle-modal__dialog">
+                <div class="modal-content servicio-detalle-modal">
+                    <div class="modal-header">
+                        <div class="servicio-detalle-modal__encabezado">
+                            <span class="servicio-detalle-modal__icono" aria-hidden="true">
+                                <img src="<?= ASSETS_URL ?>/svgs/paw-print.svg" alt="">
+                            </span>
+                            <div>
+                                <p class="categoria-servicio mb-1">Servicio veterinario</p>
+                                <h2 class="modal-title h5 mb-0" id="servicioDetalleTitulo"></h2>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img class="servicio-detalle-modal__imagen" id="servicioDetalleImagen" src="" alt="" hidden>
+                        <p id="servicioDetalleDescripcion" class="servicio-detalle-modal__descripcion"></p>
+                        <dl class="servicio-detalle-modal__datos mb-0">
+                            <div><dt>Precio</dt><dd id="servicioDetallePrecio"></dd></div>
+                            <div><dt>Duración</dt><dd id="servicioDetalleDuracion"></dd></div>
+                        </dl>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="<?= ASSETS_URL ?>/js/servicios-landing.js?v=<?= filemtime(ROOT_PATH . '/public/activos/js/servicios-landing.js') ?>" defer></script>
     </section>
     <section class="landing-about" id="sobre-nosotros">
         <div class="container">

@@ -45,20 +45,22 @@
                                                                                                             } ?>"><i class="fa fa-hospital-alt me-2"></i>Hospitalización</a>
 
 
+                    <?php if (Auth::rol() === 'Director'): ?>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" <?php if (Auth::rol() !== 'Director') echo 'hidden';?>>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-user-cog me-2"></i>
                             Administración
                         </a>
                         <div class="dropdown-menu border-0">
-                            <a href="/servicios" class="dropdown-item">
+                            <a href="<?= htmlspecialchars(url('servicios'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">
                                 Servicios
                             </a>
-                            <a href="/usuarios" class="dropdown-item">
+                            <a href="<?= htmlspecialchars(url('usuarios'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">
                                 Usuarios
                             </a>
                         </div>
                     </div>
+                    <?php endif; ?>
                 </div>
             </nav>
         </div>

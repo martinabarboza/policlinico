@@ -38,6 +38,7 @@ require_once APP_PATH . '/Controllers/PacienteController.php';
 require_once APP_PATH . '/Controllers/AgendaController.php';
 require_once APP_PATH . '/Controllers/HospitalizacionController.php';
 require_once APP_PATH . '/Controllers/UsuarioController.php';
+require_once APP_PATH . '/Controllers/ServicioController.php';
 
 
 $router = new Router();

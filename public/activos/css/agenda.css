@@ -2,6 +2,11 @@
     max-width: 1540px;
 }
 
+.servicios-page {
+    min-width: 0;
+    overflow-x: clip;
+}
+
 .agenda-header {
     display: flex;
     flex-wrap: wrap;

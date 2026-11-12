@@ -12,7 +12,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/landing.css">
     <!-- CSS-DINAMICOS -->
-    <link id="dinamico-css" rel="stylesheet" href="<?= ASSETS_URL ?>/css/inicio_landing.css">
+    <link id="dinamico-css" rel="stylesheet" href="<?= ASSETS_URL ?>/css/inicio_landing.css?v=<?= filemtime(ROOT_PATH . '/public/activos/css/inicio_landing.css') ?>">
 
 </head>
 <header class="container-fluid p-0">
