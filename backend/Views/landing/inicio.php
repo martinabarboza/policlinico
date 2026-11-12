@@ -70,6 +70,7 @@ function mostrarServicios($cartas, $cantidad)
         </div>
     </section>
     <!--ACCESOS DIRECTOS-->
+    <?php if (Auth::check()): ?>
     <section class="py-5">
 
         <!-- Título de la sección -->
@@ -329,6 +330,7 @@ function mostrarServicios($cartas, $cantidad)
         </div>
 
     </section>
+    <?php endif; ?>
     <!--ACCESOS DIRECTOS-->
     <section class="pb-5" id="servicios">
         <div class="d-flex justify-content-center px-4">
