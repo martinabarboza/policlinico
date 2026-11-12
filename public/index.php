@@ -1,12 +1,18 @@
 <?php
 
+$forwardedProto = strtolower(trim(explode(',', $_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')[0]));
+$httpsDirecto = isset($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off';
+$conexionSegura = $httpsDirecto || $forwardedProto === 'https';
+
 session_set_cookie_params([
     'lifetime' => 0,
     'path'     => '/',
-    'secure'   => false, // pasar a true cuando el sitio corra bajo HTTPS
+    'secure'   => $conexionSegura,
     'httponly' => true,
     'samesite' => 'Lax',
 ]);
+// Permite que las sesiones marcadas como recordadas sigan disponibles hasta 30 días.
+ini_set('session.gc_maxlifetime', '2592000');
 session_start();
 
 require_once __DIR__ . '/../config/config.php';

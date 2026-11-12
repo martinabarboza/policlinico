@@ -38,18 +38,30 @@
 
           <div class="mb-3">
             <label for="password" class="form-label fw-semibold">Contraseña</label>
-            <input
-              type="password"
-              class="form-control form-control-lg"
-              id="password"
-              name="password"
-              placeholder="● ● ● ● ● ●"
-              required>
+            <div class="position-relative">
+              <input
+                type="password"
+                class="form-control form-control-lg pe-5"
+                id="password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="● ● ● ● ● ●"
+                required>
+              <button
+                type="button"
+                class="btn position-absolute top-50 end-0 translate-middle-y me-2"
+                id="toggle-password"
+                aria-label="Mostrar contraseña"
+                aria-pressed="false"
+                aria-controls="password">
+                <span data-toggle-label>Mostrar</span>
+              </button>
+            </div>
           </div>
 
           <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="remember" name="remember">
+              <input class="form-check-input" type="checkbox" id="remember" name="remember" value="1">
               <label class="form-check-label" for="remember">
                 Recordarme
               </label>
@@ -67,3 +79,4 @@
     </div>
   </div>
 </main>
+<script src="<?= ASSETS_URL ?>/js/login.js" defer></script>

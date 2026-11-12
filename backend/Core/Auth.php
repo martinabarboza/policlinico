@@ -4,6 +4,7 @@
 class Auth
 {
     private const SESSION_KEY = 'usuario';
+    private const REMEMBER_DURATION = 2592000;
 
     /** Inicia una sesión nueva y conserva solo los campos necesarios en ella. */
     public static function login(array $usuario): void
@@ -27,6 +28,29 @@ class Auth
     {
         unset($_SESSION[self::SESSION_KEY]);
         session_regenerate_id(true);
+        self::setRememberMe(false);
+    }
+
+    /** Configura la cookie de sesión como persistente o de solo navegador. */
+    public static function setRememberMe(bool $remember): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE || session_id() === '') {
+            return;
+        }
+
+        $cookie = session_get_cookie_params();
+        $options = [
+            'expires' => $remember ? time() + self::REMEMBER_DURATION : 0,
+            'path' => $cookie['path'] ?: '/',
+            'secure' => $cookie['secure'],
+            'httponly' => $cookie['httponly'],
+            'samesite' => $cookie['samesite'] ?: 'Lax',
+        ];
+        if ($cookie['domain'] !== '') {
+            $options['domain'] = $cookie['domain'];
+        }
+
+        setcookie(session_name(), session_id(), $options);
     }
 
     /** Indica si la sesión contiene una identidad autenticada. */

@@ -62,6 +62,7 @@ class AuthController extends Controller
         }
 
         Auth::login($usuario);
+        Auth::setRememberMe(($_POST['remember'] ?? '') === '1');
         $usuarioModel->actualizarUltimoLogin((int) $usuario['id_Usuario']);
 
         header('Location: ' . url('dashboard'));
