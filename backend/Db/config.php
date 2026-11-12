@@ -1,5 +1,6 @@
 <?php
 
+/** Configuración consumida por Core/Database.php; los secretos deben venir de entorno en despliegues. */
 return [
     'DB_HOST' => 'db',
     'DB_USER' => 'user',

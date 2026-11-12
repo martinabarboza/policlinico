@@ -1,7 +1,9 @@
 <?php
 
+/** Coordina la consulta, creación, reprogramación y cancelación de turnos. */
 class AgendaController extends Controller
 {
+    /** Muestra la agenda diaria o semanal y conserva filtros/mensajes de sesión. */
     public function index(): void
     {
         Auth::requireLogin();
@@ -70,6 +72,7 @@ class AgendaController extends Controller
         );
     }
 
+    /** Valida CSRF y datos del formulario antes de delegar el alta al modelo. */
     public function guardar(): void
     {
         Auth::requireLogin();
@@ -117,6 +120,7 @@ class AgendaController extends Controller
         }
     }
 
+    /** Permite a profesores/directores cambiar la fecha de un turno pendiente. */
     public function reprogramar(): void
     {
         Auth::requireLogin();
@@ -152,6 +156,7 @@ class AgendaController extends Controller
         $this->redirigirFechaAgenda($fechaRetorno);
     }
 
+    /** Cancela un turno pendiente sin borrar su registro clínico. */
     public function cancelar(): void
     {
         Auth::requireLogin();
@@ -223,7 +228,7 @@ class AgendaController extends Controller
     }
 
     /**
-     * Busca opciones para el formulario con los modelos existentes.
+        * Carga opciones de paciente/usuario solo cuando se ingresó un criterio de búsqueda.
      *
      * @return array{pacientes: array, usuarios: array, busquedaPaciente: string, busquedaUsuario: string, error: ?string}
      */

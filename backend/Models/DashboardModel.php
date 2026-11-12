@@ -1,5 +1,6 @@
 <?php
 
+/** Consultas agregadas para los paneles y listados del dashboard. */
 class DashboardModel extends Model
 {
     /**

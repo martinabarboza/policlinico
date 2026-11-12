@@ -1,4 +1,5 @@
 <?php
+/** Lista cuentas administrativas; usuarios y filtros llegan desde UsuarioController. */
 $usuarios = $usuarios ?? [];
 $totalUsuarios = count($usuarios);
 $rolesConteo = [

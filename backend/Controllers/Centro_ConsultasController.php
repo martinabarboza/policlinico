@@ -1,7 +1,9 @@
 <?php
 
+/** Coordina el ciclo clínico de consultas y el acceso a sus archivos adjuntos. */
 class Centro_ConsultasController extends Controller
 {
+    /** Prepara el formulario de una consulta nueva para la especie solicitada. */
     public function nueva(): void
     {
         Auth::requireLogin();
@@ -38,6 +40,7 @@ class Centro_ConsultasController extends Controller
         );
     }
 
+    /** Carga como borrador una consulta que todavía admite edición. */
     public function editar(): void
     {
         Auth::requireLogin();
@@ -73,6 +76,7 @@ class Centro_ConsultasController extends Controller
         );
     }
 
+    /** Valida el formulario y guarda una consulta, un avance o su finalización. */
     public function guardar(): void
     {
         Auth::requireLogin();
@@ -441,6 +445,7 @@ class Centro_ConsultasController extends Controller
         exit;
     }
 
+    /** Normaliza la estructura multidimensional de archivos de los paraclínicos. */
     private function obtenerArchivoSubidoParaclinico($archivos, $indice): ?array
     {
         if ($archivos === null) {
@@ -471,6 +476,7 @@ class Centro_ConsultasController extends Controller
         return $archivo;
     }
 
+    /** Verifica MIME/tamaño y guarda el archivo con nombre aleatorio fuera de la URL pública. */
     private function guardarArchivoParaclinico(?array $archivo): ?string
     {
         if ($archivo === null) {
@@ -516,6 +522,7 @@ class Centro_ConsultasController extends Controller
         return $nombreArchivo;
     }
 
+    /** Elimina archivos temporales que quedaron sin consulta tras una operación fallida. */
     private function eliminarArchivosParaclinicos(array $nombres): void
     {
         foreach ($nombres as $nombre) {
@@ -527,6 +534,7 @@ class Centro_ConsultasController extends Controller
         }
     }
 
+    /** Valida y guarda una imagen de reseña en el almacenamiento privado. */
     private function guardarArchivoResenia($archivo): ?string
     {
         if ($archivo === null) {
@@ -572,6 +580,7 @@ class Centro_ConsultasController extends Controller
         return $nombreArchivo;
     }
 
+    /** Quita del almacenamiento privado una imagen desvinculada de su reseña. */
     private function eliminarArchivoResenia(?string $nombreArchivo): void
     {
         if ($nombreArchivo === null) {
@@ -585,6 +594,7 @@ class Centro_ConsultasController extends Controller
         }
     }
 
+    /** Sirve una imagen de reseña después de validar sesión, ruta y MIME. */
     public function mostrarResenia(): void
     {
         Auth::requireLogin();
@@ -636,6 +646,7 @@ class Centro_ConsultasController extends Controller
         readfile($rutaReal);
     }
 
+    /** Sirve un documento clínico privado con disposición según su tipo MIME. */
     public function mostrarArchivoParaclinico(): void
     {
         Auth::requireLogin();
@@ -693,6 +704,7 @@ class Centro_ConsultasController extends Controller
         readfile($rutaReal);
     }
 
+    /** Cambia el estado solo para roles autorizados y conserva los filtros de retorno. */
     public function actualizarEstado(): void
     {
         Auth::requireLogin();
@@ -734,6 +746,7 @@ class Centro_ConsultasController extends Controller
         exit;
     }
 
+    /** Reconstruye una URL de retorno solo con filtros permitidos y valores validados. */
     private function urlRetornoEstado($consultaId, $vista): string
     {
         if ($vista === 'detalle' && is_string($consultaId) && ctype_digit($consultaId) && (int) $consultaId > 0) {
@@ -767,16 +780,19 @@ class Centro_ConsultasController extends Controller
         return url('centro-consultas') . ($query === '' ? '' : '?' . $query);
     }
 
+    /** Estudiantes, profesores y directores pueden registrar consultas clínicas. */
     private function puedeCrearConsultas(): bool
     {
         return in_array(strtoupper(trim(Auth::rol() ?? '')), ['ESTUDIANTE', 'PROFESOR', 'DIRECTOR'], true);
     }
 
+    /** Solo profesores y directores pueden actualizar el estado de una consulta. */
     private function puedeCambiarEstado(): bool
     {
         return in_array(strtoupper(trim(Auth::rol() ?? '')), ['PROFESOR', 'DIRECTOR'], true);
     }
 
+    /** Prepara catálogos, valores previos y anexos para la vista de consulta clínica. */
     private function mostrarFormularioNuevaConsulta(
         string $especie,
         ?string $error = null,
@@ -829,6 +845,7 @@ class Centro_ConsultasController extends Controller
      * Lee `?busqueda=` de la URL y muestra coincidencias de pacientes.
      * Si falta el término, deja el centro listo para continuar el desarrollo.
      */
+    /** Genera el PDF con el historial clínico del paciente solicitado. */
     public function descargarHistoriaClinica(): void
     {
         Auth::requireLogin();
@@ -1002,6 +1019,7 @@ class Centro_ConsultasController extends Controller
         $pdf->Output('D', $nombreArchivo);
     }
 
+    /** Busca consultas con filtros y decide si presenta listado o detalle clínico. */
     public function index(): void
     {
         Auth::requireLogin();
@@ -1140,6 +1158,7 @@ class Centro_ConsultasController extends Controller
         );
     }
 
+    /** Renderiza la ficha completa de una consulta y sus elementos clínicos asociados. */
     private function mostrarDetalleConsulta(
         ?array $detalle,
         ?string $errorDetalle = null,

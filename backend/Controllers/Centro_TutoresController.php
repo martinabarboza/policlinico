@@ -1,5 +1,6 @@
 <?php
 
+/** Presenta el centro de búsqueda de tutores. */
 class Centro_TutoresController extends Controller
 {
     /**

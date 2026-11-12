@@ -1,3 +1,4 @@
+<!-- Respuesta visual para rutas que el Router no tiene registradas. -->
 <!DOCTYPE html>
 <html lang="es">
 

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Generador legado de cookie remen_token de larga duración.
+ * Espera que el llamador defina $id; la autenticación MVC actual no usa esta cookie.
+ */
 $config = require __DIR__ . '/../config/config.php';
 $clave_secreta = $config['SECRET'];
 

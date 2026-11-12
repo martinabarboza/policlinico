@@ -1,9 +1,10 @@
 <?php
 
+/** Atiende el inicio y cierre de sesión; la contraseña nunca se guarda en la sesión. */
 class AuthController extends Controller
 {
     /**
-     * Muestra el formulario de login (GET /login).
+    * Muestra el formulario de acceso y limpia los mensajes de un intento anterior.
      */
     public function login(): void
     {
@@ -23,7 +24,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Procesa el formulario de login 
+    * Verifica CSRF, estado de cuenta y hash de contraseña antes de abrir sesión.
      */
     public function authenticate(): void
     {
@@ -67,10 +68,7 @@ class AuthController extends Controller
         exit;
     }
 
-    /**
-     * Cierra la sesion (GET /logout).
-     */
-
+    /** Cierra la sesión actual y redirige al formulario de acceso. */
     public function logout(): void
     {
         Auth::logout();
@@ -78,6 +76,7 @@ class AuthController extends Controller
         exit;
     }
 
+    /** Guarda el error y la cédula para mostrarlos tras redirigir al login. */
     private function fallarLogin(string $mensaje, string $cedula): void
     {
         $_SESSION['auth_error'] = $mensaje;

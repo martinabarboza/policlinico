@@ -3,13 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: policlinico-db
--- Tiempo de generación: 11-11-2026 a las 00:44:23
--- Versión del servidor: 10.11.18-MariaDB-ubu2204
--- Versión de PHP: 8.3.33
+-- Tiempo de generación: 12-11-2026 a las 13:38:21
+-- Versión del servidor: 10.11.19-MariaDB-ubu2204
+-- Versión de PHP: 8.3.36
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "-03:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -637,7 +637,7 @@ CREATE TABLE `USUARIO` (
 
 INSERT INTO `USUARIO` (`id_Usuario`, `cedula_Usuario`, `nombre_Usuario`, `apellido_Usuario`, `email_Usuario`, `passw_Usuario`, `rol_Usuario`, `estado_Usuario`, `lastlogin_Usuario`, `dateupdate_Usuario`) VALUES
 (1, '51234567', 'Juan', 'Pérez', 'juan.perez@polivet.com', '$2y$10$OUdEYLLCRLbKjl6df6xhZ.HiBVMjyGCOt140qWTN.72PTqBCMBdHi', 'Estudiante', 'inactivo', NULL, '2026-11-11 00:01:20'),
-(2, '12345678', 'María', 'Rodríguez', 'maria.rodriguez@polivet.com', '$2y$10$OUdEYLLCRLbKjl6df6xhZ.HiBVMjyGCOt140qWTN.72PTqBCMBdHi', 'Director', 'activo', '2026-11-10 23:35:14', '2026-11-11 00:09:27'),
+(2, '12345678', 'María', 'Rodríguez', 'maria.rodriguez@polivet.com', '$2y$10$OUdEYLLCRLbKjl6df6xhZ.HiBVMjyGCOt140qWTN.72PTqBCMBdHi', 'Director', 'activo', '2026-11-12 13:24:10', '2026-11-12 13:24:10'),
 (3, '53456789', 'Ana', 'Silva', 'ana.silva@polivet.com', '$2y$10$OUdEYLLCRLbKjl6df6xhZ.HiBVMjyGCOt140qWTN.72PTqBCMBdHi', 'Profesor', 'activo', '2026-10-15 13:24:45', '2026-11-11 00:09:33'),
 (14, '11111122', 'Carlos', 'González', 'carlos.gonzalez@example.com', '$2y$10$OUdEYLLCRLbKjl6df6xhZ.HiBVMjyGCOt140qWTN.72PTqBCMBdHi', 'ESTUDIANTE', 'activo', NULL, '2026-11-11 00:09:37'),
 (15, '23456789', 'Ana', 'Martínez', 'ana.martinez@example.com', '$2y$10$OUdEYLLCRLbKjl6df6xhZ.HiBVMjyGCOt140qWTN.72PTqBCMBdHi', 'ESTUDIANTE', 'activo', NULL, '2026-11-11 00:09:41'),
@@ -701,6 +701,82 @@ INSERT INTO `USUARIO_CONSULTA` (`id_Usuario`, `id_Consulta`) VALUES
 (21, 19),
 (22, 17);
 
+-- --------------------------------------------------------
+-- Datos pequenos y reproducibles para la demostracion.
+-- Las fechas relativas mantienen las citas vigentes al importar el dump.
+-- --------------------------------------------------------
+
+DELETE FROM `ANAMNESIS`;
+DELETE FROM `DIAGNOSTICO`;
+DELETE FROM `EXAMEN_EQUINO`;
+DELETE FROM `EXAMEN_PARTICULAR`;
+DELETE FROM `RESEÑA`;
+DELETE FROM `EXAMEN_GENERAL`;
+DELETE FROM `PARACLINICO`;
+DELETE FROM `PRONOSTICO`;
+DELETE FROM `TRATAMIENTO`;
+DELETE FROM `USUARIO_CONSULTA`;
+DELETE FROM `HOSPITALIZACION`;
+DELETE FROM `SERVICIO`;
+DELETE FROM `CONSULTA`;
+DELETE FROM `PACIENTE`;
+DELETE FROM `TUTOR`;
+DELETE FROM `USUARIO`;
+DELETE FROM `RAZA` WHERE `id_Raza` NOT IN (1, 17, 21);
+
+INSERT INTO `USUARIO` (`id_Usuario`, `cedula_Usuario`, `nombre_Usuario`, `apellido_Usuario`, `email_Usuario`, `passw_Usuario`, `rol_Usuario`, `estado_Usuario`, `lastlogin_Usuario`) VALUES
+(1, '12345678', 'María', 'Rodríguez', 'maria.directora@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Director', 'activo', NULL),
+(2, '53456789', 'Ana', 'Silva', 'ana.profesora@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Profesor', 'activo', NULL),
+(3, '11111122', 'Carlos', 'González', 'carlos.estudiante@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Estudiante', 'activo', NULL);
+
+INSERT INTO `TUTOR` (`id_Tutor`, `documento_Tutor`, `nombre_Tutor`, `telefono_Tutor`, `direccion_Tutor`, `email_Tutor`, `notas_Tutor`) VALUES
+(1, '22334455', 'Laura Benítez', '099123456', 'Av. Italia 1234', 'laura@example.com', 'Tutora de Nala.'),
+(2, '87654321', 'Sergio Medina', '098765432', 'Camino Maldonado 456', 'sergio@example.com', 'Tutor de Relámpago y Milo.');
+
+INSERT INTO `PACIENTE` (`id_Paciente`, `id_Tutor`, `id_Raza`, `numchip_Paciente`, `nombre_Paciente`, `fecha_nac_Paciente`, `edad_Paciente`, `sexo_Paciente`, `color_Paciente`) VALUES
+(1, 1, 17, 'UY-DEMO-001', 'Nala', '2021-04-15', 5, 'Hembra', 'Marrón'),
+(2, 2, 1, 'UY-DEMO-002', 'Relámpago', '2018-03-09', 8, 'Macho castrado', 'Zaino'),
+(3, 2, 21, 'UY-DEMO-003', 'Milo', '2022-11-02', 4, 'Macho', 'Gris');
+
+INSERT INTO `CONSULTA` (`id_Consulta`, `id_Paciente`, `tipo_Consulta`, `fecha_hora_Consulta`, `estado_proceso_Consulta`, `resultado_final_Consulta`, `fecha_proximo_control_Consulta`, `fecha_fin_Consulta`, `motivo_Consulta`) VALUES
+(1, 1, 'Consulta general', DATE_SUB(NOW(), INTERVAL 2 DAY), 'Finalizada', 'Paciente estable', DATE_ADD(CURDATE(), INTERVAL 7 DAY), DATE_SUB(CURDATE(), INTERVAL 2 DAY), 'Control de rutina.'),
+(2, 2, 'Consulta equina', DATE_ADD(NOW(), INTERVAL 30 MINUTE), 'Pendiente', NULL, NULL, NULL, 'Evaluación locomotora de ejemplo.'),
+(3, 3, 'Control', DATE_ADD(NOW(), INTERVAL 1 DAY), 'Pendiente', NULL, NULL, NULL, 'Control general de ejemplo.');
+
+INSERT INTO `ANAMNESIS` (`id_Anamnesis`, `id_Consulta`, `sanitaria_Anamnesis`, `ambiental_Anamnesis`, `remota_fisiologica_Anamnesis`, `remota_patologica_Anamnesis`, `proxima_fisiologica_Anamnesis`, `proxima_patologica_Anamnesis`) VALUES
+(1, 1, 'Vacunación al día.', 'Vive en casa con patio.', 'Apetito y actividad habituales.', 'Sin antecedentes relevantes.', 'Sin cambios recientes.', 'Consulta de rutina.');
+
+INSERT INTO `DIAGNOSTICO` (`id_Diagnostico`, `id_Consulta`, `tipo_Diagnostico`, `descripcion_Diagnostico`) VALUES
+(1, 1, 'Definitivo', 'Paciente clínicamente estable.');
+
+INSERT INTO `EXAMEN_GENERAL` (`id_ExamenG`, `id_Consulta`, `peso_ExamenG`, `CC_ExamenG`, `TR_ExamenG`, `FC_ExamenG`, `FR_ExamenG`, `TLLC_ExamenG`, `sensorio_ExamenG`, `facies_ExamenG`, `piel_subcutaneo_ExamenG`, `mucosas_ExamenG`, `grandes_funciones_ExamenG`, `actitudes_anomalas_ExamenG`, `hidratacion_ExamenG`, `ganglios_linfaticos_ExamenG`, `aparentes_ExamenG`) VALUES
+(1, 1, '24 kg', '5/9', '38.5 °C', '96 lpm', '22 rpm', '2 s', 'Alerta', 'Normal', 'Sin alteraciones', 'Rosadas', 'Normales', 'Sin actitudes anómalas', 'Normal', 'Sin alteraciones', 'Sin alteraciones aparentes');
+
+INSERT INTO `EXAMEN_PARTICULAR` (`id_ExamenP`, `id_ExamenG`, `texto_libre_ExamenP`, `observaciones_ExamenP`) VALUES
+(1, 1, 'Examen clínico general de rutina.', 'Sin hallazgos relevantes.');
+
+INSERT INTO `PARACLINICO` (`id_Paraclinico`, `id_Consulta`, `tipo_Paraclinico`, `resultado_Paraclinico`, `archivoURL_Paraclinico`) VALUES
+(1, 1, 'Evaluación clínica', 'Sin estudios adicionales indicados.', NULL);
+
+INSERT INTO `PRONOSTICO` (`id_Pronostico`, `id_Consulta`, `tipo_Pronostico`) VALUES
+(1, 1, 'Favorable');
+
+INSERT INTO `TRATAMIENTO` (`id_Tratamiento`, `id_Consulta`, `descripcion_Tratamiento`) VALUES
+(1, 1, 'Mantener plan sanitario habitual. Control segun indicacion profesional.');
+
+INSERT INTO `HOSPITALIZACION` (`id_Hospitalizacion`, `id_Paciente`, `id_Consulta`, `id_Usuario`, `fecha_ingreso_Hospitalizacion`, `fecha_egreso_Hospitalizacion`, `motivo_Hospitalizacion`, `estado_Hospitalizacion`) VALUES
+(1, 2, NULL, 2, DATE_SUB(NOW(), INTERVAL 2 HOUR), NULL, 'Observación clínica de demostración.', 'Activa');
+
+INSERT INTO `SERVICIO` (`id_Servicio`, `id_Usuario`, `nombre_Servicio`, `descripcion_Servicio`, `precio_Servicio`, `duracion_Servicio`) VALUES
+(1, 2, 'Consulta clínica', 'Evaluación general del paciente.', 1800.00, '45 minutos'),
+(2, 2, 'Control', 'Seguimiento clínico.', 1000.00, '30 minutos');
+
+INSERT INTO `USUARIO_CONSULTA` (`id_Usuario`, `id_Consulta`) VALUES
+(2, 1),
+(3, 1),
+(2, 2),
+(2, 3);
+
 --
 -- Índices para tablas volcadas
 --
@@ -717,7 +793,8 @@ ALTER TABLE `ANAMNESIS`
 --
 ALTER TABLE `CONSULTA`
   ADD PRIMARY KEY (`id_Consulta`),
-  ADD KEY `id_Paciente` (`id_Paciente`);
+  ADD KEY `id_Paciente` (`id_Paciente`),
+  ADD KEY `idx_consulta_fecha_hora` (`fecha_hora_Consulta`);
 
 --
 -- Indices de la tabla `DIAGNOSTICO`
@@ -843,19 +920,19 @@ ALTER TABLE `USUARIO_CONSULTA`
 -- AUTO_INCREMENT de la tabla `ANAMNESIS`
 --
 ALTER TABLE `ANAMNESIS`
-  MODIFY `id_Anamnesis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_Anamnesis` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `CONSULTA`
 --
 ALTER TABLE `CONSULTA`
-  MODIFY `id_Consulta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_Consulta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `DIAGNOSTICO`
 --
 ALTER TABLE `DIAGNOSTICO`
-  MODIFY `id_Diagnostico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_Diagnostico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `ESPECIE`
@@ -867,49 +944,49 @@ ALTER TABLE `ESPECIE`
 -- AUTO_INCREMENT de la tabla `EXAMEN_EQUINO`
 --
 ALTER TABLE `EXAMEN_EQUINO`
-  MODIFY `id_ExamenEq` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_ExamenEq` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `EXAMEN_GENERAL`
 --
 ALTER TABLE `EXAMEN_GENERAL`
-  MODIFY `id_ExamenG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_ExamenG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `EXAMEN_PARTICULAR`
 --
 ALTER TABLE `EXAMEN_PARTICULAR`
-  MODIFY `id_ExamenP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_ExamenP` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `HOSPITALIZACION`
 --
 ALTER TABLE `HOSPITALIZACION`
-  MODIFY `id_Hospitalizacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_Hospitalizacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `PACIENTE`
 --
 ALTER TABLE `PACIENTE`
-  MODIFY `id_Paciente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_Paciente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `PARACLINICO`
 --
 ALTER TABLE `PARACLINICO`
-  MODIFY `id_Paraclinico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_Paraclinico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `PRONOSTICO`
 --
 ALTER TABLE `PRONOSTICO`
-  MODIFY `id_Pronostico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_Pronostico` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `RAZA`
 --
 ALTER TABLE `RAZA`
-  MODIFY `id_Raza` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_Raza` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `RESEÑA`
@@ -921,25 +998,25 @@ ALTER TABLE `RESEÑA`
 -- AUTO_INCREMENT de la tabla `SERVICIO`
 --
 ALTER TABLE `SERVICIO`
-  MODIFY `id_Servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_Servicio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `TRATAMIENTO`
 --
 ALTER TABLE `TRATAMIENTO`
-  MODIFY `id_Tratamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_Tratamiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `TUTOR`
 --
 ALTER TABLE `TUTOR`
-  MODIFY `id_Tutor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_Tutor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `USUARIO`
 --
 ALTER TABLE `USUARIO`
-  MODIFY `id_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
@@ -1038,6 +1115,25 @@ ALTER TABLE `TRATAMIENTO`
 ALTER TABLE `USUARIO_CONSULTA`
   ADD CONSTRAINT `USUARIO_CONSULTA_ibfk_1` FOREIGN KEY (`id_Usuario`) REFERENCES `USUARIO` (`id_Usuario`) ON DELETE CASCADE,
   ADD CONSTRAINT `USUARIO_CONSULTA_ibfk_2` FOREIGN KEY (`id_Consulta`) REFERENCES `CONSULTA` (`id_Consulta`) ON DELETE CASCADE;
+
+-- Vista de alertas por usuario para consultas cuyo horario ya pasó y siguen abiertas.
+CREATE OR REPLACE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_alertas_consultas_atrasadas` AS
+SELECT
+  uc.`id_Usuario` AS `id_usuario`,
+  c.`id_Consulta`,
+  c.`fecha_hora_Consulta`,
+  c.`estado_proceso_Consulta`,
+  c.`tipo_Consulta`,
+  c.`motivo_Consulta`,
+  p.`nombre_Paciente`,
+  t.`nombre_Tutor`
+FROM `USUARIO_CONSULTA` uc
+INNER JOIN `CONSULTA` c ON c.`id_Consulta` = uc.`id_Consulta`
+INNER JOIN `PACIENTE` p ON p.`id_Paciente` = c.`id_Paciente`
+INNER JOIN `TUTOR` t ON t.`id_Tutor` = p.`id_Tutor`
+WHERE c.`fecha_hora_Consulta` < NOW()
+  AND LOWER(TRIM(c.`estado_proceso_Consulta`)) IN ('pendiente', 'en curso');
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

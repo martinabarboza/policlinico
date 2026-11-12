@@ -1,4 +1,5 @@
 <?php
+/** Directorio y formularios de alta/edición de tutores. */
 $escape = static fn ($valor): string =>
     htmlspecialchars(is_scalar($valor) ? (string) $valor : '', ENT_QUOTES, 'UTF-8');
 

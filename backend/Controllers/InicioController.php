@@ -1,6 +1,9 @@
 <?php
+
+/** Prepara la página pública de inicio y su catálogo de servicios. */
 class InicioController extends  Controller
 {
+    /** Muestra la landing; si falta el catálogo, conserva la página sin servicios. */
     public function index()
     {   
         $servicios = [];
@@ -18,6 +21,7 @@ class InicioController extends  Controller
         $this->view('landing/inicio', ['servicios' => $servicios], 'landing');
     }
     
+    /** Obtiene del modelo las tarjetas que presenta la landing. */
     public function obtenerServicios(): array
     {
         $modeloServicio = $this->model('Servicio');

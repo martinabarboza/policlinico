@@ -1,10 +1,9 @@
 <?php
+
+/** Objeto de transferencia para los datos de usuario usados por el modelo legado. */
     class UsuarioObj
     {
-        //
-        // Atributos de la clase Usuario.
-        //
-
+        // Mantiene los nombres de propiedad históricos para compatibilidad con el modelo.
         private int $id_Usuario;
         private string $cedula_Usuario;
         private string $nombre_Usuario;
@@ -15,10 +14,7 @@
         private datetime $lastlogin_usuario;
         private datetime $dateupdate_usuario;
 
-        //
-        // Constructor de un objeto para esta clase.
-        //
-
+        /** Se conserva vacío porque los campos se asignan mediante setters. */
         public function __CONSTRUCT() {
 
         }

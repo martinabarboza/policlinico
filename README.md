@@ -60,8 +60,18 @@ El router despacha las rutas; los controladores coordinan las operaciones y los 
    ```sh
    docker compose up --build
    ```
-5. Importar manualmente `database/26-10-2026.sql` en la base `policlinico_db`; Compose no importa el esquema automáticamente.
+5. Importar `database/policlinico_db.sql` en una base `policlinico_db` vacía; Compose no importa el esquema automáticamente. El dump incluye el esquema y un conjunto reducido de datos para la exposición, así que no lo importes sobre una base con datos que quieras conservar.
 6. Abrir la aplicación en `http://localhost:8080`. phpMyAdmin está disponible en `http://localhost:8081`.
+
+### Cuentas de demostración
+
+Las tres cuentas usan la contraseña `Expo2026!`:
+
+| Rol | Documento |
+| --- | --- |
+| Director | `12345678` |
+| Profesor | `53456789` |
+| Estudiante | `11111122` |
 
 Compose conserva los datos de MariaDB en un volumen y prepara los directorios de archivos adjuntos dentro de `storage/`.
 

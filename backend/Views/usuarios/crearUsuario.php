@@ -1,4 +1,5 @@
 <?php
+/** Formulario de alta de cuentas, disponible únicamente para el rol Director. */
 $usuarioEdit = $usuarioEdit ?? [];
 $rolesUsuario = [
     'DIRECTOR' => 'Director',

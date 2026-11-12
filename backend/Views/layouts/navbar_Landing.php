@@ -1,3 +1,4 @@
+<!-- Navegación de anclas y acceso al login del sitio público. -->
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
 

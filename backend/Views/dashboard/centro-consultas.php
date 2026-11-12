@@ -1,3 +1,4 @@
+<!-- Resultados de búsqueda de pacientes y acciones vinculadas al consultorio. -->
 <?php if ($errorBusqueda !== null || $busqueda !== null): ?>
     <div class="container-fluid pt-4 px-4">
         <section class="bg-white border rounded p-4" aria-labelledby="resultado-pacientes">

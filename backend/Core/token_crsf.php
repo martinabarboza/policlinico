@@ -1,4 +1,5 @@
 <?php
+/** Inicializador CSRF procedural legado; el flujo MVC actual usa la clase Csrf. */
 /* 
 Un token CSRF (Cross-Site Request Forgery) es una medida de seguridad utilizada para 
 proteger aplicaciones web contra ataques de falsificación de solicitudes entre sitios. 

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Verificador legado de la cookie auten_token.
+ * El flujo MVC actual autentica mediante Auth y la sesión PHP; public/index.php no incluye este archivo.
+ */
 $config = require __DIR__ . '/../config/config.php';
 $clave_secreta = $config['SECRET'];
 $estado_auth;

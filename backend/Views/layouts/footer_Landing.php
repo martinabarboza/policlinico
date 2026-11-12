@@ -1,3 +1,4 @@
+<!-- Pie informativo de la landing pública. -->
 <footer class="pie-inicio text-center text-lg-start">
     <!-- Grid container -->
     <div class="container-fluid px-4 py-5">

@@ -1,12 +1,10 @@
 <?php
 require_once APP_PATH . '/Helpers/UsuarioClase.php';
+
+/** Gestiona cuentas del sistema; todas las acciones requieren permiso de Dirección. */
 class UsuarioController extends Controller
 {
-
-    //
-    // Index llama a la vista del titulo de la página, mediante usuario y gestion de roles.
-    //
-
+    /** Lista cuentas y permite filtrar entre activas e inactivas. */
     public function index(): void {
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
@@ -22,11 +20,7 @@ class UsuarioController extends Controller
         ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
     }
 
-    //
-    // Retorna en a la vista correspondiente basandose en el formulario en el que esté, una comprobación
-    // Devolviendo un mensaje de error
-    // 
-    //
+    /** Vuelve a renderizar el formulario correspondiente conservando el error. */
     private function returnPorError(string $form, $usuarioVerificacion, string $mensajeError): void {
         if ($form === 'modificar') {
         $this->view('usuarios/modificarUsuario', [
@@ -55,9 +49,7 @@ class UsuarioController extends Controller
         return;
     }
 
-    //
-    // Llama a la vista de modificar usuario, utilizando la cédula del usuario.
-    //
+    /** Busca una cuenta por cédula y presenta su formulario de edición. */
     public function modificarUsuario(): void {
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
@@ -90,7 +82,7 @@ class UsuarioController extends Controller
             ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
         }
     }
-    // Permite Actualizar un Usuario en la base de datos utilizando la cédula.
+    /** Actualiza la cuenta indicada por su cédula anterior; el hash cambia solo si se envía contraseña. */
     public function actualizarUsuario(): void {
 
         Auth::requireLogin();
@@ -161,9 +153,7 @@ class UsuarioController extends Controller
         }
     }
 
-    //
-    // Crea un nuevo usuario en la base de datos.
-    //
+    /** Procesa el alta por POST o muestra el formulario vacío por GET. */
     public function crearUsuario(): void {
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
@@ -220,6 +210,7 @@ class UsuarioController extends Controller
         );}
     }
 
+    /** Activa o desactiva una cuenta sin eliminar sus registros relacionados. */
     public function cambiarEstadoUsuario() {
         auth::requireLogin();
         auth::requirePermiso('admin.total');

@@ -1,4 +1,5 @@
 <?php
+/** Ficha de solo lectura con los datos clínicos agrupados por sección. */
 $esc = static function ($valor): string {
     return htmlspecialchars((string) $valor, ENT_QUOTES, 'UTF-8');
 };

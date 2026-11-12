@@ -1,5 +1,6 @@
 <?php
 
+/** Persiste consultas y reúne sus datos clínicos relacionados para edición e historial. */
 class ConsultaModel extends Model
 {
     /**
@@ -68,6 +69,7 @@ class ConsultaModel extends Model
             return null;
         }
 
+        // Inicializa todos los campos del formulario para que los bloques clínicos opcionales sean editables.
         $campos = [
             'sanitaria_Anamnesis',
             'ambiental_Anamnesis',
@@ -116,6 +118,7 @@ class ConsultaModel extends Model
         $valores['pronosticos_legacy'] = [];
         $valores['paraclinicos'] = [];
 
+        // Cada tabla clínica se consulta por separado para reconstruir el mismo contrato que recibe crear().
         $anamnesis = $this->obtenerFilasDetalle(
             "SELECT sanitaria_Anamnesis, ambiental_Anamnesis,
                     remota_fisiologica_Anamnesis, remota_patologica_Anamnesis,
@@ -277,6 +280,7 @@ class ConsultaModel extends Model
             throw new InvalidArgumentException('El estado inicial de la consulta no es válido.');
         }
 
+        // La consulta y sus detalles clínicos deben quedar completos o revertirse juntos.
         $this->db->begin_transaction();
 
         try {
@@ -364,6 +368,7 @@ class ConsultaModel extends Model
                 );
                 $pronosticosLegacy = array_column($pronosticosLegacy, 'tipo_Pronostico');
 
+                // Los detalles se reemplazan en la misma transacción; se guardan aparte archivos/participantes que deben conservarse.
                 $this->ejecutarUpdate(
                     "UPDATE CONSULTA
                      SET id_Paciente = ?, tipo_Consulta = ?, fecha_hora_Consulta = ?,
@@ -450,6 +455,7 @@ class ConsultaModel extends Model
                 'proxima_fisiologica_Anamnesis',
                 'proxima_patologica_Anamnesis',
             ];
+            // Los grupos opcionales solo se insertan si contienen algún valor informado.
             $anamnesis = $this->obtenerCamposOpcionales($datos, $camposAnamnesis);
 
             if ($this->hayDatos($anamnesis)) {

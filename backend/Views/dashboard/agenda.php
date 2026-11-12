@@ -1,4 +1,8 @@
 <?php
+/**
+ * Agenda diaria/semanal; recibe turnos, opciones de búsqueda, permisos y estado del formulario.
+ * Las acciones POST publicadas aquí usan el token CSRF entregado por AgendaController.
+ */
 $e = static fn($valor): string => htmlspecialchars((string) ($valor ?? ''), ENT_QUOTES, 'UTF-8');
 $turnos = is_array($turnos ?? null) ? $turnos : [];
 $pacientes = is_array($pacientes ?? null) ? $pacientes : [];

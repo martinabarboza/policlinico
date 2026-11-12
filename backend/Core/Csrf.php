@@ -1,16 +1,11 @@
 <?php
 
-
-  // CONVERSIÓN DEL TOKEN CSRF A CLASES, 
-  // FUNCIONANDO EN MVC
- 
+/** Genera y valida tokens CSRF asociados a la sesión actual. */
 class Csrf
 {
     private const SESSION_KEY = 'csrf_token';
 
-    /**
-     * Devuelve el token actual, generándolo si todavía no existe.
-     */
+    /** Devuelve el token de sesión actual y crea uno aleatorio si falta. */
     public static function token(): string
     {
         if (empty($_SESSION[self::SESSION_KEY])) {
@@ -20,9 +15,7 @@ class Csrf
         return $_SESSION[self::SESSION_KEY];
     }
 
-    /**
-     * Valida el token recibido contra el guardado en sesión.
-     */
+    /** Compara de forma constante el token recibido con el token de sesión. */
     public static function validar(?string $tokenRecibido): bool
     {
         if (empty($_SESSION[self::SESSION_KEY]) || empty($tokenRecibido)) {

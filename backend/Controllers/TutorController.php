@@ -1,7 +1,9 @@
 <?php
 
+/** Atiende el directorio, alta y edición de tutores. */
 class TutorController extends Controller
 {
+    /** Valida filtros opcionales y abre el formulario cuando se solicita editar. */
     public function index(): void
     {
         Auth::requireLogin();
@@ -41,6 +43,7 @@ class TutorController extends Controller
         $this->mostrarDirectorio($busqueda, '', $editando ?? [], $errorBusqueda, $editando);
     }
 
+    /** Valida CSRF y delega la creación al modelo. */
     public function guardar(): void
     {
         Auth::requireLogin();
@@ -99,6 +102,7 @@ class TutorController extends Controller
         }
     }
 
+    /** Actualiza un tutor existente con validación de ID, CSRF y campos. */
     public function actualizar(): void
     {
         Auth::requireLogin();
@@ -155,6 +159,7 @@ class TutorController extends Controller
         }
     }
 
+    /** Renderiza el directorio con resultados, errores y datos del formulario. */
     private function mostrarDirectorio(
         string $busqueda = '',
         string $error = '',

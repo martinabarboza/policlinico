@@ -1,7 +1,9 @@
 <?php
 
+/** Muestra el módulo informativo de hospitalización para usuarios autenticados. */
 class HospitalizacionController extends Controller
 {
+    /** Renderiza la vista; las operaciones de ingreso/alta aún no están implementadas. */
     public function index()
     {   
         Auth::requireLogin();

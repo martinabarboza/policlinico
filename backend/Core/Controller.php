@@ -26,6 +26,16 @@ class Controller
             throw new Exception("Vista no encontrada: {$viewFile}");
         }
 
+        if (
+            $layout === 'app'
+            && Auth::check()
+            && !array_key_exists('alertasNotificaciones', $data)
+        ) {
+            // El navbar comparte una muestra de alertas en todas las páginas autenticadas.
+            $data['alertasNotificaciones'] = $this->model('NotificacionModel')
+                ->obtenerAlertasAtrasadasPorUsuario((int) Auth::id(), 5);
+        }
+
         extract($data);
 
         switch ($layout) {
@@ -71,9 +81,7 @@ class Controller
     }
 
 
-    /**
-     * Instancia un modelo.
-     */
+    /** Carga e instancia un modelo por nombre usando la convención local de archivos. */
     protected function model(string $model)
     {
         $modelFile = MODELS_PATH . "/{$model}.php";

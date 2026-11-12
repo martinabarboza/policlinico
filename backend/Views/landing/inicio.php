@@ -1,4 +1,5 @@
 <?php
+/** Landing pública; muestra el catálogo de servicios entregado por InicioController. */
 function mostrarServicios($cartas, $cantidad)
 {
     $grupos = array_chunk($cartas, $cantidad);

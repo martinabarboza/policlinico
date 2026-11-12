@@ -1,6 +1,9 @@
 <?php
+
+/** Provee los servicios publicados que consume la página de inicio. */
 class Servicio extends Model
 {
+    /** Devuelve los campos de servicio con los alias esperados por la vista landing. */
     public function getArray_Servicios(): array
     {
 

@@ -1,3 +1,4 @@
+<!-- Pantalla informativa; todavía no contiene formularios para ingreso ni alta. -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light rounded p-4 mb-4">
         <div class="d-flex align-items-center gap-3 mb-3">

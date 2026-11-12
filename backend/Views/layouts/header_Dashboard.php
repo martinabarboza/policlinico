@@ -1,3 +1,4 @@
+<!-- Cabecera común de páginas autenticadas; carga recursos declarados por Controller::view. -->
 <!DOCTYPE html>
 <html lang="es">
 

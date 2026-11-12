@@ -1,4 +1,8 @@
 <?php
+/**
+ * Generador legado de cookie auten_token firmada.
+ * Espera que el llamador defina $id; el flujo activo usa Auth::login() y no incluye este archivo.
+ */
 $config = require __DIR__ . '/../config/config.php';
 $clave_secreta = $config['SECRET'];
 

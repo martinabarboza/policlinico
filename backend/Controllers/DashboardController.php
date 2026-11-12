@@ -1,5 +1,6 @@
 <?php
 
+/** Prepara el dashboard y sus listados secundarios a partir de los modelos. */
 class DashboardController extends Controller
 {
     /**

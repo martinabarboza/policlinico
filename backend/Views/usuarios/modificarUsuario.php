@@ -1,4 +1,5 @@
 <?php
+/** Formulario para editar una cuenta existente; recibe usuarioEdit y mensajes de error. */
 $usuarioEdit = $usuarioEdit ?? [];
 $rolesUsuario = [
     'Director' => 'Director',

@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Conexión única a la base de datos.
- * con mysqli
- */
-
+/** Mantiene una única conexión mysqli y centraliza su configuración. */
 class Database
 {
     private static ?mysqli $conn = null;
@@ -25,6 +21,9 @@ class Database
                     $config['DB_NAME']
                 );
                 self::$conn->set_charset('utf8mb4');
+                // DATETIME representa hora local en este sistema; alinear NOW() y CURDATE().
+                $offsetHorario = (new DateTimeImmutable('now'))->format('P');
+                self::$conn->query("SET time_zone = '{$offsetHorario}'");
             } catch (mysqli_sql_exception $e) {
                 error_log(sprintf(
                     'Error de conexión a la base de datos [host=%s, db=%s]: %s',
@@ -39,9 +38,7 @@ class Database
         return self::$conn;
     }
  
-    /**
-     * Devuelve el SECRET usado para firmar tokens/cookies.
-     */
+    /** Devuelve y conserva en memoria el secreto usado para firmar tokens. */
     public static function getSecret(): string
     {
         static $secret = null;

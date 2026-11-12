@@ -1,4 +1,5 @@
 <?php $usuario = Auth::user(); ?>
+<!-- Navegación superior compartida: búsqueda global, alertas y menú de cuenta. -->
 <!-- Empieza Navbar -->
 <div id="content" class="contenido-principal">
 
@@ -33,29 +34,27 @@
         <div class="navbar-nav align-items-center ms-auto">
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <i class="fa fa-bell me-lg-2"></i>
+                    <i class="fa fa-bell me-lg-2" aria-hidden="true"></i>
                     <span class="d-none d-lg-inline-flex">Notificaciones</span>
+                    <?php if (!empty($alertasNotificaciones)): ?>
+                        <span class="badge rounded-pill bg-danger"><?= count($alertasNotificaciones) ?></span>
+                    <?php endif; ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                    <!-- 
-                        <a href="#" class="dropdown-item">
-                            <h6 class="fw-normal mb-0">Perfil actualizado</h6>
-                            <small>hace 15 minutos</small>
-                        </a>
-
-                        <hr class="dropdown-divider">
-                        <a href="#" class="dropdown-item">
-                            <h6 class="fw-normal mb-0">Nuevo usuario agregado</h6>
-                            <small>hace 2 días</small>
-                        </a>
-                        <hr class="dropdown-divider">
-                        <a href="#" class="dropdown-item">
-                            <h6 class="fw-normal mb-0">Contraseña cambiada</h6>
-                            <small>hace 1 mes</small>
-                        </a>
-                        <hr class="dropdown-divider">
-                    -->
-                    <a href="<?= htmlspecialchars(url('centro-notificaciones'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item text-center">Ver todas las notificaciones</a>
+                    <?php if (!empty($alertasNotificaciones)): ?>
+                        <?php foreach ($alertasNotificaciones as $alerta): ?>
+                            <a href="<?= htmlspecialchars(url('notificaciones'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">
+                                <span class="fw-semibold">Consulta atrasada: <?= htmlspecialchars($alerta['nombre_paciente'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                                <small class="d-block text-muted">
+                                    <?= htmlspecialchars((new DateTimeImmutable($alerta['fecha_hora']))->format('d/m/Y H:i'), ENT_QUOTES, 'UTF-8') ?>
+                                    · <?= htmlspecialchars($alerta['estado'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                                </small>
+                            </a>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <span class="dropdown-item-text text-muted">No tienes alertas pendientes</span>
+                    <?php endif; ?>
+                    <a href="<?= htmlspecialchars(url('notificaciones'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item text-center">Ver todas las alertas</a>
                 </div>
             </div>
             <div class="nav-item dropdown">
@@ -63,7 +62,7 @@
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                         <i class="bi bi-person-fill"></i>
                     </div>
-                    <span class="d-none d-lg-inline-flex"><?= $usuario['nombre'] ?></span>
+                    <span class="d-none d-lg-inline-flex"><?= htmlspecialchars((string) $usuario['nombre'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                     <a href="<?= htmlspecialchars(url('perfil'), ENT_QUOTES, 'UTF-8') ?>" class="dropdown-item">Mi Perfil</a>

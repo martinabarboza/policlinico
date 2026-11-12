@@ -1,3 +1,4 @@
+<!-- Formulario de acceso; recibe csrfToken, error y oldCedula desde AuthController. -->
 <main>
 
   <div class="barra-superior"></div>

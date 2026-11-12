@@ -1,4 +1,5 @@
 <?php
+/** Verifica y renueva la cookie remen_token del mecanismo de autenticación legado. */
 $config = require __DIR__ . '/../config/config.php';
 $clave_secreta = $config['SECRET'];
 $remem_auth;

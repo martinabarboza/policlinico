@@ -1,4 +1,4 @@
-        <!-- Empieza Sidebar -->
+        <!-- Navegación lateral compartida; la opción de administración depende del rol. -->
         <div class="menu-lateral pe-4 pb-3">
             <nav class="navbar">
                 <!-- bg-light navbar-light -->
@@ -13,8 +13,8 @@
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3 text-light">
-                        <h6 class="mb-0"><?= $usuario['nombre'] ?></h6>
-                        <span><?= $usuario['rol'] ?></span>
+                        <h6 class="mb-0"><?= htmlspecialchars((string) $usuario['nombre'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></h6>
+                        <span><?= htmlspecialchars((string) $usuario['rol'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                     </div>
                 </div>
                 <div class="navbar-nav w-100">

@@ -1,19 +1,16 @@
 <?php
 
+/** Gestiona la identidad y los permisos guardados en la sesión PHP. */
 class Auth
 {
-
-    //CONSTANTE PARA LA SESION DEL USUARIO
     private const SESSION_KEY = 'usuario';
 
-    //INICIA LA SESION DEL USUARIO
+    /** Inicia una sesión nueva y conserva solo los campos necesarios en ella. */
     public static function login(array $usuario): void
     {
-
-        //DESTRUYE LA SESION ANTERIOR Y CREA UNA NUEVA SESION PARA EL USUARIO
+        // Cambiar el ID al autenticar evita reutilizar el identificador previo.
         session_regenerate_id(true);
 
-        //ALMACENA LOS DATOS DEL USUARIO EN LA SESION
         $_SESSION[self::SESSION_KEY] = [
             'id'       => (int) $usuario['id_Usuario'],
             'nombre'   => $usuario['nombre_Usuario'],
@@ -25,39 +22,38 @@ class Auth
         ];
     }
 
-    //CIERRA LA SESION DEL USUARIO ELIMINANDO LOS DATOS DE 
-    //LA SESION Y GENERANDO UN NUEVO ID DE SESION
+    /** Elimina la identidad autenticada y renueva el identificador de sesión. */
     public static function logout(): void
     {
         unset($_SESSION[self::SESSION_KEY]);
         session_regenerate_id(true);
     }
 
-    //VERIFICA SI EL USUARIO INICIO SESIÓN
+    /** Indica si la sesión contiene una identidad autenticada. */
     public static function check(): bool
     {
         return isset($_SESSION[self::SESSION_KEY]);
     }
 
-    //OBTIENE LOS DATOS DEL USUARIO LOGUEADO
+    /** Devuelve los datos mínimos del usuario actual o null si no inició sesión. */
     public static function user(): ?array
     {
         return $_SESSION[self::SESSION_KEY] ?? null;
     }
 
-    //OBTIENE EL ID DEL USUARIO LOGUEADO
+    /** Devuelve el ID del usuario autenticado. */
     public static function id(): ?int
     {
         return $_SESSION[self::SESSION_KEY]['id'] ?? null;
     }
 
-    //OBTIENE EL ROL DEL USUARIO LOGUEADO
+    /** Devuelve el rol del usuario autenticado. */
     public static function rol(): ?string
     {
         return $_SESSION[self::SESSION_KEY]['rol'] ?? null;
     }
 
-    //DEVUELVE EL USUARIO A LA PAGINA LOGIN SI NO ESTA LOGEADO
+    /** Redirige al login y detiene la petición si no hay sesión autenticada. */
     public static function requireLogin(): void
     {
         if (!self::check()) {
@@ -66,8 +62,10 @@ class Auth
         }
     }
 
-    // VERIFICA EL PERMISO DEL USUARIO SI ES DIRECTOR PARA ACCEDER
-    // A SECCIONES DONDE SOLO EL PUEDE ACCEDER
+    /**
+     * Comprueba un permiso de la aplicación y responde con 403 si falta.
+     * Los permisos se resuelven aquí para que los controladores no dupliquen reglas.
+     */
     public static function requirePermiso(string $permiso): void
     {
         self::requireLogin();

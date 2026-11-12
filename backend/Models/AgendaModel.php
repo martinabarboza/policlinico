@@ -3,6 +3,9 @@
 class AgendaModel extends Model
 {
     /**
+    * Lista turnos del intervalo [desde, hasta), junto con paciente, tutor y usuarios.
+    * El extremo final es exclusivo para evitar duplicar turnos entre períodos consecutivos.
+    *
      * @return list<array{
      *     id: int,
      *     fecha_hora: string,
@@ -66,6 +69,7 @@ class AgendaModel extends Model
     ): int {
         $this->validarDatosTurno($pacienteId, $usuarioId, $fechaHora, $tipo, $motivo);
         $fechaHora = $this->validarFechaHoraFutura($fechaHora);
+        // Consulta y asociación al usuario deben persistirse juntas o revertirse juntas.
         $this->db->begin_transaction();
 
         try {
@@ -103,6 +107,7 @@ class AgendaModel extends Model
             throw new InvalidArgumentException('El turno seleccionado no es válido.');
         }
         $fechaHora = $this->validarFechaHoraFutura($fechaHora);
+        // El bloqueo impide que otro proceso cambie el turno mientras se valida su estado.
         $this->db->begin_transaction();
 
         try {
@@ -142,6 +147,7 @@ class AgendaModel extends Model
             throw new InvalidArgumentException('El turno seleccionado no es válido.');
         }
 
+        // Solo se cancela la cita; sus datos clínicos se conservan.
         $stmt = $this->db->prepare(
             "UPDATE CONSULTA
              SET estado_proceso_Consulta = 'Cancelada', fecha_fin_Consulta = NULL

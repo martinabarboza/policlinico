@@ -1,5 +1,6 @@
 <?php
 
+/** Gestiona pacientes, tutores vinculados y catálogos de especie/raza. */
 class PacienteModel extends Model
 {
     /** @return list<array{id_Especie: int, nombre_Especie: string}> */
@@ -66,6 +67,7 @@ class PacienteModel extends Model
         return $razas;
     }
 
+    /** Devuelve la ficha del paciente junto a sus datos de tutor y especie. */
     public function obtenerFicha(int $pacienteId): ?array
     {
         $stmt = $this->db->prepare(
@@ -481,6 +483,7 @@ class PacienteModel extends Model
      *
      * @return list<array{id: int, nombre: string, chip: string|null, tutor: string}>
      */
+    /** Busca pacientes por nombre o chip y agrega los datos principales del tutor. */
     public function buscar(string $texto): array
     {
         $termino = '%' . $texto . '%';
@@ -513,6 +516,7 @@ class PacienteModel extends Model
      * @param int $idTutor Identificador del tutor
      * @return array Lista de pacientes asociados al tutor
      */
+    /** Lista los pacientes registrados a nombre del tutor indicado. */
     public function listarPorTutor(int $idTutor): array
     {
         $stmt = $this->db->prepare(

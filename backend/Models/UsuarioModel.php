@@ -1,12 +1,9 @@
 <?php
 
+/** Consultas y operaciones de persistencia para cuentas de acceso. */
 class UsuarioModel extends Model
 {
-
-    //
-    // Busca un usuario por su cedula. Devuelve el registro completo
-    //(incluye passw_usuario hasheada) o null si no existe.
-    //
+    /** Busca por cédula validada y devuelve el hash para que AuthController verifique la contraseña. */
     public function buscarPorCedula(string $cedula): ?array
     {
         $cedula = trim($cedula);
@@ -33,9 +30,7 @@ class UsuarioModel extends Model
         return $resultado ?: null;
     }
 
-    //
-    // Actualiza la fecha de último login del usuario.
-    //
+    /** Registra el último acceso en hora local de la conexión de base de datos. */
     public function actualizarUltimoLogin(int $idUsuario): void
     {
         $stmt = $this->db->prepare(
@@ -47,9 +42,7 @@ class UsuarioModel extends Model
         $stmt->close();
     }
 
-    //
-    // Lista Los Usuarios Registrados en la Base de Datos.
-    //
+    /** Busca usuarios activos o inactivos; la opción controla cuál conjunto se devuelve. */
     public function listadoUsuarios(string $busqueda = '', bool $checkinactivos = false): array
     {
         $resultado = [];
@@ -92,9 +85,7 @@ class UsuarioModel extends Model
         return $usuario;
     }
 
-    //
-    // Agrega un Nuevo Usuario a la Base de Datos
-    //
+    /** Inserta una cuenta; la contraseña recibida debe venir ya hasheada. */
     public function crearUsuarioNuevo(string $cedula, string $nombre, string $apellido, string $rol, string $email, string $passw): bool {
         $resultado = [];
         $stmt = $this->db->prepare(
@@ -108,10 +99,7 @@ class UsuarioModel extends Model
         return $resultado;
     }
 
-    //
-    // Función para modificar usuarios tomando en cuenta un objeto 
-    // usuario almacenado en $usuarioObj y la cedula del usuario a modificar.
-    //
+    /** Actualiza los campos de la cuenta identificada por la cédula anterior. */
     public function modificarUsuario(UsuarioObj $usuarioObj, string $cedulaOld): bool {
         $stmt = $this->db->prepare(
             'UPDATE USUARIO 
@@ -133,6 +121,7 @@ class UsuarioModel extends Model
         return $resultado;
     }
 
+    /** Cambia el estado de una cuenta sin eliminar su historial ni asociaciones. */
     public function cambiarStatusUsuario(string $cedula, string $estado) {
         $stmt = $this->db->prepare(
             'UPDATE USUARIO
@@ -146,6 +135,7 @@ class UsuarioModel extends Model
         return $resultado;
     }
 
+    /** Método legado sin implementación; las cuentas se desactivan con cambiarStatusUsuario(). */
     public function borrarUsuario(){
         
     }

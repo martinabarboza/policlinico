@@ -1,7 +1,9 @@
 <?php
 
+/** Valida y persiste tutores, incluidos sus criterios de búsqueda. */
 class TutorModel extends Model
 {
+    /** Obtiene los datos de un tutor por su ID o devuelve null si no existe. */
     public function obtener(int $tutorId): ?array
     {
         $stmt = $this->db->prepare(
@@ -19,8 +21,7 @@ class TutorModel extends Model
         return $tutor ?: null;
     }
 
-    /**
-     * Busca por nombre, documento o teléfono.
+    /** Busca por nombre, documento o teléfono y resume la cantidad de pacientes.
      *
      * @return list<array<string, mixed>>
      */
@@ -68,8 +69,7 @@ class TutorModel extends Model
         return $tutores;
     }
 
-    /**
-     * Registra un tutor nuevo.
+    /** Registra un tutor nuevo después de validar campos y documento único.
      *
      * @param array<string, mixed> $datos
      */
@@ -157,7 +157,9 @@ class TutorModel extends Model
         return $id;
     }
 
-    /** @param array<string, mixed> $datos */
+    /** Actualiza el tutor existente tras validar formato y unicidad documental.
+     * @param array<string, mixed> $datos
+     */
     public function actualizar(int $tutorId, array $datos): void
     {
         if ($this->obtener($tutorId) === null) {

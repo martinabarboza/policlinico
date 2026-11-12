@@ -1,4 +1,5 @@
 <?php
+/** Conector anterior conservado como referencia; la aplicación activa usa Core/Database.php. */
 $config = require __DIR__ . '/config.php'; // devuelve el array que contiene data sensible $config;
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);

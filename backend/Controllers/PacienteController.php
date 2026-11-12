@@ -1,7 +1,9 @@
 <?php
 
+/** Controla altas y ediciones de pacientes junto con los datos del tutor. */
 class PacienteController extends Controller
 {
+    /** Comprueba el rol y prepara las razas disponibles para la especie elegida. */
     public function crear(): void
     {
         Auth::requireLogin();
@@ -18,6 +20,7 @@ class PacienteController extends Controller
         $this->mostrarFormulario(['especie_Paciente' => $especie], '', null, $especie);
     }
 
+    /** Valida la solicitud protegida por CSRF y registra paciente/tutor. */
     public function guardar(): void
     {
         Auth::requireLogin();
@@ -56,6 +59,7 @@ class PacienteController extends Controller
         }
     }
 
+    /** Carga la ficha existente después de validar ID y permisos. */
     public function editar(): void
     {
         Auth::requireLogin();
@@ -83,6 +87,7 @@ class PacienteController extends Controller
         $this->mostrarFormulario($ficha, '', (int) $id, $ficha['nombre_Especie'] ?? '');
     }
 
+    /** Actualiza paciente y tutor conservando la especie original al manejar errores. */
     public function actualizar(): void
     {
         Auth::requireLogin();
@@ -134,6 +139,7 @@ class PacienteController extends Controller
         }
     }
 
+    /** Prepara catálogos y valores del formulario para alta, edición o error. */
     private function mostrarFormulario(
         array $datos = [],
         string $error = '',
@@ -174,6 +180,7 @@ class PacienteController extends Controller
         );
     }
 
+    /** El sistema permite gestionar pacientes a estudiantes, profesores y directores. */
     private function puedeCrearPacientes(): bool
     {
         return in_array(strtoupper(trim(Auth::rol() ?? '')), ['ESTUDIANTE', 'PROFESOR', 'DIRECTOR'], true);
