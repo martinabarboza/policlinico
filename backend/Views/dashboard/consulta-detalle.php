@@ -48,6 +48,10 @@ $renderSeccion = static function (string $titulo, array $registros) use ($render
                 <h1 class="h3 mb-0">Consulta #<?= (int) $detalle['consulta']['id'] ?></h1>
             </div>
             <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary"
+                   href="/centro-consultas/consulta-pdf?id=<?= (int) $detalle['consulta']['id'] ?>">
+                    Descargar consulta PDF
+                </a>
                 <a class="btn btn-outline-success"
                    href="/centro-consultas/historia-clinica?paciente=<?= (int) $detalle['consulta']['id_paciente'] ?>">
                     Descargar historia PDF

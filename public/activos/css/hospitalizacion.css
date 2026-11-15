@@ -1,0 +1,35 @@
+.hospitalizacion-page {
+    max-width: 1540px;
+}
+
+.hospitalizacion-page .card {
+    border-color: #e2e8e3;
+    border-radius: 0.75rem;
+}
+
+.hospitalizacion-table th {
+    color: #59665f;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.hospitalizacion-table td {
+    min-width: 6rem;
+}
+
+.hospitalizacion-actions {
+    min-width: 10rem;
+}
+
+@media (max-width: 767.98px) {
+    .hospitalizacion-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hospitalizacion-card-header h2 {
+        margin-bottom: 0.5rem;
+    }
+}

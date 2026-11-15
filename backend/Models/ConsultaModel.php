@@ -782,7 +782,8 @@ class ConsultaModel extends Model
                 t.documento_Tutor AS documento_tutor,
                 t.telefono_Tutor AS telefono_tutor,
                 t.email_Tutor AS email_tutor,
-                t.direccion_Tutor AS direccion_tutor
+                t.direccion_Tutor AS direccion_tutor,
+                t.notas_Tutor AS notas_tutor
              FROM PACIENTE p
              INNER JOIN TUTOR t ON t.id_Tutor = p.id_Tutor
              LEFT JOIN RAZA r ON r.id_Raza = p.id_Raza

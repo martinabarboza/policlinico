@@ -1,0 +1,109 @@
+.centro-pacientes {
+    max-width: 1540px;
+}
+
+.centro-pacientes .centro-pacientes__busqueda,
+.centro-pacientes .centro-pacientes__ficha,
+.centro-pacientes .centro-pacientes__seccion {
+    margin-bottom: 1.25rem;
+}
+
+.centro-pacientes__perfil {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, rgba(4, 113, 76, 0.06), rgba(0, 74, 130, 0.035));
+    border-bottom: 1px solid #dde5e5;
+}
+
+.centro-pacientes__perfil h2 {
+    margin-bottom: 0.35rem;
+}
+
+.centro-pacientes__perfil-meta {
+    color: #64748b;
+}
+
+.centro-pacientes__busqueda .form-control,
+.centro-pacientes__busqueda .btn {
+    min-height: 44px;
+}
+
+.centro-pacientes__estado-vacio {
+    display: grid;
+    min-height: 190px;
+    place-content: center;
+    color: #64748b;
+    text-align: center;
+}
+
+.centro-pacientes__estado-vacio i {
+    margin-bottom: 0.75rem;
+    color: var(--primary);
+    font-size: 1.75rem;
+}
+
+.centro-pacientes__consulta {
+    overflow: hidden;
+    border: 1px solid #dde5e5;
+    border-left: 4px solid var(--primary);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.centro-pacientes__consulta + .centro-pacientes__consulta {
+    margin-top: 0.85rem;
+}
+
+.centro-pacientes__consulta summary {
+    padding: 1rem 1.15rem;
+    cursor: pointer;
+    list-style-position: inside;
+}
+
+.centro-pacientes__consulta[open] summary {
+    border-bottom: 1px solid #e8edef;
+    background: #f8fafc;
+}
+
+.centro-pacientes__consulta-resumen {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.centro-pacientes__consulta-detalle {
+    display: grid;
+    gap: 1rem;
+    padding: 1.1rem;
+}
+
+.centro-pacientes__grupo h4 {
+    margin-bottom: 0.75rem;
+    color: #475569;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.centro-pacientes__resenia {
+    display: block;
+    max-width: 100%;
+    max-height: 360px;
+    border: 1px solid #dde5e5;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+@media (max-width: 575.98px) {
+    .centro-pacientes__perfil {
+        padding: 1rem;
+    }
+
+    .centro-pacientes__perfil .btn {
+        width: 100%;
+    }
+}

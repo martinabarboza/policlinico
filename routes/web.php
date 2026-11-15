@@ -10,7 +10,9 @@ $router->get('/consultas-diarias', [DashboardController::class, 'consultasDiaria
 $router->get('/consultas-incompletas', [DashboardController::class, 'consultasIncompletas']);
 $router->get('/proximas-consultas', [DashboardController::class, 'proximasConsultas']);
 $router->get('/centro-consultas', [Centro_ConsultasController::class, 'index']);
+$router->get('/centro-pacientes', [CentroPacienteController::class, 'index']);
 $router->get('/centro-consultas/historia-clinica', [Centro_ConsultasController::class, 'descargarHistoriaClinica']);
+$router->get('/centro-consultas/consulta-pdf', [Centro_ConsultasController::class, 'descargarConsultaPdf']);
 $router->get('/centro-consultas/nueva', [Centro_ConsultasController::class, 'nueva']);
 $router->get('/centro-consultas/editar', [Centro_ConsultasController::class, 'editar']);
 $router->get('/pacientes/crear', [PacienteController::class, 'crear']);
@@ -29,6 +31,8 @@ $router->post('/agenda/guardar', [AgendaController::class, 'guardar']);
 $router->post('/agenda/reprogramar', [AgendaController::class, 'reprogramar']);
 $router->post('/agenda/cancelar', [AgendaController::class, 'cancelar']);
 $router->get('/hospitalizacion', [HospitalizacionController::class, 'index']);
+$router->post('/hospitalizacion/registrarIngreso', [HospitalizacionController::class, 'registrarIngreso']);
+$router->post('/hospitalizacion/darAlta', [HospitalizacionController::class, 'darAlta']);
 $router->get('/usuarios', [UsuarioController::class, 'index']);
 $router->get('/usuarios/editar', [UsuarioController::class, 'modificarUsuario']);
 $router->post('/usuarios/actualizarUsuario', [UsuarioController::class, 'actualizarUsuario']);

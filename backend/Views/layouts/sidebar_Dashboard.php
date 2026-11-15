@@ -28,6 +28,11 @@
                                                                                                             } else {
                                                                                                                 echo 'nav-item nav-link';
                                                                                                             } ?>"><i class="fa fa-search me-2"></i>Consultorio</a>
+                    <a href="<?= htmlspecialchars(url('centro-pacientes'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-pacientes')) {
+                                                                                                                echo 'nav-item nav-link active';
+                                                                                                            } else {
+                                                                                                                echo 'nav-item nav-link';
+                                                                                                            } ?>"><i class="fa fa-paw me-2"></i>Centro de pacientes</a>
                     <a href="<?= htmlspecialchars(url('centro-tutores'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-tutores')) {
                                                                                                                 echo 'nav-item nav-link active';
                                                                                                             } else {

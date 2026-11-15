@@ -32,6 +32,7 @@ require_once APP_PATH . '/Controllers/AuthController.php';
 require_once APP_PATH . '/Controllers/DashboardController.php';
 require_once APP_PATH . '/Controllers/NotificacionController.php';
 require_once APP_PATH . '/Controllers/Centro_ConsultasController.php';
+require_once APP_PATH . '/Controllers/CentroPacienteController.php';
 require_once APP_PATH . '/Controllers/Centro_TutoresController.php';
 require_once APP_PATH . '/Controllers/TutorController.php';
 require_once APP_PATH . '/Controllers/PacienteController.php';

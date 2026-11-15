@@ -879,70 +879,14 @@ class Centro_ConsultasController extends Controller
             return;
         }
 
-        require_once ROOT_PATH . '/backend/libs/fpdf/fpdf.php';
-
-        $pdf = new class extends FPDF {
-            public function Header(): void
-            {
-                $this->SetFont('Arial', 'B', 10);
-                $this->SetTextColor(54, 74, 81);
-                $this->Cell(0, 7, 'POLICLINICO VETERINARIO  |  HISTORIA CLINICA', 0, 1, 'R');
-                $this->SetDrawColor(31, 117, 128);
-                $this->SetLineWidth(0.5);
-                $this->Line(16, 17, 194, 17);
-                $this->Ln(5);
-            }
-
-            public function Footer(): void
-            {
-                $this->SetY(-14);
-                $this->SetDrawColor(210, 220, 220);
-                $this->Line(16, $this->GetY(), 194, $this->GetY());
-                $this->SetY(-12);
-                $this->SetFont('Arial', '', 8);
-                $this->SetTextColor(100, 110, 110);
-                $this->Cell(0, 8, 'Documento generado el ' . date('d/m/Y H:i') . '  |  Pagina ' . $this->PageNo(), 0, 0, 'R');
-            }
-        };
-        $pdf->SetMargins(16, 24, 16);
-        $pdf->SetAutoPageBreak(true, 19);
-        $pdf->SetTitle('Historia clinica - ' . $historial['paciente']['nombre'], true);
-        $pdf->SetAuthor('Policlinico Veterinario', true);
-        $pdf->AddPage();
-
-        $textoPdf = static function ($valor): string {
-            $texto = trim((string) ($valor ?? ''));
-            if ($texto === '') {
-                return 'No registrado';
-            }
-
-            $convertido = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $texto);
-            if ($convertido === false) {
-                throw new RuntimeException('No se pudo convertir un dato de la historia clínica para el PDF.');
-            }
-
-            return $convertido;
-        };
-        $agregarSeccion = static function (string $titulo, array $lineas) use ($pdf, $textoPdf): void {
-            $pdf->SetFont('Arial', 'B', 11);
-            $pdf->SetTextColor(31, 96, 105);
-            $pdf->Cell(0, 8, $textoPdf($titulo), 0, 1, 'L');
-            $pdf->SetFont('Arial', '', 9);
-            $pdf->SetTextColor(40, 48, 50);
-            foreach ($lineas as $etiqueta => $valor) {
-                if ($valor === null || trim((string) $valor) === '') {
-                    continue;
-                }
-                $pdf->SetFont('Arial', 'B', 9);
-                $pdf->Write(5, $textoPdf((string) $etiqueta . ': '));
-                $pdf->SetFont('Arial', '', 9);
-                $pdf->MultiCell(0, 5, $textoPdf($valor));
-            }
-            $pdf->Ln(2);
-        };
+        require_once ROOT_PATH . '/backend/libs/fpdf/ClinicaPdf.php';
+        $pdf = new ClinicaPdf(
+            'Historia clinica - ' . ($historial['paciente']['nombre'] ?? ''),
+            'HISTORIA CLINICA'
+        );
 
         $paciente = $historial['paciente'];
-        $agregarSeccion('Datos del paciente', [
+        $pdf->agregarSeccion('Datos del paciente', [
             'Nombre' => $paciente['nombre'],
             'Especie' => $paciente['especie'],
             'Raza' => $paciente['raza'],
@@ -952,7 +896,7 @@ class Centro_ConsultasController extends Controller
             'Color' => $paciente['color'],
             'Microchip' => $paciente['chip'],
         ]);
-        $agregarSeccion('Datos del tutor', [
+        $pdf->agregarSeccion('Datos del tutor', [
             'Nombre' => $paciente['tutor'],
             'Documento' => $paciente['documento_tutor'],
             'Teléfono' => $paciente['telefono_tutor'],
@@ -960,23 +904,11 @@ class Centro_ConsultasController extends Controller
             'Dirección' => $paciente['direccion_tutor'],
         ]);
 
-        $seccionesConsulta = [
-            'participantes' => 'Profesionales participantes',
-            'anamnesis' => 'Anamnesis',
-            'examenes_generales' => 'Examen general',
-            'examenes_particulares' => 'Exámenes particulares',
-            'examenes_equinos' => 'Evaluación equina',
-            'diagnosticos' => 'Diagnósticos',
-            'tratamientos' => 'Tratamientos',
-            'paraclinicos' => 'Estudios paraclínicos',
-            'pronosticos' => 'Pronósticos',
-            'hospitalizaciones' => 'Hospitalización',
-            'resenias' => 'Archivos de reseña asociados',
-        ];
+        $seccionesConsulta = $this->seccionesPdfConsulta();
 
         if ($historial['consultas'] === []) {
             $pdf->SetFont('Arial', 'I', 10);
-            $pdf->MultiCell(0, 6, $textoPdf('El paciente aún no tiene consultas registradas.'));
+            $pdf->MultiCell(0, 6, $pdf->convertirTexto('El paciente aún no tiene consultas registradas.'));
         }
 
         foreach ($historial['consultas'] as $detalle) {
@@ -986,7 +918,7 @@ class Centro_ConsultasController extends Controller
             if ($fecha !== false) {
                 $titulo .= ' - ' . date('d/m/Y H:i', $fecha);
             }
-            $agregarSeccion($titulo, [
+            $pdf->agregarSeccion($titulo, [
                 'Tipo' => $consulta['Tipo de consulta'],
                 'Estado' => $consulta['Estado'],
                 'Motivo' => $consulta['Motivo'],
@@ -996,27 +928,113 @@ class Centro_ConsultasController extends Controller
             ]);
 
             foreach ($seccionesConsulta as $clave => $etiqueta) {
-                $registros = $detalle[$clave] ?? [];
-                $lineas = [];
-                foreach ($registros as $indice => $registro) {
-                    foreach ($registro as $campo => $valor) {
-                        if ($campo === 'id' || $valor === null || trim((string) $valor) === '') {
-                            continue;
-                        }
-                        $nombreCampo = count($registros) > 1
-                            ? 'Registro ' . ($indice + 1) . ' - ' . $campo
-                            : (string) $campo;
-                        $lineas[$nombreCampo] = $valor;
-                    }
-                }
-                if ($lineas !== []) {
-                    $agregarSeccion($etiqueta, $lineas);
-                }
+                $pdf->agregarRegistros($etiqueta, $detalle[$clave] ?? []);
             }
         }
 
         $nombreArchivo = 'historia-clinica-paciente-' . (int) $paciente['id'] . '.pdf';
         $pdf->Output('D', $nombreArchivo);
+    }
+
+    /** Descarga un PDF con los datos y hallazgos de una consulta individual. */
+    public function descargarConsultaPdf(): void
+    {
+        Auth::requireLogin();
+
+        $consultaId = $_GET['id'] ?? null;
+        if (!is_string($consultaId) || !ctype_digit($consultaId) || (int) $consultaId < 1) {
+            http_response_code(400);
+            echo 'El identificador de la consulta no es válido.';
+            return;
+        }
+
+        if (!function_exists('iconv')) {
+            error_log('No se puede generar el PDF de consulta: la extensión iconv no está disponible.');
+            http_response_code(500);
+            echo 'No se pudo generar el PDF porque falta una extensión requerida del servidor.';
+            return;
+        }
+
+        try {
+            $detalle = $this->model('ConsultaModel')->obtenerDetalle((int) $consultaId);
+        } catch (mysqli_sql_exception $error) {
+            error_log('No se pudo consultar el detalle para generar el PDF: ' . $error->getMessage());
+            http_response_code(500);
+            echo 'No se pudo generar el PDF de consulta. Intentá nuevamente más tarde.';
+            return;
+        }
+
+        if ($detalle === null) {
+            http_response_code(404);
+            echo 'No se encontró la consulta solicitada.';
+            return;
+        }
+
+        require_once ROOT_PATH . '/backend/libs/fpdf/ClinicaPdf.php';
+        $consulta = $detalle['consulta'];
+        $consultaIdNumerico = (int) ($consulta['id'] ?? $consultaId);
+        $pdf = new ClinicaPdf(
+            'Consulta ' . $consultaIdNumerico . ' - ' . ($consulta['Paciente'] ?? ''),
+            'DETALLE DE CONSULTA'
+        );
+        $pdf->agregarSeccion('Datos del paciente', [
+            'Nombre' => $consulta['Paciente'] ?? null,
+            'Especie' => $consulta['Especie'] ?? null,
+            'Raza' => $consulta['Raza'] ?? null,
+            'Sexo' => $consulta['Sexo'] ?? null,
+            'Fecha de nacimiento' => $consulta['Fecha de nacimiento'] ?? null,
+            'Edad registrada' => $consulta['Edad'] ?? null,
+            'Color' => $consulta['Color'] ?? null,
+            'Microchip' => $consulta['Chip'] ?? null,
+        ]);
+        $pdf->agregarSeccion('Datos del tutor', [
+            'Nombre' => $consulta['Tutor'] ?? null,
+            'Documento' => $consulta['Documento del tutor'] ?? null,
+            'Teléfono' => $consulta['Teléfono del tutor'] ?? null,
+            'Correo' => $consulta['Correo del tutor'] ?? null,
+            'Dirección' => $consulta['Dirección del tutor'] ?? null,
+            'Notas' => $consulta['Notas del tutor'] ?? null,
+        ]);
+
+        $fecha = strtotime((string) ($consulta['Fecha y hora'] ?? ''));
+        $tituloConsulta = 'Consulta #' . $consultaIdNumerico;
+        if ($fecha !== false) {
+            $tituloConsulta .= ' - ' . date('d/m/Y H:i', $fecha);
+        }
+        $pdf->agregarSeccion($tituloConsulta, [
+            'Tipo' => $consulta['Tipo de consulta'] ?? null,
+            'Estado' => $consulta['Estado'] ?? null,
+            'Motivo' => $consulta['Motivo'] ?? null,
+            'Resultado final' => $consulta['Resultado final'] ?? null,
+            'Próximo control' => $consulta['Próximo control'] ?? null,
+            'Fecha de finalización' => $consulta['Fecha de finalización'] ?? null,
+        ]);
+
+        foreach ($this->seccionesPdfConsulta() as $clave => $etiqueta) {
+            $pdf->agregarRegistros($etiqueta, $detalle[$clave] ?? []);
+        }
+
+        $pdf->Output(
+            'D',
+            'consulta-' . $consultaIdNumerico . '-paciente-' . (int) ($consulta['id_paciente'] ?? 0) . '.pdf'
+        );
+    }
+
+    private function seccionesPdfConsulta(): array
+    {
+        return [
+            'participantes' => 'Profesionales participantes',
+            'anamnesis' => 'Anamnesis',
+            'examenes_generales' => 'Examen general',
+            'examenes_particulares' => 'Exámenes particulares',
+            'examenes_equinos' => 'Evaluación equina',
+            'diagnosticos' => 'Diagnósticos',
+            'tratamientos' => 'Tratamientos',
+            'paraclinicos' => 'Estudios paraclínicos',
+            'pronosticos' => 'Pronósticos',
+            'hospitalizaciones' => 'Hospitalización asociada',
+            'resenias' => 'Archivos de reseña asociados',
+        ];
     }
 
     /** Busca consultas con filtros y decide si presenta listado o detalle clínico. */
