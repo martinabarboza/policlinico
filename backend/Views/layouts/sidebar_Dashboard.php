@@ -32,7 +32,7 @@
                                                                                                                 echo 'nav-item nav-link active';
                                                                                                             } else {
                                                                                                                 echo 'nav-item nav-link';
-                                                                                                            } ?>"><i class="fa fa-paw me-2"></i>Centro de pacientes</a>
+                                                                                                            } ?>"><i class="fa fa-paw me-2"></i>Pacientes</a>
                     <a href="<?= htmlspecialchars(url('centro-tutores'), ENT_QUOTES, 'UTF-8') ?>" class="<?php if (str_contains($_SERVER['REQUEST_URI'], 'centro-tutores')) {
                                                                                                                 echo 'nav-item nav-link active';
                                                                                                             } else {

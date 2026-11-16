@@ -158,6 +158,7 @@ class PacienteModel extends Model
         ) {
             throw new InvalidArgumentException('Uno de los campos supera la longitud permitida.');
         }
+        $this->validarChipDisponible($chip, $pacienteId);
         if ($email !== null && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
             throw new InvalidArgumentException('Ingresá un correo electrónico válido para el tutor.');
         }
@@ -334,6 +335,7 @@ class PacienteModel extends Model
         ) {
             throw new InvalidArgumentException('Uno de los campos supera la longitud permitida.');
         }
+        $this->validarChipDisponible($chip);
         if ($email !== null && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
             throw new InvalidArgumentException('Ingresá un correo electrónico válido para el tutor.');
         }
@@ -476,6 +478,31 @@ class PacienteModel extends Model
 
         $valor = trim($valor);
         return $valor === '' ? null : $valor;
+    }
+
+    private function validarChipDisponible(?string $chip, ?int $pacienteId = null): void
+    {
+        if ($chip === null) {
+            return;
+        }
+
+        $sql = 'SELECT id_Paciente FROM PACIENTE WHERE numchip_Paciente = ?';
+        if ($pacienteId !== null) {
+            $sql .= ' AND id_Paciente <> ?';
+        }
+        $stmt = $this->db->prepare($sql . ' LIMIT 1');
+        if ($pacienteId === null) {
+            $stmt->bind_param('s', $chip);
+        } else {
+            $stmt->bind_param('si', $chip, $pacienteId);
+        }
+        $stmt->execute();
+        $chipDuplicado = $stmt->get_result()->fetch_assoc() !== null;
+        $stmt->close();
+
+        if ($chipDuplicado) {
+            throw new InvalidArgumentException('Ese número de chip ya está asociado a otro paciente.');
+        }
     }
 
     /**

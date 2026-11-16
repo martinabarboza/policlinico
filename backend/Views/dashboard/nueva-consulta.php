@@ -77,9 +77,11 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
                     Guardar como pendiente
                 </button>
             <?php endif; ?>
-            <button class="btn btn-finish" type="submit" form="formConsulta" name="accion" value="finalizar">
-                Finalizar consulta
-            </button>
+            <?php if ($puedeFinalizarConsulta ?? false): ?>
+                <button class="btn btn-finish" type="submit" form="formConsulta" name="accion" value="finalizar">
+                    Finalizar consulta
+                </button>
+            <?php endif; ?>
         </div>
     </header>
 
@@ -787,7 +789,9 @@ $fechaActual = $valorAnterior('fecha_hora_Consulta', date('Y-m-d\TH:i'));
             <?php if (!$modoEdicion): ?>
                 <button class="btn btn-pending" type="submit" name="accion" value="guardar_pendiente">Guardar como pendiente</button>
             <?php endif; ?>
-            <button class="btn btn-finish" type="submit" name="accion" value="finalizar">Finalizar consulta</button>
+            <?php if ($puedeFinalizarConsulta ?? false): ?>
+                <button class="btn btn-finish" type="submit" name="accion" value="finalizar">Finalizar consulta</button>
+            <?php endif; ?>
         </footer>
     </form>
 </main>

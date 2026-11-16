@@ -108,6 +108,15 @@ class Centro_ConsultasController extends Controller
         }
         $esFinalizacion = $accion === 'finalizar';
         $guardarComoPendiente = $accion === 'guardar_pendiente';
+        if ($esFinalizacion && !$this->puedeCambiarEstado()) {
+            http_response_code(403);
+            $this->mostrarFormularioNuevaConsulta(
+                $especie,
+                'Solo profesores y directores pueden finalizar consultas.',
+                $_POST
+            );
+            return;
+        }
 
         $consultaIdEdicion = $_POST['consulta_id'] ?? '';
         if (
@@ -833,6 +842,7 @@ class Centro_ConsultasController extends Controller
                 'consultaEdicionId' => $consultaEdicionId,
                 'estadoConsultaEdicion' => $estadoConsultaEdicion,
                 'reseniasExistentes' => $reseniasExistentes,
+                'puedeFinalizarConsulta' => $this->puedeCambiarEstado(),
             ],
             'app',
             ['app-layout.css', 'nueva-consulta.css'],

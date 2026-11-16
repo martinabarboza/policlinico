@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: policlinico-db
--- Tiempo de generación: 15-11-2026 a las 17:11:32
+-- Tiempo de generación: 16-11-2026 a las 13:52:14
 -- Versión del servidor: 10.11.19-MariaDB-ubu2204
 -- Versión de PHP: 8.3.36
 
@@ -205,7 +205,7 @@ CREATE TABLE `HOSPITALIZACION` (
 --
 
 INSERT INTO `HOSPITALIZACION` (`id_Hospitalizacion`, `id_Paciente`, `id_Consulta`, `id_Usuario`, `fecha_ingreso_Hospitalizacion`, `fecha_egreso_Hospitalizacion`, `motivo_Hospitalizacion`, `estado_Hospitalizacion`) VALUES
-(1, 2, NULL, 2, '2026-11-12 10:01:04', NULL, 'Observación clínica de demostración.', 'Activa');
+(1, 2, NULL, 2, '2026-11-12 10:01:04', '2026-11-15 15:40:33', 'Observación clínica de demostración.', 'Finalizada');
 
 -- --------------------------------------------------------
 
@@ -410,7 +410,7 @@ CREATE TABLE `USUARIO` (
 --
 
 INSERT INTO `USUARIO` (`id_Usuario`, `cedula_Usuario`, `nombre_Usuario`, `apellido_Usuario`, `email_Usuario`, `passw_Usuario`, `rol_Usuario`, `estado_Usuario`, `lastlogin_Usuario`, `dateupdate_Usuario`) VALUES
-(1, '12345678', 'María', 'Rodríguez', 'maria.directora@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Director', 'activo', '2026-11-15 13:51:46', '2026-11-15 16:51:46'),
+(1, '12345678', 'María', 'Rodríguez', 'maria.directora@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Director', 'activo', '2026-11-15 16:36:43', '2026-11-15 19:36:43'),
 (2, '53456789', 'Ana', 'Silva', 'ana.profesora@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Profesor', 'activo', '2026-11-12 20:41:24', '2026-11-13 22:33:30'),
 (3, '11111122', 'Carlos', 'González', 'carlos.estudiante@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Estudiante', 'activo', NULL, '2026-11-12 23:26:41');
 
@@ -520,6 +520,7 @@ ALTER TABLE `HOSPITALIZACION`
 --
 ALTER TABLE `PACIENTE`
   ADD PRIMARY KEY (`id_Paciente`),
+  ADD UNIQUE KEY `numchip_Paciente` (`numchip_Paciente`),
   ADD KEY `id_Tutor` (`id_Tutor`),
   ADD KEY `id_FK_P_RAZA` (`id_Raza`);
 
