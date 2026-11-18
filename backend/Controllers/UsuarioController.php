@@ -130,10 +130,11 @@ class UsuarioController extends Controller
                 $usuarioObj->setPasswUsuario($usuarioActual['passw_Usuario']);
             }
 
-            $comprobacion = $this->model('UsuarioModel')->modificarUsuario($usuarioObj, $cedulaOld);
+            // Se llama al modelo para actualizar el usuario.
+            $model = $this->model('UsuarioModel');
 
             // Comprueba si se modificó correctamente y redirige a la página de usuarios con un mensaje de éxito o error.
-            if ($comprobacion) {
+            if ($model->modificarUsuario($usuarioObj, $cedulaOld)) {
                 header('Location: /usuarios?success=Usuario_Modificado_Correctamente');
                 exit;
             }
@@ -174,20 +175,20 @@ class UsuarioController extends Controller
                 $this->returnPorError('crearUsuario', null, 'El correo electrónico no es válido.');
                 return;
             }
-            
+            if (!$passw || $passw === ''){
+                $this->returnPorError('crearUsuario', null, 'La contraseña no debe estar vacía');
+                return;
+            }
+
+            $model = $this->model('UsuarioModel');
             // Comprueba si ya existe un usuario con esa cedula antes de crearlo.
-            $usuarioExistente = $this->model('UsuarioModel')->buscarPorCedula($cedula);
-            if ($usuarioExistente) {
+            if ($model->buscarPorCedula($cedula)) {
                 $this->returnPorError('crearUsuario', null, 'Ya existe un usuario con esa cédula.');
                 return;
             }
 
-            // Crea una instancia del modelo de usuario y llama al método para crear un nuevo usuario.
-            $usuarioNuevo = $this->model('UsuarioModel');
-            $comprobacion = $usuarioNuevo->crearUsuarioNuevo($cedula, $nombre, $apellido, $rol, $email, $passw);
-
             // Comprueba si se crea correctamente el usuario y redirige a la pagina de usuarios con un mensaje de éxito o error.
-            if ($comprobacion) {
+            if ($model->crearUsuarioNuevo($cedula, $nombre, $apellido, $rol, $email, $passw)) {
                 header('Location: /usuarios?success=Usuario_Creado_Correctamente');
                 exit;
             } 
@@ -232,19 +233,17 @@ class UsuarioController extends Controller
             $cedula = trim($_POST['cedula']);
             $estado = trim($_POST['estado']);
 
+            // Se llama al modelo
+            $model = $this->model('UsuarioModel');
+
             // Comprueba si el usuario existe antes de intentar cambiar su estado.
-            $usuarioExistente = $this->model('UsuarioModel')->buscarPorCedula($cedula);
-            if (!$usuarioExistente) {
+            if (!$model->buscarPorCedula($cedula)) {
                 header('Location: /usuarios?error=No_Existe_el_Usuario');
                 exit;
             }
 
-            // Se llama al modelo para cambiar el estado del usuario.
-            $cambiarEstado = $this->model('UsuarioModel');
-            $comprobacion = $cambiarEstado->cambiarStatusUsuario($cedula, $estado);
-
             // Se comprueba si se cambia correctamente el estado antes de redirigir a la pagina de usuarios con un mensaje de exito o error
-            if ($comprobacion) {
+            if ($model->cambiarStatusUsuario($cedula, $estado)) {
                 header('Location: /usuarios?success=Estado_del_Usuario_Cambiado');
                 exit;
             } 

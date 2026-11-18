@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: policlinico-db
--- Tiempo de generación: 16-11-2026 a las 13:52:14
--- Versión del servidor: 10.11.19-MariaDB-ubu2204
--- Versión de PHP: 8.3.36
+-- Tiempo de generación: 18-11-2026 a las 02:45:31
+-- Versión del servidor: 10.11.18-MariaDB-ubu2204
+-- Versión de PHP: 8.3.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -400,7 +400,7 @@ CREATE TABLE `USUARIO` (
   `email_Usuario` varchar(150) NOT NULL,
   `passw_Usuario` varchar(255) NOT NULL,
   `rol_Usuario` varchar(50) NOT NULL,
-  `estado_Usuario` varchar(20) DEFAULT 'Activo',
+  `estado_Usuario` varchar(20) DEFAULT 'activo',
   `lastlogin_Usuario` datetime DEFAULT NULL,
   `dateupdate_Usuario` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -412,7 +412,7 @@ CREATE TABLE `USUARIO` (
 INSERT INTO `USUARIO` (`id_Usuario`, `cedula_Usuario`, `nombre_Usuario`, `apellido_Usuario`, `email_Usuario`, `passw_Usuario`, `rol_Usuario`, `estado_Usuario`, `lastlogin_Usuario`, `dateupdate_Usuario`) VALUES
 (1, '12345678', 'María', 'Rodríguez', 'maria.directora@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Director', 'activo', '2026-11-15 16:36:43', '2026-11-15 19:36:43'),
 (2, '53456789', 'Ana', 'Silva', 'ana.profesora@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Profesor', 'activo', '2026-11-12 20:41:24', '2026-11-13 22:33:30'),
-(3, '11111122', 'Carlos', 'González', 'carlos.estudiante@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Estudiante', 'activo', NULL, '2026-11-12 23:26:41');
+(3, '11111122', 'Carlos', 'González', 'carlos.estudiante@example.com', '$2y$12$wFPUX1LQOjdWIPcjhLzuve1.7DAkrIwOgUt6TKa.PzedZ.UOUb1nS', 'Estudiante', 'activo', NULL, '2026-11-18 00:29:18');
 
 -- --------------------------------------------------------
 
@@ -692,7 +692,7 @@ ALTER TABLE `TUTOR`
 -- AUTO_INCREMENT de la tabla `USUARIO`
 --
 ALTER TABLE `USUARIO`
-  MODIFY `id_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 -- --------------------------------------------------------
 

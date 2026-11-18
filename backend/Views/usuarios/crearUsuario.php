@@ -2,10 +2,9 @@
 /** Formulario de alta de cuentas, disponible únicamente para el rol Director. */
 $usuarioEdit = $usuarioEdit ?? [];
 $rolesUsuario = [
-    'DIRECTOR' => 'Director',
-    'ESTUDIANTE' => 'Estudiante',
-    'PROFESOR' => 'Profesor',
-    'VETERINARIO' => 'Veterinario'
+    'Director' => 'Director',
+    'Estudiante' => 'Estudiante',
+    'Profesor' => 'Profesor',
 ];
 ?>
 
