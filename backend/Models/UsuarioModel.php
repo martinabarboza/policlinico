@@ -122,7 +122,7 @@ class UsuarioModel extends Model
     }
 
     /** Cambia el estado de una cuenta sin eliminar su historial ni asociaciones. */
-    public function cambiarStatusUsuario(string $cedula, string $estado) {
+    public function cambiarStatusUsuario(string $cedula, string $estado): bool {
         $stmt = $this->db->prepare(
             'UPDATE USUARIO
             SET estado_Usuario = ?
@@ -136,7 +136,15 @@ class UsuarioModel extends Model
     }
 
     /** Método legado sin implementación; las cuentas se desactivan con cambiarStatusUsuario(). */
-    public function borrarUsuario(){
-        
+    public function borrarUsuario(string $cedula): bool {
+        $stmt = $this->db->prepare(
+            'DELETE FROM USUARIO
+            WHERE cedula_Usuario = ?'
+        );
+
+        $stmt->bind_param('s', $cedula);
+        $resultado = $stmt->execute();
+        $stmt->close();
+        return $resultado;
     }
 }

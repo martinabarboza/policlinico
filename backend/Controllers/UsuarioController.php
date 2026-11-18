@@ -21,35 +21,26 @@ class UsuarioController extends Controller
     }
 
     /** Vuelve a renderizar el formulario correspondiente conservando el error. */
-    private function returnPorError(string $form, $usuarioVerificacion, string $mensajeError): void {
-        if ($form === 'modificar') {
-        $this->view('usuarios/modificarUsuario', [
+    private function returnPorError(string $form, ?array $usuarioVerificacion, string $mensajeError): void {
+        $this->view('usuarios/'. $form, [
             'tituloPagina' => 'Modificar Usuario',
             'activeMenu' => 'usuarios',
             'usuarioEdit' => $usuarioVerificacion,
             'error' => $mensajeError
         ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
-        }
-        if ($form === 'crear') {
-            $this->view('usuarios/crearUsuario', [
-            'tituloPagina' => 'Crear Nuevo Usuario',
-            'activeMenu' => 'usuarios',
-            'usuarioEdit' => $usuarioVerificacion,
-            'error' => $mensajeError
-        ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
-        }
-        if ($form === 'lista') {
-            $this->view('usuarios/index', [
-            'tituloPagina' => 'Crear Nuevo Usuario',
-            'activeMenu' => 'usuarios',
-            'usuarioEdit' => $usuarioVerificacion,
-            'error' => $mensajeError
-        ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
-        }
-        return;
     }
 
-    /** Busca una cuenta por cédula y presenta su formulario de edición. */
+    public function perfilUsuario(): void {
+        Auth::requireLogin();
+
+        $this->view('usuarios/perfil', [
+            'tituloPagina' => 'Perfil',
+            'activeMenu' => 'perfil',
+            'usuario' => Auth::user()
+        ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
+    }
+    
+        /** Busca una cuenta por cédula y presenta su formulario de edición. */
     public function modificarUsuario(): void {
         Auth::requireLogin();
         Auth::requirePermiso('admin.total');
@@ -63,7 +54,7 @@ class UsuarioController extends Controller
 
         // Valida que la cedula tenga exactamente 8 números enteros
         if (!preg_match('/^\d{8}$/', $cedula)) {
-            $this->returnPorError('modificar', null, 'La cédula debe contener exactamente 8 números.');
+            $this->returnPorError('modificarUsuario', null, 'La cédula debe contener exactamente 8 números.');
             return;
         }
 
@@ -82,6 +73,7 @@ class UsuarioController extends Controller
             ], 'app', ['app-layout.css', 'dashboard.css'], ['dashboard.js'], ['bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js', 'jquery-4.0.0.min.js.js']);
         }
     }
+
     /** Actualiza la cuenta indicada por su cédula anterior; el hash cambia solo si se envía contraseña. */
     public function actualizarUsuario(): void {
 
@@ -116,11 +108,11 @@ class UsuarioController extends Controller
 
             // Validaciones de cédula y correo electrónico.
             if (!preg_match('/^\d{8}$/', $cedulaNueva)) {
-                $this->returnPorError('modificar', $usuarioActual, 'La cédula debe contener exactamente 8 números');
+                $this->returnPorError('modificarUsuario', $usuarioActual, 'La cédula debe contener exactamente 8 números');
                 return;
             }
             if (!filter_var($emailNuevo, FILTER_VALIDATE_EMAIL)) {
-                $this->returnPorError('modificar', $usuarioActual, 'El correo electrónico no es válido');
+                $this->returnPorError('modificarUsuario', $usuarioActual, 'El correo electrónico no es válido');
                 return;
             }
             
@@ -161,7 +153,7 @@ class UsuarioController extends Controller
         // Valida que la solicitud sea POST y que todos los campos requeridos estén presentes.
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            if (!isset($_POST['cedula'], $_POST['nombre'], $_POST['apellido'], $_POST['rol'], $_POST['email'], $_POST['passw'])) {
-                $this->returnPorError('crear', null, 'Por favor, completa todos los campos requeridos.');
+                $this->returnPorError('crearUsuario', null, 'Por favor, completa todos los campos requeridos.');
                 return;
             }
             
@@ -175,16 +167,19 @@ class UsuarioController extends Controller
 
             // Validaciones de cédula y correo electrónico.
             if (!preg_match('/^\d{8}$/', $cedula)) {
-                $this->returnPorError('crear', null, 'La cédula debe contener exactamente 8 números.');
+                $this->returnPorError('crearUsuario', null, 'La cédula debe contener exactamente 8 números.');
+                return;
             }
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $this->returnPorError('crear', null, 'El correo electrónico no es válido.');
+                $this->returnPorError('crearUsuario', null, 'El correo electrónico no es válido.');
+                return;
             }
             
             // Comprueba si ya existe un usuario con esa cedula antes de crearlo.
             $usuarioExistente = $this->model('UsuarioModel')->buscarPorCedula($cedula);
             if ($usuarioExistente) {
-                $this->returnPorError('crear', null, 'Ya existe un usuario con esa cédula.');
+                $this->returnPorError('crearUsuario', null, 'Ya existe un usuario con esa cédula.');
+                return;
             }
 
             // Crea una instancia del modelo de usuario y llama al método para crear un nuevo usuario.
@@ -198,7 +193,8 @@ class UsuarioController extends Controller
             } 
             else 
             {
-                $this->returnPorError('crear', null, 'Fallo al Crear Usuario');
+                $this->returnPorError('crearUsuario', null, 'Fallo al Crear Usuario');
+                return;
             }
         } 
         else { 
@@ -212,40 +208,89 @@ class UsuarioController extends Controller
 
     /** Activa o desactiva una cuenta sin eliminar sus registros relacionados. */
     public function cambiarEstadoUsuario() {
-        auth::requireLogin();
-        auth::requirePermiso('admin.total');
+        Auth::requireLogin();
+        Auth::requirePermiso('admin.total');
 
+        // Valida que la solicitud sea POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+            // Validaciones
             if (!isset($_POST['cedula'])) {
-                $this->returnPorError('lista', null, 'Error en la Cédula');
+                header('Location: /usuarios?error=Error_en_la_Cedula');
+                exit;
             }
             if (!isset($_POST['estado'])) {
-                $this->returnPorError('lista', null, 'Error en el Estado');
+                header('Location: /usuarios?error=Error_en_el_Estado');
+                exit;
             }
-
+            if ($_POST['estado'] !== 'activo' && $_POST['estado'] !== 'inactivo'){
+                header('Location: /usuarios?error=Error_en_el_Estado');
+                exit;
+            }
+            
+            // Obtiene la cédula y el estado del usuario a cambiar desde POST
             $cedula = trim($_POST['cedula']);
             $estado = trim($_POST['estado']);
 
-            if ($cedula)
-
-            $verifyExistencia = $this->model('UsuarioModel')->buscarPorCedula($cedula);
-            if (!$verifyExistencia) 
-            {
-                $this->returnPorError('crear', null, 'No existe un usuario con esa cédula.');
+            // Comprueba si el usuario existe antes de intentar cambiar su estado.
+            $usuarioExistente = $this->model('UsuarioModel')->buscarPorCedula($cedula);
+            if (!$usuarioExistente) {
+                header('Location: /usuarios?error=No_Existe_el_Usuario');
+                exit;
             }
 
+            // Se llama al modelo para cambiar el estado del usuario.
             $cambiarEstado = $this->model('UsuarioModel');
             $comprobacion = $cambiarEstado->cambiarStatusUsuario($cedula, $estado);
 
+            // Se comprueba si se cambia correctamente el estado antes de redirigir a la pagina de usuarios con un mensaje de exito o error
             if ($comprobacion) {
                 header('Location: /usuarios?success=Estado_del_Usuario_Cambiado');
                 exit;
             } 
-            else 
-            {
-                $this->returnPorError('index', null, 'Fallo al cambiar estado');
+            else {
+                header('Location: /usuarios?error=Fallo_al_cambiar_Estado');
+                exit;
             }
         } 
     }
+
+    // Función de borrado de usuarios, no se si se va a implementar.
+    /*public function borrarUsuario() {
+        Auth::requireLogin();
+        Auth::requirePermiso('admin.total');
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            header('Location: /usuarios');
+            exit;
+        }
+
+        if (!isset($_POST['cedula'])) {
+            header('Location: /usuarios?error=Error_en_la_Cedula');
+            exit;
+        }
+            
+        $cedula = trim($_POST['cedula']);
+
+        if (!preg_match('/^\d{8}$/', $cedula)){
+            header('Location: /usuarios?error=Cedula_Invalida');
+            exit;
+        }
+
+        $model = $this->model('UsuarioModel');
+
+        if (!$model->buscarPorCedula($cedula)){
+            header('Location: /usuarios?error=No_Existe_Este_Usuario');
+            exit;
+        }
+
+        if ($model->borrarUsuario($cedula)) {
+            header('Location: /usuarios?success=Usuario_Borrado_Correctamente');
+            exit;
+        }
+        else {
+            header('Location: /usuarios?error=Fallo_al_Borrar');
+            exit;
+        }
+    }*/
 }
