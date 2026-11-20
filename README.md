@@ -85,3 +85,7 @@ Compose conserva los datos de MariaDB en un volumen y prepara los directorios de
 - No se identificó un conjunto de pruebas automatizadas ni manifiestos de Composer o npm en el proyecto.
 - La configuración Docker contiene credenciales de desarrollo. Deben reemplazarse y gestionarse de forma segura antes de un despliegue real.
 - Algunos iconos y estilos se cargan desde servicios externos y requieren conexión a Internet.
+
+## Documentación adicional
+
+- [Consultas SQL ejecutadas por la aplicación](DOCUMENTACION_SQL.md): inventario funcional de consultas de lectura, escritura, validación y vistas utilizadas por los modelos.

@@ -160,8 +160,8 @@ class UsuarioController extends Controller
             
             // Valida y procesa los datos del formulario.
             $cedula = trim($_POST['cedula']);
-            $nombre = trim($_POST['nombre']);
-            $apellido = trim($_POST['apellido']);
+            $nombre = $_POST['nombre'];
+            $apellido = $_POST['apellido'];
             $rol = trim($_POST['rol']);
             $email = trim($_POST['email']);
             $passw = password_hash($_POST['passw'], PASSWORD_DEFAULT);
